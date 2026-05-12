@@ -22,7 +22,7 @@ related:
   - ../skills/README.md
   - ../agents/executor-agent.md
   - ../agents/validator-agent.md
-  - ./jest-backend-test-design.md
+  - ./typescript-jest-test-design.md
   - ./validation-disposition.md
 ---
 
@@ -58,4 +58,4 @@ Map each approved acceptance criterion to concrete evidence so executor claims a
 - Providing global claims like "tests pass" without stating which criterion that proves.
 - Mixing evidence with new scope decisions that were not part of the approved work package.
 - Hiding assumptions or manual checks inside a generic completion summary.
-- Use `jest-backend-test-design.md` instead when the missing piece is which tests to design rather than how to map evidence to criteria.
+- Use `typescript-jest-test-design.md` instead when the missing piece is which tests to design rather than how to map evidence to criteria.

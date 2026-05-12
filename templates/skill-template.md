@@ -39,3 +39,8 @@ Describe the capability in one sentence.
 
 - Common mistakes
 - When to choose a different skill instead
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Note any role-specific or domain-specific safety clauses that apply when using this skill.

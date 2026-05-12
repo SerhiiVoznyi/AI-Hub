@@ -7,6 +7,7 @@ alwaysApply: true
 
 - Read `AI.md` first for repository purpose, structure, metadata, and growth rules.
 - Treat `AI.md` as the single source of truth; keep this rule minimal.
+- Follow `knowledge/safety-policy.md` for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
 - Prefer placing new material in `agents/`, `skills/`, `prompts/`, `workflows/`, `knowledge/`, or `templates/` before creating new top-level folders.
 - Mark tool-specific artifacts explicitly instead of presenting them as universally applicable.
 

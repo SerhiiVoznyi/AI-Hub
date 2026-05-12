@@ -23,6 +23,8 @@ AI-Hub stores reusable AI artifacts organized by competency. It is intentionally
 3. Keep names descriptive and generic: prefer `structured-reasoning.md` over names that imply hidden model internals.
 4. Use lowercase kebab-case for artifact filenames.
 5. Version and review materials over time as capabilities evolve.
+6. Treat [knowledge/safety-policy.md](knowledge/safety-policy.md) as the single source of operational guardrails. Agents and skills must reference it instead of restating its clauses.
+7. Default coding style for TypeScript and Node.js work is object-oriented (classes with constructor-injected dependencies). See [skills/typescript-design.md](skills/typescript-design.md) for concrete rules and allowed exceptions.
 
 ## Artifact Metadata
 

@@ -5,3 +5,4 @@ Use `../AI.md` as the single source of truth for repository structure, metadata 
 - Start there before creating or reorganizing artifacts.
 - Treat this file as a thin adapter, not a second policy document.
 - Use `context.md` for a short description of the repository's purpose.
+- Follow `../knowledge/safety-policy.md` for operational guardrails (destructive ops, secrets, scope, supply chain, AWS, untrusted-input handling, and the OOP-default coding posture).
