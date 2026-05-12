@@ -1,0 +1,16 @@
+---
+description: AI-Hub entry point and repository structure guidance
+alwaysApply: true
+---
+
+# AI-Hub Entry Point
+
+- Read `AI.md` first for repository purpose, structure, metadata, and growth rules.
+- Treat `AI.md` as the single source of truth; keep this rule minimal.
+- Prefer placing new material in `agents/`, `skills/`, `prompts/`, `workflows/`, `knowledge/`, or `templates/` before creating new top-level folders.
+- Mark tool-specific artifacts explicitly instead of presenting them as universally applicable.
+
+Examples:
+
+- Put reusable repository guidance in `AI.md`, not in this rule file.
+- Add a new prompt pattern under `prompts/` before introducing another top-level category.
