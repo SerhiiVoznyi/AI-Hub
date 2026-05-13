@@ -17,9 +17,11 @@ Use [../templates/skill-template.md](../templates/skill-template.md) to start ne
 - [typescript-jest-test-design.md](./typescript-jest-test-design.md): Jest coverage for TypeScript code at stable seams, with typed fixtures and deliberate mocking at injected interfaces.
 - [acceptance-evidence-traceability.md](./acceptance-evidence-traceability.md): maps each approved criterion to concrete evidence so completion claims and review decisions stay aligned.
 - [validation-disposition.md](./validation-disposition.md): helps the validator distinguish `pass`, `rework`, and `replan` based on evidence quality, implementation defects, and planning gaps.
+- [dotnet-10-csharp-design.md](./dotnet-10-csharp-design.md): idiomatic C# for .NET 10 (`net10.0`), nullable reference types, async, and DI-friendly class boundaries.
+- [dotnet-backend-implementation.md](./dotnet-backend-implementation.md): ASP.NET Core and generic .NET hosting—composition root, options, logging, `HttpClient` factory, graceful shutdown.
+- [aws-lambda-dotnet-implementation.md](./aws-lambda-dotnet-implementation.md): C# Lambda entry as a thin adapter with injectable services, serialization, and timeout-aware calls.
+- [dotnet-10-csharp-test-design.md](./dotnet-10-csharp-test-design.md): xUnit strategies and evidence expectations at interface seams for .NET 10 C#.
 
-## Suggested Composition
+## Composition
 
-- Planner: `story-brief-normalization`, `aws-lambda-change-planning`, `serverless-operability-checks`, `typescript-jest-test-design`
-- Executor: `typescript-design`, `nodejs-backend-implementation`, `aws-lambda-implementation`, `typescript-jest-test-design`, `acceptance-evidence-traceability`, `serverless-operability-checks`
-- Validator: `validation-disposition`, `acceptance-evidence-traceability`, `serverless-operability-checks`, `typescript-jest-test-design`
+Skill binding for the orchestrated planner, executor, and validator flow is **prompt-driven**. The user or triggering prompt supplies a per-role **task skills manifest** (repository-root paths such as `skills/foo.md`); the orchestrator forwards the full manifest on every handoff. Start from [../prompts/orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md), which includes example manifests for a TypeScript, Node.js, and Lambda stack and for a .NET 10 C# Lambda stack.

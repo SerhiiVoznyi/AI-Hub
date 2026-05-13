@@ -41,3 +41,7 @@ Describe the agent's purpose in one short paragraph.
 
 - What the agent must avoid
 - Tooling assumptions, if any
+
+## Skills
+
+For orchestrated multi-agent use, skill binding is supplied by the **task skills manifest** in the triggering prompt (see `prompts/orchestrated-execution-with-skills.md`). List here only non-manifest conventions if this agent is ever used standalone.

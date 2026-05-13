@@ -20,3 +20,4 @@ These four agents are designed to work together as one orchestrated pattern:
 - The orchestrator is the only agent that communicates with the user.
 - The planner, executor, and validator do not communicate directly with each other.
 - Every handoff is routed through the orchestrator so scope, approvals, and corrective loops stay explicit.
+- The planner, executor, and validator apply **only** the skills listed for their role in the **task skills manifest** supplied by the triggering prompt and forwarded in full on each handoff; see [../prompts/orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md).

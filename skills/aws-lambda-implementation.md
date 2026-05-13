@@ -26,6 +26,7 @@ related:
   - ../skills/typescript-design.md
   - ../skills/nodejs-backend-implementation.md
   - ../skills/typescript-jest-test-design.md
+  - ../skills/aws-lambda-dotnet-implementation.md
   - ../knowledge/safety-policy.md
 ---
 
