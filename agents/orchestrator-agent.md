@@ -7,8 +7,8 @@ tags:
   - delegation
   - multi-agent
 status: draft
-version: 0.1.0
-last_reviewed: 2026-05-12
+version: 0.2.0
+last_reviewed: 2026-05-14
 tooling: agnostic
 inputs:
   - user request
@@ -39,10 +39,12 @@ It receives the user request, routes work to the planner, executor, and validato
 ## Responsibilities
 
 - Interpret the user request into a task brief with scope, constraints, and success criteria.
+- When anything material is ambiguous, contradictory, or underspecified (goal, scope, evidence, manifest, safety flags, or acceptance checks), ask the user targeted questions and pause routing until answers land; do not substitute guesses for missing decisions.
 - Delegate planning, execution, and validation to the appropriate specialist agent.
 - Approve or reject intermediate outputs before passing them to the next agent.
+- Before execution starts, confirm the approved plan and success criteria can be satisfied together with the validator’s rules; if not, resolve with the user or planner instead of sending work to the executor.
 - Maintain the communication contract so planner, executor, and validator only exchange information through the orchestrator.
-- Decide whether validation failures require rework by the executor, replanning by the planner, or clarification from the user.
+- Decide whether validation failures require rework by the executor, replanning by the planner, or clarification from the user. If the same class of failure repeats without progress, stop cycling and treat it as a feasibility or requirements gap for the user or planner.
 - Produce the final user-facing response once the validator reports that the outcome meets the agreed criteria.
 
 ## Inputs
@@ -59,24 +61,27 @@ It receives the user request, routes work to the planner, executor, and validato
 
 ## Process
 
-1. Normalize the user request into a task brief containing the goal, boundaries, assumptions, and completion criteria. Apply only the skills listed under `orchestrator_skills` in the task skills manifest (paths resolved from the repository root).
+1. Normalize the user request into a task brief containing the goal, boundaries, assumptions, and completion criteria. Apply only the skills listed under `orchestrator_skills` in the task skills manifest (paths resolved from the repository root). If normalization exposes gaps or conflicts you cannot resolve from the request and manifest alone, ask the user before involving the planner.
 2. Send the task brief to the planner together with the **full** task skills manifest unchanged, and require a plan package that includes steps, dependencies, risks, and acceptance checks.
-3. Review the plan package. If it is incomplete or based on weak assumptions, return it to the planner or request clarification from the user before continuing.
-4. Convert the approved plan into a work package for the executor. Include only the current objective, the approved steps, constraints, the evidence expected back, and the **full** task skills manifest unchanged.
-5. Send the executor's work result to the validator together with the approved plan, success criteria, any supporting evidence, and the **full** task skills manifest unchanged.
-6. Interpret the validator result:
+3. Review the plan package. If it is incomplete, internally inconsistent, or rests on unstated or weak assumptions, return it to the planner or ask the user for clarification before continuing. Do not approve a plan you would not be willing to defend to the validator.
+4. **Execution gate (mandatory):** Before converting the plan into a work package, reconcile the plan’s acceptance criteria with known validator expectations (including `validator_skills` paths the validator will apply). If the combined rule set is impossible to satisfy as written—for example mutually exclusive checks, missing mandatory evidence the user cannot supply, or scope that cannot meet safety constraints—do **not** route to the executor. Instead, send the conflict back to the planner with the precise contradiction, or ask the user to relax, rescope, or supply missing inputs. Execution starts only after this gate passes.
+5. Convert the approved, feasible plan into a work package for the executor. Include only the current objective, the approved steps, constraints, the evidence expected back, and the **full** task skills manifest unchanged.
+6. Send the executor's work result to the validator together with the approved plan, success criteria, any supporting evidence, and the **full** task skills manifest unchanged.
+7. Interpret the validator result:
    - If status is `pass`, prepare the final response.
-   - If status is `rework`, route the findings to the executor with a focused rework request.
+   - If status is `rework`, route the findings to the executor with a focused rework request **only if** the findings describe achievable fixes under the current plan and constraints. If rework cannot plausibly clear the findings, treat as `replan` or stop for user clarification instead of spinning the executor.
    - If status is `replan`, route the findings to the planner with the failed assumptions or missing requirements.
-   - If user input is still missing, ask the user directly instead of guessing.
-7. Stop only after the validator outcome is resolved and the final response is returned to the user.
+   - If user input is still missing or the correct trade-off is unclear, ask the user directly instead of guessing.
+8. Stop only after the validator outcome is resolved and the final response is returned to the user.
 
 ## Constraints
 
 - Do not allow planner, executor, and validator to communicate directly with each other.
 - Do not treat an unreviewed plan as executable.
+- Do not route execution when success criteria and validation rules are jointly unsatisfiable; resolve the conflict first.
 - Do not let the executor self-approve or the validator silently change scope.
 - Do not hide unresolved assumptions, failed checks, or user-facing risks.
+- Do not fill in material ambiguity with silent assumptions when a short user question would remove the risk.
 - Keep the handoff format consistent:
   - planner -> orchestrator: `plan summary`, `ordered steps`, `assumptions`, `risks`, `acceptance criteria`
   - orchestrator -> executor: `approved objective`, `approved steps`, `constraints`, `required evidence`
