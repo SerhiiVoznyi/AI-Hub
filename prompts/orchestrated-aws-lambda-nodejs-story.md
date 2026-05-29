@@ -10,12 +10,12 @@ tags:
   - lambda
   - nodejs
 status: draft
-version: 0.4.0
-last_reviewed: 2026-05-14
+version: 0.5.0
+last_reviewed: 2026-05-29
 tooling: tool-assisted
 inputs:
   - plain-text user story under "## Story"
-  - explicit AI_HUB_ROOT absolute path inside the prompt
+  - hard-coded AI_HUB_ROOT absolute path inside the prompt
 outputs:
   - planner-approved plan, executor work, validator disposition, final orchestrator response
 related:
@@ -26,14 +26,12 @@ related:
 
 # Summary
 
-Run the four-agent flow (orchestrator → planner → executor → validator) for a **simple user story** on **AWS Lambda / Node.js**, with a fixed task skills manifest. The **AI-Hub repository path is hard-coded inside the prompt** (`C:\Development\Ai-Hub`), so this works the same whether Cursor is opened on the hub itself, on an unrelated project, or anywhere else.
-
-Agent, skill, and policy mechanics live in the agent files and in [orchestrated-execution-with-skills.md](./orchestrated-execution-with-skills.md); this prompt only adds the absolute hub path, the stack, and the manifest.
+Runs the four-agent flow (orchestrator → planner → executor → validator) for a simple user story on **AWS Lambda / Node.js (TypeScript + Jest)** with a fixed task skills manifest. The AI-Hub path is hard-coded, so the prompt works from any Cursor workspace. Execution mechanics live in [orchestrated-execution-with-skills.md](./orchestrated-execution-with-skills.md); this file only fixes the hub path, the stack, and the manifest.
 
 ## Use When
 
-- A short story should be executed through the orchestrator on AWS Lambda / Node.js.
-- The AI-Hub repository lives at `C:\Development\Ai-Hub` (edit the prompt once if it ever moves).
+- A short story should run through the orchestrator on AWS Lambda / Node.js.
+- AI-Hub is at `C:\Development\Ai-Hub` (otherwise edit the path once in the prompt).
 
 ## Prompt
 
@@ -41,16 +39,10 @@ Agent, skill, and policy mechanics live in the agent files and in [orchestrated-
 Run the AI-Hub orchestrated multi-agent pattern.
 
 ## Roots
+- AI_HUB_ROOT    = C:\Development\Ai-Hub  (resolve agents/..., skills/..., knowledge/... from here)
+- WORKSPACE_ROOT = current Cursor workspace (write code, IaC, tests, configs here unless a step targets AI-Hub)
 
-- AI_HUB_ROOT    = C:\Development\Ai-Hub
-- WORKSPACE_ROOT = the current Cursor workspace root.
-
-Resolve any path of the form agents/..., skills/..., or knowledge/... from AI_HUB_ROOT.
-Create or edit code, IaC, tests, and configs under WORKSPACE_ROOT unless a step explicitly targets AI-Hub itself.
-
-## Agents and policy
-
-Load and follow:
+## Load and follow (from AI_HUB_ROOT)
 - agents/orchestrator-agent.md
 - agents/planner-agent.md
 - agents/executor-agent.md
@@ -58,11 +50,9 @@ Load and follow:
 - knowledge/safety-policy.md
 
 ## Story
-
-(Paste the plain-text user story here: actors, trigger, behavior, definition of done.)
+(Paste the plain-text user story: actors, trigger, behavior, definition of done.)
 
 ## Task skills manifest (authoritative for this run)
-
 orchestrator_skills:
   - skills/story-brief-normalization.md
 planner_skills:
@@ -82,11 +72,11 @@ validator_skills:
   - skills/serverless-operability-checks.md
   - skills/typescript-jest-test-design.md
 
-Stack: AWS Lambda, Node.js / TypeScript, Jest. Begin with the orchestrator role.
+Stack: AWS Lambda + Node.js/TypeScript + Jest. Begin as the orchestrator.
 ```
 
 ## Notes
 
-- Replace the parenthetical under `## Story` with the actual story text.
-- If the AI-Hub repository ever moves, update the `AI_HUB_ROOT` line in the fenced block (single source of truth for this prompt).
-- Manifest matches **Example A** in [orchestrated-execution-with-skills.md](./orchestrated-execution-with-skills.md). Change it only if the story genuinely needs a different stack and the user approves.
+- Replace the `## Story` placeholder with the real story text before running.
+- Update the `AI_HUB_ROOT` line if the repository moves (single source of truth for this prompt).
+- Manifest matches **Example A** in [orchestrated-execution-with-skills.md](./orchestrated-execution-with-skills.md); only change it if the stack genuinely differs and the user approves.
