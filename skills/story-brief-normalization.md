@@ -22,6 +22,7 @@ related:
   - ../skills/README.md
   - ../agents/orchestrator-agent.md
   - ../agents/planner-agent.md
+  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -52,6 +53,10 @@ Turn a user story into a precise task brief with scope boundaries, assumptions, 
 4. Translate vague success language into observable completion criteria that can later be tested or evidenced.
 5. Call out missing information that blocks responsible planning instead of guessing.
 6. Return a brief that is short enough to execute against and specific enough to validate.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
 
 ## Failure Modes
 

@@ -23,6 +23,7 @@ related:
   - ../agents/validator-agent.md
   - ./acceptance-evidence-traceability.md
   - ./serverless-operability-checks.md
+  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -53,6 +54,10 @@ Classify a reviewed result as `pass`, `rework`, or `replan` by separating implem
 4. Return `rework` when the plan is still sound but the implementation, tests, or evidence are incomplete.
 5. Return `replan` when the approved plan omitted necessary work, depended on bad assumptions, or no longer matches the real task.
 6. Recommend the smallest useful next action so the orchestrator can route the loop without reinterpretation.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
 
 ## Failure Modes
 

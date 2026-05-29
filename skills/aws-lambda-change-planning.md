@@ -26,6 +26,7 @@ related:
   - ./story-brief-normalization.md
   - ./serverless-operability-checks.md
   - ./aws-lambda-implementation.md
+  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -56,6 +57,10 @@ Plan AWS Lambda story work by turning a clear brief into ordered steps, dependen
 4. Add Lambda-specific risks such as duplicate delivery, timeout pressure, partial failure handling, schema drift, and cold-start-sensitive initialization.
 5. Define acceptance criteria in terms the validator can observe: behavior on valid and invalid events, expected side effects, error handling, and evidence from tests or artifacts.
 6. Return only the plan package. Do not slip into implementation details that belong to the executor.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
 
 ## Failure Modes
 

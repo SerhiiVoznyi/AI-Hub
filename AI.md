@@ -26,6 +26,7 @@ AI-Hub stores reusable AI artifacts organized by competency. It is intentionally
 6. Treat [knowledge/safety-policy.md](knowledge/safety-policy.md) as the single source of operational guardrails. Agents and skills must reference it instead of restating its clauses.
 7. Default coding style for TypeScript and Node.js work is object-oriented (classes with constructor-injected dependencies). See [skills/typescript-design.md](skills/typescript-design.md) for concrete rules and allowed exceptions.
 8. Orchestrated multi-agent runs use a **task skills manifest** (per-role skill paths) supplied by the triggering prompt; see [prompts/orchestrated-execution-with-skills.md](prompts/orchestrated-execution-with-skills.md).
+9. For a fixed AWS Lambda / Node.js story run with a hard-coded hub path, see [prompts/orchestrated-aws-lambda-nodejs-story.md](prompts/orchestrated-aws-lambda-nodejs-story.md). For Principal-Engineer-style codebase evaluation, see [prompts/project-evaluation.md](prompts/project-evaluation.md).
 
 ## Artifact Metadata
 

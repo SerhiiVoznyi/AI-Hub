@@ -25,6 +25,7 @@ related:
   - ../agents/executor-agent.md
   - ../agents/validator-agent.md
   - ./aws-lambda-change-planning.md
+  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -54,6 +55,10 @@ Apply production-minded checks to Lambda work so functional success does not hid
 3. Check state and configuration handling: idempotency keys, environment variables, secrets, region-specific behavior, and deployment-time configuration assumptions.
 4. Check observability: structured logs, enough context to debug failures, and evidence that critical behavior is visible in tests or review artifacts.
 5. Record only the highest-value operability risks and missing evidence so they can influence planning, execution, or validation.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
 
 ## Failure Modes
 

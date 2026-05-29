@@ -31,7 +31,7 @@ Runs the four-agent flow (orchestrator → planner → executor → validator) f
 ## Use When
 
 - A short story should run through the orchestrator on AWS Lambda / Node.js.
-- AI-Hub is at `C:\Development\Ai-Hub` (otherwise edit the path once in the prompt).
+- AI-Hub is at `C:\Development\Private\AI-Hub` (otherwise edit the path once in the prompt).
 
 ## Prompt
 
@@ -39,7 +39,7 @@ Runs the four-agent flow (orchestrator → planner → executor → validator) f
 Run the AI-Hub orchestrated multi-agent pattern.
 
 ## Roots
-- AI_HUB_ROOT    = C:\Development\Ai-Hub  (resolve agents/..., skills/..., knowledge/... from here)
+- AI_HUB_ROOT    = C:\Development\Private\AI-Hub  (resolve agents/..., skills/..., knowledge/... from here)
 - WORKSPACE_ROOT = current Cursor workspace (write code, IaC, tests, configs here unless a step targets AI-Hub)
 
 ## Load and follow (from AI_HUB_ROOT)

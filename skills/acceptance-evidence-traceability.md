@@ -24,6 +24,7 @@ related:
   - ../agents/validator-agent.md
   - ./typescript-jest-test-design.md
   - ./validation-disposition.md
+  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -52,6 +53,10 @@ Map each approved acceptance criterion to concrete evidence so executor claims a
 3. Mark criteria with missing, partial, or assumption-based evidence instead of treating them as complete.
 4. Keep evidence traceable to the approved plan so the validator can decide whether the gap is implementation, planning, or missing information.
 5. Return a compact summary that makes the remaining uncertainty visible to the orchestrator.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
 
 ## Failure Modes
 

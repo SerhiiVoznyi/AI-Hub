@@ -19,6 +19,7 @@ related:
   - ../agents/orchestrator-agent.md
   - ../agents/README.md
   - ../skills/README.md
+  - ../knowledge/safety-policy.md
 ---
 
 # Summary
