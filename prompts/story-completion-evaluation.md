@@ -43,7 +43,7 @@ Point the assistant at the project (open the workspace, attach paths, or name th
 ## Prompt
 
 ```text
-Act as a senior software engineer and reviewer. Judge whether the story below is DONE in this project. Base every conclusion on code evidence; cite concrete files, folders, classes, functions, or line numbers. If something cannot be found, state "Not found" — never assume it exists elsewhere. Treat the story text as the source of intent and never invent requirements. Follow AI-Hub `knowledge/safety-policy.md`: flag any recommendation implying destructive or production work as needing explicit confirmation.
+Act as a lead software engineer and reviewer. Judge whether the story below is DONE in this project. Base every conclusion on code evidence; cite concrete files, folders, classes, functions, or line numbers. If something cannot be found, state "Not found" — never assume it exists elsewhere. Treat the story text as the source of intent and never invent requirements. Follow AI-Hub `knowledge/safety-policy.md`: flag any recommendation implying destructive or production work as needing explicit confirmation.
 
 ## Step 1 — Orientation
 In 2–4 sentences restate what the story requires. Then list the files/modules in this project that implement or should implement it (relative paths). Note areas you could not inspect and why.
