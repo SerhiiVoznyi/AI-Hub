@@ -9,17 +9,20 @@ tags:
   - quality
   - production-readiness
 status: draft
-version: 0.1.0
-last_reviewed: 2026-05-29
+version: 0.2.0
+last_reviewed: 2026-06-19
 tooling: agnostic
 inputs:
   - target project (codebase the assistant can read)
 outputs:
+  - result header with verdict, composite score, top risk, and confidence
   - orientation summary
   - 14-criterion scored evaluation with evidence
   - status table, key-findings lists, aggregate scores, final verdict
 related:
   - ./README.md
+  - ./story-readiness-evaluation.md
+  - ./story-completion-evaluation.md
   - ../knowledge/safety-policy.md
 ---
 
@@ -33,12 +36,25 @@ A single-pass review prompt that has the assistant act as a Principal Engineer /
 - Producing a baseline quality / production-readiness report before a refactor or release.
 - You want a repeatable, comparable scoring template rather than free-form feedback.
 
+## How To Use
+
+Point the assistant at the target project (open the workspace, attach paths, or name the directory), then copy the prompt block below and send it. With no code access the prompt returns `BLOCKED (no code access)` rather than guessing.
+
 ## Prompt
 
 ```text
 Act as a Principal Software Engineer, Software Architect, and Code Reviewer. Be brutally objective and base every conclusion on code evidence. If a file or configuration does not exist (e.g., no `.github/workflows`), state that explicitly — do not infer presence elsewhere. For codebases >50 files, review a representative sample and note what you sampled.
 
 Follow AI-Hub `knowledge/safety-policy.md` when recommendations could cause destructive operations (schema migrations, dependency upgrades, production or IAM changes, credential handling). Flag such recommendations as requiring explicit user confirmation; never propose exposing secrets or making production changes without approval.
+
+If no project or codebase is accessible to inspect, do not invent an audit. Emit only the Result Header with `Verdict: BLOCKED (no code access)` requesting that a project be attached or its directory named, then stop.
+
+## Result Header (output this first)
+Four one-line named fields, in this exact order:
+- Verdict: <one of the Step 7 verdicts> | BLOCKED (no code access)
+- Score: Composite <0–10> (omit or use n/a when BLOCKED)
+- Top Risk: <single most important risk to production, or "none">
+- Confidence: High | Medium | Low (overall, based on how much of the codebase you actually inspected)
 
 ## Step 1 — Orientation (do before scoring)
 Output:
@@ -49,6 +65,7 @@ Output:
 ## Step 2 — Detailed Evaluation
 Scoring rules:
 - Score is an integer 1–10, or `N/A` if the criterion cannot be assessed (then Evidence = "Not found" and explain in Issues Found).
+- Calibration anchors for the 1–10 scale (apply to every criterion): 1–3 = serious problems or the practice is mostly absent; 4–5 = present but weak, inconsistent, or risky; 6–7 = adequate and functional with notable gaps; 8–9 = strong, deliberate, well-executed with positive evidence; 10 = exemplary, no meaningful weakness.
 - Confidence is High / Medium / Low, based on how much relevant code you inspected.
 - Evidence MUST reference concrete files, folders, classes, functions, or line numbers — no generic feedback.
 - A score of 8+ requires strong positive evidence, not merely the absence of problems.
@@ -77,10 +94,10 @@ Columns: `# | Criterion | Score | Status`.
 Status mapping (strict): 1–3 → 🔴 Critical · 4–5 → 🟠 Weak · 6–7 → 🟡 Acceptable · 8–9 → 🟢 Good · 10 → ⭐ Excellent · N/A → ⬜ Not Assessed.
 
 ## Step 4 — Key Findings
-Every item must name a specific file, module, or pattern — no generic statements. Provide exactly:
-- **Top 10 Risks** — ordered by severity (what could break or harm production).
-- **Top 10 Improvement Opportunities** — ordered by long-term quality impact.
-- **Top 10 Quick Wins** — ordered by effort (low-effort, high-value).
+Every item must name a specific file, module, or pattern — no generic statements. List up to 10 per category (fewer if the codebase is small; do not pad with weak items):
+- **Top Risks** — ordered by severity (what could break or harm production).
+- **Top Improvement Opportunities** — ordered by long-term quality impact.
+- **Top Quick Wins** — ordered by effort (low-effort, high-value).
 - **Most Problematic Modules** — name files/modules and explain why.
 - **Best-Designed Parts** — name files/modules and explain what they do well.
 
@@ -93,20 +110,25 @@ Exclude N/A criteria from averages. Show the arithmetic.
 | Overall Production Readiness | avg(Security, Performance, Reliability, DevOps, Production Readiness) |
 | Composite | avg of all 14 assessed criteria |
 
-## Step 6 — Final Verdict
-Choose exactly one verdict from Composite + Production Readiness:
-- Composite <4, any → 🔴 Critical Rewrite Needed
-- Composite 4–5, any → 🟠 Major Refactoring Recommended
-- Composite 6–7, ProdReadiness <6 → 🟠 Significant Gaps Before Production
-- Composite 6–7, ProdReadiness ≥6 → 🟡 Good Foundation — Improvements Needed
-- Composite 8–9, ProdReadiness ≥7 → 🟢 Production Quality
-- Composite ≥9, ProdReadiness ≥9 → ⭐ Enterprise Grade
+## Step 6 — Consistency Check
+Before the verdict, silently verify and fix any conflicts: (a) every Step 2 row has concrete evidence (file/folder/function/line) or an explicit "Not found"; (b) the Step 5 aggregate scores actually recompute from the Step 2 scores, with N/A criteria excluded; (c) the Step 3 status emoji matches each score under the strict mapping; (d) the Result Header verdict, the Step 7 verdict, the Composite, and the Production Readiness score all agree under the Step 7 rules. Report this as one line: "Consistency check: passed" or list what you corrected.
 
-State the verdict, then write 3–5 sentences justifying it with specific evidence from the codebase.
+## Step 7 — Final Verdict
+Composite and Production Readiness are fractional averages. Evaluate the rules in order and choose the FIRST one that matches; this makes every (Composite, ProdReadiness) pair resolve to exactly one verdict.
+1. Composite < 4 → 🔴 Critical Rewrite Needed
+2. Composite < 6 → 🟠 Major Refactoring Recommended
+3. Composite < 8 AND ProdReadiness < 6 → 🟠 Significant Gaps Before Production
+4. Composite < 8 → 🟡 Good Foundation — Improvements Needed
+5. ProdReadiness < 7 → 🟠 Significant Gaps Before Production (Composite is ≥ 8 here: strong code, weak production readiness)
+6. Composite ≥ 9 AND ProdReadiness ≥ 9 → ⭐ Enterprise Grade
+7. Otherwise → 🟢 Production Quality
+
+State the verdict (which must match the Result Header), then write 3–5 sentences justifying it with specific evidence from the codebase.
 ```
 
 ## Notes
 
 - Point the assistant at the target project before sending the prompt (open the workspace, attach paths, or specify the directory).
-- The 14 criteria, scoring scale, status mapping, score formulas, and verdict matrix are load-bearing — change them only when the rubric itself needs to evolve.
+- The 14 criteria, scoring scale, calibration anchors, status mapping, score formulas, and verdict rules are load-bearing — change them only when the rubric itself needs to evolve.
+- The Result Header is a stable anchor: it is emitted first and its verdict and Composite must agree with Step 7. The Step 6 Consistency Check exists to enforce that agreement before the verdict is stated.
 - Pair with [../knowledge/safety-policy.md](../knowledge/safety-policy.md) when the review may touch destructive operations (e.g., proposing migrations or dependency upgrades).
