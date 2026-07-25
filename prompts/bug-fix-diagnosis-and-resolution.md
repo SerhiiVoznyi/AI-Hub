@@ -24,9 +24,6 @@ related:
   - ./README.md
   - ./story-completion-evaluation.md
   - ../knowledge/safety-policy.md
-
-
-
 # Summary
 
 Assistant acts as a Lead Software Engineer: scans the codebase, decides if a reported bug is real, explains the root cause, tables the offending files/code, and proposes a fix. Fix is applied only if explicitly authorized.
@@ -36,8 +33,6 @@ Assistant acts as a Lead Software Engineer: scans the codebase, decides if a rep
 - A bug report needs triage before anyone commits to fixing it.
 - You need a cited yes/no on whether a bug is real.
 - You need a scoped root-cause + fix proposal for a simple bug.
-
-
 
 ## How To Use
 
