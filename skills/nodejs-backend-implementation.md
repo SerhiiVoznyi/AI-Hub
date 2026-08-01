@@ -19,13 +19,6 @@ outputs:
   - module and package layout
   - composition root
   - runtime-safe implementation
-related:
-  - ../skills/README.md
-  - ../skills/typescript-design.md
-  - ../skills/aws-lambda-implementation.md
-  - ../skills/typescript-jest-test-design.md
-  - ../agents/executor-agent.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -73,3 +66,7 @@ Implement Node.js backend work with a clear composition root, class-based depend
 - Floating promises and swallowed rejections, especially in event handlers and background tasks.
 - Use `typescript-design.md` instead when the task is language-level (types, classes, error modeling) rather than runtime-level.
 - Use `aws-lambda-implementation.md` instead when the runtime target is AWS Lambda and the handler-plus-service pattern applies.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.

@@ -7,19 +7,14 @@ tags:
   - orchestration
   - skills
 status: draft
-version: 0.1.0
-last_reviewed: 2026-05-13
+version: 0.2.0
+last_reviewed: 2026-08-01
 tooling: agnostic
 inputs:
   - user objective
   - task skills manifest
 outputs:
   - bounded multi-agent run with explicit skill binding
-related:
-  - ../agents/orchestrator-agent.md
-  - ../agents/README.md
-  - ../skills/README.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -34,14 +29,19 @@ Kick off the planner, executor, and validator flow through the orchestrator whil
 ## Prompt
 
 ```text
-You are running the AI-Hub orchestrated multi-agent pattern. Load and follow these agent definitions from the repository root:
+You are running the AI-Hub orchestrated multi-agent pattern. Load and follow from the repository root:
 
+Agents:
 - agents/orchestrator-agent.md
 - agents/planner-agent.md
 - agents/executor-agent.md
 - agents/validator-agent.md
 
-Operational guardrails: knowledge/safety-policy.md
+Knowledge (do not restate; obey):
+- knowledge/safety-policy.md
+- knowledge/orchestrated-handoff-protocol.md
+- knowledge/agent-return-contracts.md
+- knowledge/execution-output-discipline.md
 
 ## User objective
 
@@ -49,11 +49,9 @@ Operational guardrails: knowledge/safety-policy.md
 
 ## Task skills manifest
 
-The manifest below is authoritative for this run. Resolve each path from the repository root, read the file, and apply it only for the role(s) listed.
-
-Paths use the form skills/... or knowledge/....
-
-The manifest must contain all four keys: orchestrator_skills, planner_skills, executor_skills, validator_skills. Each value is a list of paths.
+Authoritative for this run. Resolve paths from the repository root. Apply each skill only for the listed role(s).
+Paths: skills/... or knowledge/...
+Required keys: orchestrator_skills, planner_skills, executor_skills, validator_skills.
 
 orchestrator_skills:
   - skills/story-brief-normalization.md
@@ -64,23 +62,18 @@ executor_skills:
 validator_skills:
   - skills/validation-disposition.md
 
-Replace the lists with the correct skills for this task before execution. Do not add skills to a role unless the user approves a manifest change.
+Replace lists for this task before execution. Manifest changes need user approval.
 
-## Execution rules
+## Start
 
-1. The orchestrator receives the user objective and the full manifest (all four keys). It applies only orchestrator_skills itself.
-2. On every handoff to the planner, executor, or validator, the orchestrator re-attaches the full manifest unchanged, together with the role-specific payload (task brief, work package, or validation inputs).
-3. The planner applies only documents listed under planner_skills. The executor applies only executor_skills. The validator applies only validator_skills.
-4. If planner_skills, executor_skills, or validator_skills is missing or empty for that role, the specialist returns a clarification request or blocker to the orchestrator instead of guessing technology or methodology skills.
-5. Specialists must not load or follow skills assigned to a different role unless the orchestrator explicitly updates the manifest after user approval.
-6. Begin with the orchestrator role: normalize the request using orchestrator_skills, then proceed through planner, executor, and validator as defined in the agent files.
+Begin as the orchestrator: normalize using orchestrator_skills, then follow the handoff protocol through planner → executor → validator. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md.
 ```
 
 ## Notes
 
 - Replace `{{USER_OBJECTIVE}}` with the concrete goal, scope, and constraints.
 - Duplicate entries across roles are allowed when the same skill should guide multiple phases (for example acceptance traceability on both executor and validator).
-- `knowledge/safety-policy.md` always applies; listing it under a role is optional but may be used when you want an explicit reminder in the manifest.
+- `knowledge/safety-policy.md` always applies; listing it under a role is optional.
 
 ## Appendix: example manifests
 

@@ -19,11 +19,6 @@ outputs:
   - orientation summary
   - 14-criterion scored evaluation with evidence
   - status table, key-findings lists, aggregate scores, final verdict
-related:
-  - ./README.md
-  - ./story-readiness-evaluation.md
-  - ./story-completion-evaluation.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary

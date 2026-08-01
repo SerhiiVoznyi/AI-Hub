@@ -20,13 +20,6 @@ outputs:
   - xUnit test strategy
   - fixture and mock boundaries
   - evidence expectations
-related:
-  - ../skills/README.md
-  - ../skills/dotnet-10-csharp-design.md
-  - ../skills/dotnet-backend-implementation.md
-  - ../skills/aws-lambda-dotnet-implementation.md
-  - ../skills/acceptance-evidence-traceability.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -66,5 +59,5 @@ Design **xUnit** coverage for **.NET 10 C#** code so tests prove approved accept
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 - Do not commit secrets into test appsettings; use user secrets or CI-injected values for local-only runs.

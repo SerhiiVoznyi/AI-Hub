@@ -18,10 +18,6 @@ inputs:
   - hard-coded AI_HUB_ROOT absolute path inside the prompt
 outputs:
   - planner-approved plan, executor work, validator disposition, final orchestrator response
-related:
-  - ./orchestrated-execution-with-skills.md
-  - ../agents/orchestrator-agent.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -48,6 +44,9 @@ Run the AI-Hub orchestrated multi-agent pattern.
 - agents/executor-agent.md
 - agents/validator-agent.md
 - knowledge/safety-policy.md
+- knowledge/orchestrated-handoff-protocol.md
+- knowledge/agent-return-contracts.md
+- knowledge/execution-output-discipline.md
 
 ## Story
 (Paste the plain-text user story: actors, trigger, behavior, definition of done.)
@@ -72,7 +71,7 @@ validator_skills:
   - skills/serverless-operability-checks.md
   - skills/typescript-jest-test-design.md
 
-Stack: AWS Lambda + Node.js/TypeScript + Jest. Begin as the orchestrator.
+Stack: AWS Lambda + Node.js/TypeScript + Jest. Begin as the orchestrator; emit packages per agent-return-contracts.md.
 ```
 
 ## Notes

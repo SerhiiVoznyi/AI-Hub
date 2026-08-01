@@ -23,14 +23,6 @@ outputs:
   - executor remediation with evidence
   - validator disposition (pass / rework / replan)
   - final orchestrator summary
-related:
-  - ./project-evaluation.md
-  - ./orchestrated-execution-with-skills.md
-  - ../agents/orchestrator-agent.md
-  - ../agents/planner-agent.md
-  - ../agents/executor-agent.md
-  - ../agents/validator-agent.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -67,6 +59,9 @@ Run the AI-Hub orchestrated multi-agent pattern to remediate project evaluation 
 - agents/executor-agent.md
 - agents/validator-agent.md
 - knowledge/safety-policy.md
+- knowledge/orchestrated-handoff-protocol.md
+- knowledge/agent-return-contracts.md
+- knowledge/execution-output-discipline.md
 
 ## Remediation objective
 
@@ -79,12 +74,12 @@ Fix only:
 Do NOT in this run:
 {{NON_GOALS}}
 
-If the scoped items imply destructive operations (schema migrations, dependency major upgrades, production or IAM changes, credential handling), flag them for explicit user confirmation per knowledge/safety-policy.md — do not proceed without approval.
+Flag destructive/production/IAM/secret work for user confirmation per knowledge/safety-policy.md.
 
 ### Success criteria
 {{SUCCESS_CRITERIA}}
 
-Each criterion must be verifiable with concrete evidence (file paths, diffs, test output, or config changes).
+Each criterion must be verifiable with concrete evidence (paths, diffs, test output, or config).
 
 ### Evaluation context (reference — paste from project-evaluation output)
 
@@ -99,21 +94,13 @@ Each criterion must be verifiable with concrete evidence (file paths, diffs, tes
 
 ## Task skills manifest
 
-Authoritative for this run. Resolve each path from AI_HUB_ROOT. Apply each skill only for the role(s) listed.
+Authoritative for this run. Resolve paths from AI_HUB_ROOT. Apply each skill only for the listed role(s).
 
 {{TASK_SKILLS_MANIFEST}}
 
-Replace manifest lists with the correct skills for the target stack before execution. Do not add skills to a role unless the user approves a manifest change.
+Manifest changes need user approval.
 
-## Execution rules
+## Start
 
-1. Begin as the **orchestrator**: normalize the remediation objective into a task brief using orchestrator_skills. Treat each scoped finding as a traceable acceptance criterion.
-2. If scope is too large, ambiguous, or jointly unsatisfiable with validator_skills, ask the user to narrow scope before routing to the planner.
-3. Route to **planner** with the full manifest unchanged. The plan must map each scoped finding to ordered steps, risks, and acceptance checks.
-4. **Execution gate:** Reconcile plan acceptance criteria with validator_skills before sending work to the executor. Do not route execution if they conflict.
-5. **Executor** implements only the approved work package in WORKSPACE_ROOT. Return evidence per acceptance-evidence-traceability (if listed in executor_skills).
-6. **Validator** checks results against the approved plan and scoped findings. Return pass, rework, or replan per validation-disposition.
-7. On pass, summarize what was fixed, what evidence supports it, and which scoped findings remain for a future run.
-8. One run addresses only the scoped findings above. Do not expand scope to other Key Findings items without orchestrator-routed user approval.
-
-Begin as the orchestrator.
+Begin as the orchestrator. Obey orchestrated-handoff-protocol.md. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md. One run = scoped findings only.
+```

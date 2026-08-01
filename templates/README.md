@@ -10,3 +10,4 @@ Each template includes the shared frontmatter schema from `AI.md` and a minimal 
 - [skill-template.md](./skill-template.md): starter for atomic skills with a Safety section.
 - [prompt-template.md](./prompt-template.md): starter for reusable prompt patterns.
 - [workflow-template.md](./workflow-template.md): starter for multi-step workflow artifacts.
+- [knowledge-template.md](./knowledge-template.md): starter for compact knowledge / contract documents.

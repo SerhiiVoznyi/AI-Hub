@@ -1,6 +1,5 @@
 ---
-
-## title: "Bug fix diagnosis and resolution"
+title: "Bug fix diagnosis and resolution"
 type: prompt
 tags:
   - prompts
@@ -20,10 +19,8 @@ outputs:
   - validity verdict with justification
   - table of files/code causing the bug
   - table of proposed fix, gated fix application
-related:
-  - ./README.md
-  - ./story-completion-evaluation.md
-  - ../knowledge/safety-policy.md
+---
+
 # Summary
 
 Assistant acts as a Lead Software Engineer: scans the codebase, decides if a reported bug is real, explains the root cause, tables the offending files/code, and proposes a fix. Fix is applied only if explicitly authorized.

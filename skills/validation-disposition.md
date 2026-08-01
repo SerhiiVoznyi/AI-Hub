@@ -18,12 +18,6 @@ outputs:
   - validation status
   - findings
   - recommended next action
-related:
-  - ../skills/README.md
-  - ../agents/validator-agent.md
-  - ./acceptance-evidence-traceability.md
-  - ./serverless-operability-checks.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -57,7 +51,7 @@ Classify a reviewed result as `pass`, `rework`, or `replan` by separating implem
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 
 ## Failure Modes
 

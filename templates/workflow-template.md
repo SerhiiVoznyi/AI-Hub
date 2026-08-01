@@ -12,8 +12,6 @@ inputs:
   - task request
 outputs:
   - repeatable process
-related:
-  - ../workflows/README.md
 ---
 
 # Summary

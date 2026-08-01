@@ -19,12 +19,6 @@ outputs:
   - typed module structure
   - class-based feature surface
   - explicit boundary contracts
-related:
-  - ../skills/README.md
-  - ../skills/nodejs-backend-implementation.md
-  - ../skills/aws-lambda-implementation.md
-  - ../skills/typescript-jest-test-design.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -88,3 +82,7 @@ Allowed exceptions, narrow and explicit:
 - Wrapping everything in classes mechanically, including tiny pure helpers that gain nothing from a class.
 - Use `nodejs-backend-implementation.md` instead when the task is Node runtime concerns (process lifecycle, async patterns, configuration loading) rather than language-level design.
 - Use `aws-lambda-implementation.md` instead when the task is the Lambda-specific handler-and-service composition pattern.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.

@@ -12,7 +12,7 @@ AI-Hub stores reusable AI artifacts organized by competency. It is intentionally
 - `skills/`: atomic capabilities that can be composed into larger tasks
 - `prompts/`: reusable prompt patterns for common tasks
 - `workflows/`: multi-step task sequences, including human checkpoints when needed
-- `knowledge/`: stable concepts, glossaries, and mental models
+- `knowledge/`: stable concepts, glossaries, mental models, and shared contracts (safety, handoffs, return shapes, output discipline); agents and prompts must link these instead of restating them
 - `templates/`: starter files for creating new artifacts consistently
 - `.cursor/rules/ai-hub.mdc` and `.coding-assistant/`: thin adapters for specific tools; they should not become alternate sources of truth
 
@@ -24,9 +24,10 @@ AI-Hub stores reusable AI artifacts organized by competency. It is intentionally
 4. Use lowercase kebab-case for artifact filenames.
 5. Version and review materials over time as capabilities evolve.
 6. Treat [knowledge/safety-policy.md](knowledge/safety-policy.md) as the single source of operational guardrails. Agents and skills must reference it instead of restating its clauses.
-7. Default coding style for TypeScript and Node.js work is object-oriented (classes with constructor-injected dependencies). See [skills/typescript-design.md](skills/typescript-design.md) for concrete rules and allowed exceptions.
-8. Orchestrated multi-agent runs use a **task skills manifest** (per-role skill paths) supplied by the triggering prompt; see [prompts/orchestrated-execution-with-skills.md](prompts/orchestrated-execution-with-skills.md).
-9. For a fixed AWS Lambda / Node.js story run with a hard-coded hub path, see [prompts/orchestrated-aws-lambda-nodejs-story.md](prompts/orchestrated-aws-lambda-nodejs-story.md). For Principal-Engineer-style codebase evaluation, see [prompts/project-evaluation.md](prompts/project-evaluation.md). For technology-agnostic test-suite diagnosis and test/mock-only repair (skills supplied as a parameter), see [prompts/test-state-evaluation.md](prompts/test-state-evaluation.md).
+7. Shared orchestration contracts live under `knowledge/` ([orchestrated-handoff-protocol.md](knowledge/orchestrated-handoff-protocol.md), [agent-return-contracts.md](knowledge/agent-return-contracts.md), [execution-output-discipline.md](knowledge/execution-output-discipline.md)). Agents, prompts, and runtime packages must reference them instead of duplicating shapes or handoff rules.
+8. Default coding style for TypeScript and Node.js work is object-oriented (classes with constructor-injected dependencies). See [skills/typescript-design.md](skills/typescript-design.md) for concrete rules and allowed exceptions.
+9. Orchestrated multi-agent runs use a **task skills manifest** (per-role skill paths) supplied by the triggering prompt; see [prompts/orchestrated-execution-with-skills.md](prompts/orchestrated-execution-with-skills.md).
+10. For a fixed AWS Lambda / Node.js story run with a hard-coded hub path, see [prompts/orchestrated-aws-lambda-nodejs-story.md](prompts/orchestrated-aws-lambda-nodejs-story.md). For Principal-Engineer-style codebase evaluation, see [prompts/project-evaluation.md](prompts/project-evaluation.md). For technology-agnostic test-suite diagnosis and test/mock-only repair (skills supplied as a parameter), see [prompts/test-state-evaluation.md](prompts/test-state-evaluation.md).
 
 ## Artifact Metadata
 
@@ -47,8 +48,6 @@ inputs:
   - problem statement
 outputs:
   - stepwise analysis
-related:
-  - ../prompts/README.md
 ---
 ```
 
@@ -57,8 +56,7 @@ Field guidance:
 - `type`: `agent`, `skill`, `prompt`, `workflow`, `knowledge`, or `template`
 - `status`: `draft`, `reviewed`, or `deprecated`
 - `tooling`: `agnostic`, `tool-assisted`, or a specific tool name when required
-- `related`: relative links to neighboring artifacts or indexes
-
+- Navigation links belong in folder `README.md` indexes and intentional body links, not in frontmatter
 ## Growth Rules
 
 Only create a new top-level folder when one of these is true:

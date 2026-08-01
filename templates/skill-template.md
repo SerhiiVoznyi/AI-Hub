@@ -12,8 +12,6 @@ inputs:
   - task context
 outputs:
   - reusable capability
-related:
-  - ../skills/README.md
 ---
 
 # Summary
@@ -42,5 +40,5 @@ Describe the capability in one sentence.
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 - Note any role-specific or domain-specific safety clauses that apply when using this skill.

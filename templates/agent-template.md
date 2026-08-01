@@ -12,8 +12,6 @@ inputs:
   - task goal
 outputs:
   - completed task
-related:
-  - ../agents/README.md
 ---
 
 # Summary
@@ -44,8 +42,8 @@ Describe the agent's purpose in one short paragraph.
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
-- Add role-specific enforcement only when it is not already covered in the policy **Enforcement** section.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Add role-specific enforcement only when it is not already covered in the policy **Enforcement** section.
+- For orchestrated roles, also obey [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md), [agent-return-contracts.md](../knowledge/agent-return-contracts.md), and [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
 
 ## Skills
 

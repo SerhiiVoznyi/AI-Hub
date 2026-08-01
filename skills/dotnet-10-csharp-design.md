@@ -20,12 +20,6 @@ outputs:
   - idiomatic C# structure
   - explicit contracts
   - DI-friendly types
-related:
-  - ../skills/README.md
-  - ../skills/dotnet-backend-implementation.md
-  - ../skills/aws-lambda-dotnet-implementation.md
-  - ../skills/dotnet-10-csharp-test-design.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -77,5 +71,5 @@ Allowed exceptions, narrow and explicit:
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 - Treat deserialized JSON and message payloads as **untrusted** until validated into strong types at the boundary.

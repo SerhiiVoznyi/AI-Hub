@@ -19,14 +19,6 @@ outputs:
   - ordered implementation plan
   - lambda-specific risks
   - acceptance criteria
-related:
-  - ../skills/README.md
-  - ../agents/planner-agent.md
-  - ../agents/orchestrator-agent.md
-  - ./story-brief-normalization.md
-  - ./serverless-operability-checks.md
-  - ./aws-lambda-implementation.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -60,7 +52,7 @@ Plan AWS Lambda story work by turning a clear brief into ordered steps, dependen
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 
 ## Failure Modes
 

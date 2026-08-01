@@ -19,16 +19,6 @@ outputs:
   - test strategy
   - typed fixtures
   - evidence expectations
-related:
-  - ../skills/README.md
-  - ../skills/typescript-design.md
-  - ../skills/nodejs-backend-implementation.md
-  - ../skills/aws-lambda-implementation.md
-  - ../skills/acceptance-evidence-traceability.md
-  - ../agents/planner-agent.md
-  - ../agents/executor-agent.md
-  - ../agents/validator-agent.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -73,3 +63,7 @@ Design Jest coverage for TypeScript code so tests prove the approved acceptance 
 - Hidden coupling to private methods or module internals, which forces churn on every refactor.
 - Using real PII, production payloads, or live credentials in fixtures. Use synthetic data per `../knowledge/safety-policy.md`.
 - Use `acceptance-evidence-traceability.md` instead when the immediate task is packaging evidence rather than designing tests.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.

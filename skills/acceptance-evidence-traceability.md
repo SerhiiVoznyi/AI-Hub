@@ -18,13 +18,6 @@ outputs:
   - criterion-to-evidence map
   - evidence gaps
   - completion summary
-related:
-  - ../skills/README.md
-  - ../agents/executor-agent.md
-  - ../agents/validator-agent.md
-  - ./typescript-jest-test-design.md
-  - ./validation-disposition.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -56,11 +49,11 @@ Map each approved acceptance criterion to concrete evidence so executor claims a
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 
 ## Failure Modes
 
 - Providing global claims like "tests pass" without stating which criterion that proves.
 - Mixing evidence with new scope decisions that were not part of the approved work package.
 - Hiding assumptions or manual checks inside a generic completion summary.
-- Use `typescript-jest-test-design.md` instead when the missing piece is which tests to design rather than how to map evidence to criteria.
+- Use the stack’s test-design skill (`typescript-jest-test-design.md` or `dotnet-10-csharp-test-design.md`) when the missing piece is which tests to design rather than how to map evidence to criteria.

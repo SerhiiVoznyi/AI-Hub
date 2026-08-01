@@ -1,16 +1,18 @@
 ---
-title: "AWS Lambda Implementation"
+title: "AWS Lambda Implementation (Node.js / TypeScript)"
 type: skill
 tags:
   - skills
   - aws
   - lambda
   - serverless
+  - nodejs
+  - typescript
   - execution
 status: draft
-version: 0.1.0
-last_reviewed: 2026-05-12
-tooling: agnostic
+version: 0.2.0
+last_reviewed: 2026-08-01
+tooling: tool-assisted
 inputs:
   - approved work package
   - lambda trigger and event contract
@@ -19,20 +21,12 @@ outputs:
   - thin handler adapter
   - service class implementation
   - lambda-safe runtime behavior
-related:
-  - ../skills/README.md
-  - ../skills/aws-lambda-change-planning.md
-  - ../skills/serverless-operability-checks.md
-  - ../skills/typescript-design.md
-  - ../skills/nodejs-backend-implementation.md
-  - ../skills/typescript-jest-test-design.md
-  - ../skills/aws-lambda-dotnet-implementation.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
 
-Implement AWS Lambda execution discipline so the framework-mandated handler is a thin adapter and the real behavior lives in an injected service class with explicit contracts, IAM, and runtime safety.
+Implement **Node.js / TypeScript** AWS Lambda functions so the framework-mandated handler is a thin adapter and behavior lives in an injected service class with explicit contracts, IAM, and runtime safety. For production checklist items (retries, idempotency, timeouts, observability), apply `serverless-operability-checks.md` when it is on the manifest—do not restate that checklist here. For **.NET** Lambdas use `aws-lambda-dotnet-implementation.md` instead.
+
 
 ## Use When
 
@@ -57,10 +51,10 @@ Implement AWS Lambda execution discipline so the framework-mandated handler is a
 2. Implement the behavior in a service class that depends only on injected interfaces (logger, AWS SDK adapters, configuration, clock). The service class never imports AWS SDK clients directly.
 3. Hold expensive clients (SDK clients, connection pools, parsed config) in module scope outside the handler to benefit from warm starts, but construct them through a single, idempotent initializer; never via top-level side effects with hidden ordering.
 4. Define typed contracts for the event and the response. Reject unknown shapes at the handler boundary with a typed parser before invoking the service class.
-5. Make every operation idempotent or guarded by an idempotency key. Document the chosen mechanism in code comments only when intent is non-obvious.
-6. Budget time against the configured timeout. Apply explicit timeouts to every outbound call; never rely on SDK defaults.
-7. Emit structured logs with stable field names and correlation identifiers. Never log secrets, full payloads with PII, or raw credentials. Redact at the logger seam.
-8. Declare required IAM actions and environment variables next to the implementation so they can be reviewed alongside code changes. Follow least privilege; no wildcard resources unless flagged as a named risk.
+5. Make every operation idempotent or guarded by an idempotency key when the trigger requires it (see `serverless-operability-checks.md` for the audit checklist).
+6. Budget time against the configured timeout; apply explicit timeouts to outbound calls.
+7. Emit structured logs with stable field names and correlation IDs. Never log secrets or raw PII; redact at the logger seam.
+8. Declare required IAM actions and environment variables next to the implementation. Least privilege; no wildcard resources unless flagged as a named risk.
 
 ## Lambda Composition Pattern
 
@@ -71,9 +65,14 @@ Implement AWS Lambda execution discipline so the framework-mandated handler is a
 
 ## Failure Modes
 
-- Putting business logic, validation, and SDK calls directly into the exported `handler`, making the function impossible to unit-test without invoking AWS.
-- Constructing SDK clients inside the handler body on every invocation, eliminating warm-start benefits and complicating instrumentation.
-- Logging full event payloads that may contain secrets, customer identifiers, or production data.
-- Calling production AWS resources from tests, or relying on the default region or profile.
-- Use `aws-lambda-change-planning.md` instead when the task is sequencing the work and naming risks before implementation begins.
-- Use `serverless-operability-checks.md` instead when the task is auditing operability rather than implementing the change.
+- Putting business logic, validation, and SDK calls directly into the exported `handler`.
+- Constructing SDK clients inside the handler body on every invocation.
+- Logging full event payloads that may contain secrets or PII.
+- Calling production AWS from tests, or relying on the default region/profile.
+- Use `aws-lambda-change-planning.md` for sequencing/risks before implementation.
+- Use `serverless-operability-checks.md` for operability audit rather than implementation.
+- Use `aws-lambda-dotnet-implementation.md` for C# / .NET Lambdas.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.

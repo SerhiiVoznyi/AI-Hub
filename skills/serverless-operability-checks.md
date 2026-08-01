@@ -19,13 +19,6 @@ outputs:
   - operability checklist
   - risk notes
   - missing evidence list
-related:
-  - ../skills/README.md
-  - ../agents/planner-agent.md
-  - ../agents/executor-agent.md
-  - ../agents/validator-agent.md
-  - ./aws-lambda-change-planning.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -58,7 +51,7 @@ Apply production-minded checks to Lambda work so functional success does not hid
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 
 ## Failure Modes
 

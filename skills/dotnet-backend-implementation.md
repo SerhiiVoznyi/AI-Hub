@@ -19,12 +19,6 @@ outputs:
   - composition-root wiring
   - configuration and logging
   - runtime-safe hosting
-related:
-  - ../skills/README.md
-  - ../skills/dotnet-10-csharp-design.md
-  - ../skills/aws-lambda-dotnet-implementation.md
-  - ../skills/dotnet-10-csharp-test-design.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -63,5 +57,5 @@ Implement .NET backend and ASP.NET Core applications with a single **composition
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 - Never log secrets, connection strings, or bearer tokens. Use placeholder redaction in examples and diagnostics.

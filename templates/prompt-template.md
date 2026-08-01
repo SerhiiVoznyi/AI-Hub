@@ -12,8 +12,6 @@ inputs:
   - user objective
 outputs:
   - prompt text
-related:
-  - ../prompts/README.md
 ---
 
 # Summary

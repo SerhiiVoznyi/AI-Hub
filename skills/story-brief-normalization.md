@@ -18,11 +18,6 @@ outputs:
   - clarified task brief
   - explicit assumptions
   - observable completion criteria
-related:
-  - ../skills/README.md
-  - ../agents/orchestrator-agent.md
-  - ../agents/planner-agent.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
@@ -56,7 +51,7 @@ Turn a user story into a precise task brief with scope boundaries, assumptions, 
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 
 ## Failure Modes
 

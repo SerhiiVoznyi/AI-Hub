@@ -1,6 +1,5 @@
 ---
-
-## title: "Test state evaluation"
+title: "Test state evaluation"
 type: prompt
 tags:
   - prompts
@@ -22,12 +21,7 @@ outputs:
   - per-failure triage table with root-cause classification and evidence
   - suggested actions tagged test-side or code-side
   - test/mock-only fixes with before/after status and orchestration handoff
-related:
-  - ./README.md
-  - ./orchestrated-execution-with-skills.md
-  - ./story-completion-evaluation.md
-  - ../skills/README.md
-  - ../knowledge/safety-policy.md
+---
 
 # Summary
 

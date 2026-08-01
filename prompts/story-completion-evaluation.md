@@ -22,11 +22,6 @@ outputs:
   - remaining work and risks
   - completion percentage and Done / Not Done verdict
   - standardized handoff (status, findings, missing evidence, recommended next action)
-related:
-  - ./README.md
-  - ./story-readiness-evaluation.md
-  - ../knowledge/safety-policy.md
-  - ../agents/orchestrator-agent.md
 ---
 
 # Summary

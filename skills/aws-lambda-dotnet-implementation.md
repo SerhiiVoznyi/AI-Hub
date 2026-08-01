@@ -20,19 +20,11 @@ outputs:
   - thin Lambda entry
   - injectable handler service
   - lambda-safe runtime behavior
-related:
-  - ../skills/README.md
-  - ../skills/aws-lambda-implementation.md
-  - ../skills/aws-lambda-change-planning.md
-  - ../skills/serverless-operability-checks.md
-  - ../skills/dotnet-10-csharp-design.md
-  - ../skills/dotnet-backend-implementation.md
-  - ../knowledge/safety-policy.md
 ---
 
 # Summary
 
-Implement **C# / .NET** AWS Lambda functions so the **handler entry** is a thin adapter, behavior lives in **injectable services**, and cold start, serialization, timeouts, and IAM usage stay explicit. For language-agnostic Lambda discipline (idempotency, warm start, SDK patterns), also read `aws-lambda-implementation.md` alongside this document.
+Implement **C# / .NET** AWS Lambda functions so the **handler entry** is a thin adapter, behavior lives in **injectable services**, and cold start, serialization, timeouts, and IAM usage stay explicit. Shared operability expectations (idempotency, retries, observability) come from `serverless-operability-checks.md` when listed on the manifest—do not require loading the TypeScript Lambda skill.
 
 ## Use When
 
@@ -63,8 +55,10 @@ Implement **C# / .NET** AWS Lambda functions so the **handler entry** is a thin 
 - Putting business rules directly in the generated `Function` class with static state and no tests.
 - Using default SDK timeouts that exceed the Lambda timeout.
 - Returning success for partially processed SQS batches without `batchItemFailures`.
+- Use `serverless-operability-checks.md` for operability audit rather than implementation detail.
+- Use `aws-lambda-implementation.md` only for **Node.js / TypeScript** Lambdas (separate stack).
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
 - Treat event payloads and IAM identity details as sensitive; follow least-privilege IAM in the approved plan.

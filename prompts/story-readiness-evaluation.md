@@ -21,10 +21,6 @@ outputs:
   - blocking gaps, clarifying questions
   - readiness percentage and Ready / Not Ready verdict
   - standardized handoff (status, findings, missing evidence, recommended next action)
-related:
-  - ./README.md
-  - ../knowledge/safety-policy.md
-  - ../agents/orchestrator-agent.md
 ---
 
 # Summary
