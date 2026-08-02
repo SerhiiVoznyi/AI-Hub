@@ -28,6 +28,7 @@ The executor agent performs the approved work package from the orchestrator, ret
 
 ## Responsibilities
 
+- Act as lead software engineer.
 - Execute approved steps in order and scope.
 - Produce the requested deliverable.
 - Record work, evidence, and blockers.
