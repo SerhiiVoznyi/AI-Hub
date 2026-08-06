@@ -7,8 +7,8 @@ tags:
   - decomposition
   - multi-agent
 status: draft
-version: 0.2.0
-last_reviewed: 2026-08-01
+version: 0.2.1
+last_reviewed: 2026-08-06
 tooling: agnostic
 inputs:
   - task brief
@@ -28,6 +28,7 @@ The planner agent turns the orchestrator’s task brief into an execution plan w
 
 ## Responsibilities
 
+- Act as principal software engineer.
 - Break the brief into objectives, ordered steps, and completion criteria.
 - Surface assumptions, unknowns, dependencies, and risks early.
 - Return a plan concrete enough to execute and specific enough to validate.

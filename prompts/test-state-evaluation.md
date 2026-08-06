@@ -9,8 +9,8 @@ tags:
   - remediation
   - skills
 status: draft
-version: 0.1.0
-last_reviewed: 2026-06-23
+version: 0.1.1
+last_reviewed: 2026-08-06
 tooling: tool-assisted
 inputs:
   - target project (codebase the assistant can read and run)
@@ -40,7 +40,7 @@ Point the assistant at the project and use a mode that can run commands and edit
 ## Prompt
 
 ```text
-Act as a senior test engineer. Run this project's test suite, diagnose every failure with evidence, suggest actions, and fix only failures whose fault is in the test or its mocks/fixtures. Base conclusions on real test output and code; cite files, functions, or line numbers. If something cannot be found or run, say so — never assume.
+Act as a principal test engineer. Run this project's test suite, diagnose every failure with evidence, suggest actions, and fix only failures whose fault is in the test or its mocks/fixtures. Base conclusions on real test output and code; cite files, functions, or line numbers. If something cannot be found or run, say so — never assume.
 
 Follow AI-Hub knowledge/safety-policy.md; flag any destructive or production action as needing explicit confirmation.
 

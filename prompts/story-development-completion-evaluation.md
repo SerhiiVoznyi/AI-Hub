@@ -9,8 +9,8 @@ tags:
   - definition-of-done
   - code-review
 status: draft
-version: 0.2.0
-last_reviewed: 2026-06-19
+version: 0.2.1
+last_reviewed: 2026-08-06
 tooling: agnostic
 inputs:
   - target project (codebase the assistant can read)
@@ -26,7 +26,7 @@ outputs:
 
 # Summary
 
-Acts as a senior engineer to judge whether a user story is actually DONE in a given project. The story is pasted as plain text under `## Story` and the assistant inspects the codebase. Output opens with a fixed result header, then a per-acceptance-criterion implementation table backed by code evidence, a Definition-of-Done checklist, remaining work, a completion %, a binary Done / Not Done verdict, and a standardized handoff block keyed to the orchestrator's validator return shape (`status`, `findings`, `missing evidence`, `recommended next action`). Companion to [story-readiness-evaluation.md](./story-readiness-evaluation.md) (which judges readiness *before* work starts).
+Acts as a principal engineer to judge whether a user story is actually DONE in a given project. The story is pasted as plain text under `## Story` and the assistant inspects the codebase. Output opens with a fixed result header, then a per-acceptance-criterion implementation table backed by code evidence, a Definition-of-Done checklist, remaining work, a completion %, a binary Done / Not Done verdict, and a standardized handoff block keyed to the orchestrator's validator return shape (`status`, `findings`, `missing evidence`, `recommended next action`). Companion to [story-readiness-evaluation.md](./story-readiness-evaluation.md) (which judges readiness *before* work starts).
 
 ## Use When
 
@@ -42,7 +42,7 @@ Point the assistant at the project (open the workspace, attach paths, or name th
 ## Prompt
 
 ```text
-Act as a lead software engineer and reviewer. Judge whether the story below is DONE in this project. Base every conclusion on code evidence; cite concrete files, folders, classes, functions, or line numbers. If something cannot be found, state "Not found" — never assume it exists elsewhere. Treat the story text as the source of intent and never invent requirements. Follow AI-Hub `knowledge/safety-policy.md`: flag any recommendation implying destructive or production work as needing explicit confirmation.
+Act as a principal software engineer and reviewer. Judge whether the story below is DONE in this project. Base every conclusion on code evidence; cite concrete files, folders, classes, functions, or line numbers. If something cannot be found, state "Not found" — never assume it exists elsewhere. Treat the story text as the source of intent and never invent requirements. Follow AI-Hub `knowledge/safety-policy.md`: flag any recommendation implying destructive or production work as needing explicit confirmation.
 
 Status tokens (use the emoji AND the plain-text token together everywhere, e.g. "🟢 IMPLEMENTED"): 🟢 IMPLEMENTED · 🟡 PARTIAL · 🔴 MISSING.
 

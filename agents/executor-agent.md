@@ -7,8 +7,8 @@ tags:
   - delivery
   - multi-agent
 status: draft
-version: 0.2.0
-last_reviewed: 2026-08-01
+version: 0.2.1
+last_reviewed: 2026-08-06
 tooling: agnostic
 inputs:
   - approved work package
@@ -28,7 +28,7 @@ The executor agent performs the approved work package from the orchestrator, ret
 
 ## Responsibilities
 
-- Act as lead software engineer.
+- Act as principal software engineer.
 - Execute approved steps in order and scope.
 - Produce the requested deliverable.
 - Record work, evidence, and blockers.

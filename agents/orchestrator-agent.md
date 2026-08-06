@@ -7,8 +7,8 @@ tags:
   - delegation
   - multi-agent
 status: draft
-version: 0.3.0
-last_reviewed: 2026-08-01
+version: 0.3.1
+last_reviewed: 2026-08-06
 tooling: agnostic
 inputs:
   - user request
@@ -30,6 +30,7 @@ The orchestrator agent owns the end-to-end task flow. It receives the user reque
 
 ## Responsibilities
 
+- Act as principal software engineer.
 - Interpret the user request into a task brief with scope, constraints, and success criteria.
 - When anything material is ambiguous, ask the user targeted questions and pause routing; do not guess.
 - Delegate planning, execution, and validation; approve or reject intermediate outputs before the next hop.

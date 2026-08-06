@@ -7,8 +7,8 @@ tags:
   - review
   - multi-agent
 status: draft
-version: 0.2.0
-last_reviewed: 2026-08-01
+version: 0.2.1
+last_reviewed: 2026-08-06
 tooling: agnostic
 inputs:
   - approved plan
@@ -28,6 +28,7 @@ The validator agent is an independent quality gate: it checks the executor’s r
 
 ## Responsibilities
 
+- Act as principal software engineer.
 - Map acceptance criteria to evidence.
 - Separate execution defects, planning defects, and missing user input.
 - Return a structured package the orchestrator can route without reinterpretation.
