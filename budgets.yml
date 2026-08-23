@@ -1,0 +1,4 @@
+# Soft guidance only. Hard per-day caps need durable state (see SandBox design §21).
+# The gate workflow may log warnings when these are exceeded; it does not enforce yet.
+per_repo_max_runs_per_day: 20
+global_max_runs_per_day: 100

@@ -1,0 +1,144 @@
+name: Create Branch
+run-name: Create Branch - ${{ inputs.branch_name }} @ ${{ inputs.repository }}
+
+# Cross-repo branch creation for the SDLC control plane.
+# Requires secret TARGET_WRITE_TOKEN (PAT or App installation token) with contents:write
+# on allowlisted target repositories. Do not use GITHUB_TOKEN for cross-repo push.
+#
+# workflow_dispatch:
+#   POST /repos/{owner}/{control}/actions/workflows/create-branch.yml/dispatches
+#   { "ref":"main", "inputs": { "repository":"https://github.com/org/repo", "branch_name":"ai/portal-18270", "base_ref":"main" } }
+#
+# Also callable from sdlc-plan-story.yml via workflow_call.
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        description: Target repo URL or owner/name
+        required: true
+        type: string
+      branch_name:
+        description: Short branch name (e.g. ai/portal-18270)
+        required: true
+        type: string
+      base_ref:
+        description: Existing branch or commit SHA to branch from
+        required: false
+        default: main
+        type: string
+  workflow_call:
+    inputs:
+      repository:
+        description: Target repo URL or owner/name
+        required: true
+        type: string
+      branch_name:
+        description: Short branch name
+        required: true
+        type: string
+      base_ref:
+        description: Existing branch or commit SHA to branch from
+        required: false
+        default: main
+        type: string
+    secrets:
+      TARGET_WRITE_TOKEN:
+        required: true
+    outputs:
+      owner_repo:
+        description: Normalised owner/name
+        value: ${{ jobs.create-branch.outputs.owner_repo }}
+      branch_name:
+        description: Created branch name
+        value: ${{ jobs.create-branch.outputs.branch_name }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: create-branch-${{ inputs.repository }}-${{ inputs.branch_name }}
+  cancel-in-progress: false
+
+jobs:
+  create-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      owner_repo: ${{ steps.normalize.outputs.owner_repo }}
+      branch_name: ${{ inputs.branch_name }}
+    steps:
+      - name: Checkout control repo (scripts + allowlist)
+        uses: actions/checkout@v4
+
+      - name: Normalise repository
+        id: normalize
+        env:
+          REPOSITORY: ${{ inputs.repository }}
+        run: |
+          set -euo pipefail
+          chmod +x .github/scripts/normalize-repo.sh
+          OWNER_REPO="$(.github/scripts/normalize-repo.sh "${REPOSITORY}")"
+          echo "owner_repo=${OWNER_REPO}" >> "$GITHUB_OUTPUT"
+          echo "Normalised repository: ${OWNER_REPO}"
+
+      - name: Allowlist check
+        env:
+          OWNER_REPO: ${{ steps.normalize.outputs.owner_repo }}
+        run: |
+          set -euo pipefail
+          if ! grep -E '^- ' allowlist.yml | sed 's/^-[[:space:]]*//' | tr -d '[:space:]' | grep -qx "${OWNER_REPO}"; then
+            echo "::error::Repository ${OWNER_REPO} is not in allowlist.yml"
+            exit 1
+          fi
+
+      - name: Validate branch name
+        env:
+          BRANCH_NAME: ${{ inputs.branch_name }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${BRANCH_NAME}" ]]; then
+            echo "::error::branch_name is required"
+            exit 1
+          fi
+          if [[ "${BRANCH_NAME}" == refs/* ]]; then
+            echo "::error::Pass the short branch name (e.g. ai/portal-18270), not a full ref"
+            exit 1
+          fi
+          if ! git check-ref-format --branch "${BRANCH_NAME}"; then
+            echo "::error::Invalid branch name: ${BRANCH_NAME}"
+            exit 1
+          fi
+
+      - name: Require TARGET_WRITE_TOKEN
+        env:
+          TARGET_WRITE_TOKEN: ${{ secrets.TARGET_WRITE_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${TARGET_WRITE_TOKEN}" ]]; then
+            echo "::error::TARGET_WRITE_TOKEN secret is required for cross-repo branch creation"
+            exit 1
+          fi
+
+      - name: Checkout target base
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.normalize.outputs.owner_repo }}
+          ref: ${{ inputs.base_ref }}
+          token: ${{ secrets.TARGET_WRITE_TOKEN }}
+          fetch-depth: 0
+          path: target
+
+      - name: Create and push branch
+        working-directory: target
+        env:
+          BRANCH_NAME: ${{ inputs.branch_name }}
+          BASE_REF: ${{ inputs.base_ref }}
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --heads origin "${BRANCH_NAME}" >/dev/null 2>&1; then
+            echo "::error::Branch already exists on origin: ${BRANCH_NAME}"
+            exit 1
+          fi
+          git checkout -B "${BRANCH_NAME}"
+          git push -u origin "HEAD:refs/heads/${BRANCH_NAME}"
+          echo "Created origin/${BRANCH_NAME} from ${BASE_REF} on ${{ steps.normalize.outputs.owner_repo }}"

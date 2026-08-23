@@ -8,4 +8,4 @@ Use [../templates/workflow-template.md](../templates/workflow-template.md) to st
 
 ## Available Workflows
 
-None yet. Prefer documenting a concrete multi-step process here only when order, checkpoints, or branching are the primary value—not when a single prompt already covers the run.
+- [sdlc-ai-plan-story.md](sdlc-ai-plan-story.md) — Jira → AI-Hub Actions → target `ai/*` branch + implementation plan (GitHub Actions in `.github/workflows/`).

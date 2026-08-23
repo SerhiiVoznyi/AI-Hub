@@ -1,0 +1,412 @@
+name: AI-SDLC Plan Story
+run-name: AI-SDLC Plan ${{ inputs.jira_id }} → ${{ inputs.repository }}
+
+# Jira (or manual) entry point for AI story planning.
+# POST /repos/SerhiiVoznyi/AI-Hub/actions/workflows/sdlc-plan-story.yml/dispatches
+# {
+#   "ref": "main",
+#   "inputs": {
+#     "jira_id": "PORTAL-18270",
+#     "jira_url": "https://jira-domain.atlassian.net/browse/PORTAL-18270",
+#     "repository": "https://github.com/SerhiiVoznyi/SandBox"
+#   }
+# }
+#
+# Required secrets: TARGET_WRITE_TOKEN, CURSOR_API_KEY, JIRA_READ_TOKEN
+# Optional secrets: JIRA_EMAIL (Basic auth), JIRA_CALLBACK_WEBHOOK_URL
+# Required variable: AI_SDLC_ENABLED=true (kill switch)
+# Optional variables: CURSOR_CLI_VERSION, SDLC_DEFAULT_MODEL
+
+on:
+  workflow_dispatch:
+    inputs:
+      jira_id:
+        description: Jira issue key (e.g. PORTAL-18270)
+        required: true
+        type: string
+      jira_url:
+        description: Canonical browse URL for the issue
+        required: true
+        type: string
+      repository:
+        description: Target GitHub repo URL or owner/name
+        required: true
+        type: string
+
+concurrency:
+  group: sdlc-plan-${{ inputs.jira_id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      owner_repo: ${{ steps.gate.outputs.owner_repo }}
+      branch: ${{ steps.gate.outputs.branch }}
+      plan_path: ${{ steps.gate.outputs.plan_path }}
+      generated_at: ${{ steps.gate.outputs.generated_at }}
+      jira_id: ${{ steps.gate.outputs.jira_id }}
+      jira_url: ${{ steps.gate.outputs.jira_url }}
+      base_ref: ${{ steps.gate.outputs.base_ref }}
+    steps:
+      - name: Checkout control repo
+        uses: actions/checkout@v4
+
+      - name: Kill switch, allowlist, compute identifiers
+        id: gate
+        env:
+          JIRA_ID_IN: ${{ inputs.jira_id }}
+          JIRA_URL_IN: ${{ inputs.jira_url }}
+          REPOSITORY_IN: ${{ inputs.repository }}
+          AI_SDLC_ENABLED: ${{ vars.AI_SDLC_ENABLED }}
+        run: |
+          set -euo pipefail
+          chmod +x .github/scripts/normalize-repo.sh
+
+          if [[ "${AI_SDLC_ENABLED}" != "true" ]]; then
+            echo "::error::Kill switch engaged (vars.AI_SDLC_ENABLED must be 'true')"
+            exit 1
+          fi
+
+          JIRA_ID="$(echo "${JIRA_ID_IN}" | tr -d '[:space:]')"
+          if [[ ! "${JIRA_ID}" =~ ^[A-Z][A-Z0-9]+-[0-9]+$ ]]; then
+            echo "::error::Invalid jira_id: ${JIRA_ID_IN}"
+            exit 1
+          fi
+
+          OWNER_REPO="$(.github/scripts/normalize-repo.sh "${REPOSITORY_IN}")"
+          if ! grep -E '^- ' allowlist.yml | sed 's/^-[[:space:]]*//' | tr -d '[:space:]' | grep -qx "${OWNER_REPO}"; then
+            echo "::error::Repository ${OWNER_REPO} is not in allowlist.yml"
+            exit 1
+          fi
+
+          BRANCH="ai/$(echo "${JIRA_ID}" | tr '[:upper:]' '[:lower:]')"
+          if ! git check-ref-format --branch "${BRANCH}"; then
+            echo "::error::Computed branch name is invalid: ${BRANCH}"
+            exit 1
+          fi
+
+          GENERATED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          GENERATED_AT_BASIC="$(date -u +%Y%m%dT%H%M%SZ)"
+          PLAN_PATH=".sdlc/plans/${JIRA_ID}-implementation-plan-${GENERATED_AT_BASIC}.md"
+          PLAN_REGEX='^\.sdlc/plans/[A-Z][A-Z0-9]+-[0-9]+-implementation-plan-[0-9]{8}T[0-9]{6}Z\.md$'
+          if [[ ! "${PLAN_PATH}" =~ ${PLAN_REGEX} ]]; then
+            echo "::error::Computed plan_path failed regex: ${PLAN_PATH}"
+            exit 1
+          fi
+
+          {
+            echo "owner_repo=${OWNER_REPO}"
+            echo "branch=${BRANCH}"
+            echo "plan_path=${PLAN_PATH}"
+            echo "generated_at=${GENERATED_AT}"
+            echo "jira_id=${JIRA_ID}"
+            echo "jira_url=${JIRA_URL_IN}"
+            echo "base_ref=main"
+          } >> "$GITHUB_OUTPUT"
+
+  create-branch:
+    needs: prepare
+    uses: ./.github/workflows/create-branch.yml
+    with:
+      repository: ${{ needs.prepare.outputs.owner_repo }}
+      branch_name: ${{ needs.prepare.outputs.branch }}
+      base_ref: ${{ needs.prepare.outputs.base_ref }}
+    secrets:
+      TARGET_WRITE_TOKEN: ${{ secrets.TARGET_WRITE_TOKEN }}
+
+  plan:
+    needs: [prepare, create-branch]
+    runs-on: ubuntu-latest
+    env:
+      OWNER_REPO: ${{ needs.prepare.outputs.owner_repo }}
+      BRANCH: ${{ needs.prepare.outputs.branch }}
+      PLAN_PATH: ${{ needs.prepare.outputs.plan_path }}
+      GENERATED_AT: ${{ needs.prepare.outputs.generated_at }}
+      JIRA_ID: ${{ needs.prepare.outputs.jira_id }}
+      JIRA_URL: ${{ needs.prepare.outputs.jira_url }}
+      MODEL: ${{ vars.SDLC_DEFAULT_MODEL }}
+    steps:
+      - name: Checkout control repo (scripts + prompts)
+        uses: actions/checkout@v4
+        with:
+          path: control
+
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.OWNER_REPO }}
+          ref: ${{ env.BRANCH }}
+          token: ${{ secrets.TARGET_WRITE_TOKEN }}
+          fetch-depth: 0
+          path: target
+
+      - name: Resolve model and base commit
+        id: meta
+        working-directory: target
+        run: |
+          set -euo pipefail
+          BASE_COMMIT="$(git rev-parse HEAD)"
+          MODEL_OUT="${MODEL:-claude-4.6-sonnet-thinking}"
+          if [[ -f .sdlc/config.yml ]]; then
+            CFG_MODEL="$(grep -E '^[[:space:]]*model:' .sdlc/config.yml | head -1 | sed 's/^[[:space:]]*model:[[:space:]]*//' | tr -d '"' || true)"
+            if [[ -n "${CFG_MODEL}" ]]; then
+              MODEL_OUT="${CFG_MODEL}"
+            fi
+          fi
+          echo "base_commit=${BASE_COMMIT}" >> "$GITHUB_OUTPUT"
+          echo "model=${MODEL_OUT}" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch Jira issue
+        id: jira
+        env:
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_READ_TOKEN: ${{ secrets.JIRA_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${JIRA_READ_TOKEN}" ]]; then
+            echo "::error::JIRA_READ_TOKEN secret is required"
+            exit 1
+          fi
+
+          JIRA_BASE="$(echo "${JIRA_URL}" | sed -E 's|^(https://[^/]+)/.*|\1|')"
+          API_URL="${JIRA_BASE}/rest/api/3/issue/${JIRA_ID}?expand=renderedFields"
+
+          if [[ -n "${JIRA_EMAIL}" ]]; then
+            curl -fsS -u "${JIRA_EMAIL}:${JIRA_READ_TOKEN}" \
+              -H "Accept: application/json" \
+              "${API_URL}" -o /tmp/jira-issue.json
+          else
+            curl -fsS \
+              -H "Authorization: Bearer ${JIRA_READ_TOKEN}" \
+              -H "Accept: application/json" \
+              "${API_URL}" -o /tmp/jira-issue.json
+          fi
+
+          python3 <<'PY'
+          import json, hashlib, re, html, pathlib
+          raw = pathlib.Path("/tmp/jira-issue.json").read_text(encoding="utf-8")
+          data = json.loads(raw)
+          fields = data.get("fields") or {}
+          rendered = data.get("renderedFields") or {}
+
+          def strip_html(s: str) -> str:
+              s = re.sub(r"<br\s*/?>", "\n", s, flags=re.I)
+              s = re.sub(r"</p>", "\n\n", s, flags=re.I)
+              s = re.sub(r"<[^>]+>", "", s)
+              return html.unescape(s).strip()
+
+          summary = fields.get("summary") or ""
+          description = rendered.get("description") or ""
+          if isinstance(description, str) and "<" in description:
+              description = strip_html(description)
+          elif not description and fields.get("description"):
+              description = json.dumps(fields.get("description"), ensure_ascii=False)
+
+          ctx = {
+              "key": data.get("key"),
+              "summary": summary,
+              "status": ((fields.get("status") or {}).get("name")) or "",
+              "issuetype": ((fields.get("issuetype") or {}).get("name")) or "",
+              "labels": fields.get("labels") or [],
+              "description": description,
+          }
+          text = json.dumps(ctx, indent=2, ensure_ascii=False)
+          if len(text) > 100_000:
+              text = text[:100_000] + "\n…[truncated]"
+          pathlib.Path("/tmp/jira-context.json").write_text(text, encoding="utf-8")
+          digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+          pathlib.Path("/tmp/inputs-digest.txt").write_text(f"sha256:{digest}", encoding="utf-8")
+          print(f"Fetched Jira {ctx['key']}; inputs_digest=sha256:{digest[:12]}…")
+          PY
+          echo "inputs_digest=$(cat /tmp/inputs-digest.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Render prompt
+        env:
+          BASE_COMMIT: ${{ steps.meta.outputs.base_commit }}
+          MODEL_OUT: ${{ steps.meta.outputs.model }}
+          RUN_ID: ${{ github.run_id }}
+          INPUTS_DIGEST: ${{ steps.jira.outputs.inputs_digest }}
+        run: |
+          set -euo pipefail
+          mkdir -p target/.sdlc/plans
+          if [[ ! -f target/.sdlc/plan-template.md ]]; then
+            cp control/.sdlc/plan-template.md /tmp/plan-template.md
+          else
+            cp target/.sdlc/plan-template.md /tmp/plan-template.md
+          fi
+
+          python3 <<'PY'
+          import os, pathlib
+          frame = pathlib.Path("control/.sdlc/prompts/plan-frame.md").read_text(encoding="utf-8")
+          replacements = {
+              "{{PLAN_PATH}}": os.environ["PLAN_PATH"],
+              "{{JIRA_ID}}": os.environ["JIRA_ID"],
+              "{{JIRA_URL}}": os.environ["JIRA_URL"],
+              "{{OWNER_REPO}}": os.environ["OWNER_REPO"],
+              "{{BRANCH}}": os.environ["BRANCH"],
+              "{{BASE_COMMIT}}": os.environ["BASE_COMMIT"],
+              "{{GENERATED_AT}}": os.environ["GENERATED_AT"],
+              "{{RUN_ID}}": os.environ["RUN_ID"],
+              "{{MODEL}}": os.environ["MODEL_OUT"],
+              "{{INPUTS_DIGEST}}": os.environ["INPUTS_DIGEST"],
+              "{{JIRA_CONTEXT}}": pathlib.Path("/tmp/jira-context.json").read_text(encoding="utf-8"),
+          }
+          for k, v in replacements.items():
+              frame = frame.replace(k, v)
+          pathlib.Path("/tmp/prompt.md").write_text(frame, encoding="utf-8")
+          print(f"Rendered prompt ({len(frame)} chars)")
+          PY
+
+      - name: Install Cursor CLI
+        env:
+          CURSOR_CLI_VERSION: ${{ vars.CURSOR_CLI_VERSION }}
+        run: |
+          set -euo pipefail
+          curl -fsSL https://cursor.com/install -o /tmp/cursor-install.sh
+          bash /tmp/cursor-install.sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.local/bin:$PATH"
+          if ! command -v agent >/dev/null 2>&1; then
+            echo "::error::Cursor agent CLI not found on PATH after install"
+            exit 1
+          fi
+          agent --version || true
+          if [[ -n "${CURSOR_CLI_VERSION}" ]]; then
+            echo "Requested CURSOR_CLI_VERSION=${CURSOR_CLI_VERSION}"
+          fi
+
+      - name: Stage plan template for agent read (untracked helper)
+        working-directory: target
+        run: |
+          set -euo pipefail
+          if [[ ! -f .sdlc/plan-template.md ]]; then
+            mkdir -p .sdlc
+            cp /tmp/plan-template.md .sdlc/plan-template.md
+            echo "COPIED_TEMPLATE=1" >> "$GITHUB_ENV"
+          else
+            echo "COPIED_TEMPLATE=0" >> "$GITHUB_ENV"
+          fi
+
+      - name: Run planning agent
+        working-directory: target
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          MODEL_OUT: ${{ steps.meta.outputs.model }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${CURSOR_API_KEY}" ]]; then
+            echo "::error::CURSOR_API_KEY secret is required"
+            exit 1
+          fi
+          timeout 25m agent -p --mode plan --force --trust \
+            --model "${MODEL_OUT}" \
+            --output-format json \
+            "$(cat /tmp/prompt.md)" > /tmp/agent.json \
+            || { echo "::error::Planning agent failed"; tail -n 50 /tmp/agent.json || true; exit 1; }
+
+      - name: Verify plan artifact
+        working-directory: target
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          set -euo pipefail
+          chmod +x ../control/.github/scripts/verify-plan.sh
+
+          hide_helper() {
+            if [[ "${COPIED_TEMPLATE}" == "1" ]] && [[ -f .sdlc/plan-template.md ]]; then
+              if git status --porcelain -- .sdlc/plan-template.md | grep -q '^??'; then
+                mkdir -p /tmp/sdlc-helper
+                mv .sdlc/plan-template.md /tmp/sdlc-helper/plan-template.md
+              fi
+            fi
+          }
+          restore_helper() {
+            if [[ -f /tmp/sdlc-helper/plan-template.md ]]; then
+              mkdir -p .sdlc
+              cp /tmp/sdlc-helper/plan-template.md .sdlc/plan-template.md
+            fi
+          }
+
+          hide_helper
+          if ../control/.github/scripts/verify-plan.sh "${PLAN_PATH}"; then
+            exit 0
+          fi
+
+          for attempt in 1 2; do
+            echo "Verification failed; corrective continue (${attempt}/2)"
+            restore_helper
+            timeout 15m agent --continue -p --force --trust \
+              "Verification failed. Ensure exactly one new file exists at ${PLAN_PATH} with required frontmatter and section headings. Touch no other files." \
+              > "/tmp/agent-retry-${attempt}.json" || true
+            hide_helper
+            if ../control/.github/scripts/verify-plan.sh "${PLAN_PATH}"; then
+              exit 0
+            fi
+          done
+          exit 1
+
+      - name: Commit and push plan
+        working-directory: target
+        run: |
+          set -euo pipefail
+          git config user.name "SDLC Bot"
+          git config user.email "sdlc-bot@users.noreply.github.com"
+          git add -- "${PLAN_PATH}"
+          git commit -m "docs(${JIRA_ID}): add implementation plan"
+          git push origin "HEAD:refs/heads/${BRANCH}"
+          echo "PLAN_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Archive prompt and transcript
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdlc-plan-${{ needs.prepare.outputs.jira_id }}-${{ github.run_id }}
+          path: |
+            /tmp/prompt.md
+            /tmp/agent.json
+            /tmp/agent-retry-1.json
+            /tmp/agent-retry-2.json
+            /tmp/jira-context.json
+          if-no-files-found: ignore
+          retention-days: 90
+
+      - name: Callback to Jira
+        if: always()
+        env:
+          WEBHOOK: ${{ secrets.JIRA_CALLBACK_WEBHOOK_URL }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${WEBHOOK}" ]]; then
+            echo "JIRA_CALLBACK_WEBHOOK_URL not set; skipping callback"
+            exit 0
+          fi
+          PLAN_LINK=""
+          if [[ -n "${PLAN_SHA:-}" ]]; then
+            PLAN_LINK="https://github.com/${OWNER_REPO}/blob/${PLAN_SHA}/${PLAN_PATH}"
+          fi
+          export PLAN_LINK
+          payload="$(python3 <<'PY'
+          import json, os
+          print(json.dumps({
+            "jira_id": os.environ["JIRA_ID"],
+            "jira_url": os.environ["JIRA_URL"],
+            "repository": os.environ["OWNER_REPO"],
+            "branch": os.environ["BRANCH"],
+            "plan_path": os.environ["PLAN_PATH"],
+            "plan_sha": os.environ.get("PLAN_SHA") or None,
+            "plan_permalink": os.environ.get("PLAN_LINK") or None,
+            "run_url": "https://github.com/%s/actions/runs/%s" % (
+              os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_RUN_ID"]),
+            "status": os.environ["JOB_STATUS"],
+          }))
+          PY
+          )"
+          curl -fsS -X POST "${WEBHOOK}" \
+            -H "Content-Type: application/json" \
+            -d "${payload}"
+          echo "Callback sent"

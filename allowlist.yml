@@ -1,0 +1,4 @@
+# Repositories the SDLC planning pipeline may create branches in and push plans to.
+# Entries are owner/name (normalised). Payload may also send a full github.com URL.
+repositories:
+  - SerhiiVoznyi/SandBox
