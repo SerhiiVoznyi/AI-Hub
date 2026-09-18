@@ -8,4 +8,4 @@ Use [../templates/workflow-template.md](../templates/workflow-template.md) to st
 
 ## Available Workflows
 
-- [sdlc-ai-plan-story.md](sdlc-ai-plan-story.md) — Jira → AI-Hub Actions → target `ai/*` branch + implementation plan (GitHub Actions in `.github/workflows/`).
+_(None yet — add workflow artifacts here and link them from this index.)_

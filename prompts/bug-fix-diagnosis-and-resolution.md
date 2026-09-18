@@ -39,9 +39,9 @@ Open the target project, copy the prompt, replace the placeholder under `## Bug 
 
 ```text
 # Stage
-Act as a Principal Software Engineer. 
-Decide if the bug below is real and reproducible in this codebase. 
-Cite evidence — files, functions, lines — for every claim. 
+Act as a Principal Software Engineer.
+Decide if the bug below is real and reproducible in this codebase.
+Cite evidence — files, functions, lines — for every claim.
 Say "Not found" rather than guess.
 
 Follow AI-Hub `knowledge/safety-policy.md`.
@@ -83,13 +83,8 @@ Apply only if told to (e.g. "apply it"). Otherwise write "Not applied — awaiti
 One sentence each: verdict, root cause (or why not confirmed), proposed fix, applied or not.
 ```
 
-
-
-
-
 ## Notes
 
 - No code access or bug report → `BLOCKED`.
 - Fix is proposed only; Step 6 is a hard gate needing explicit confirmation.
 - `NOT_REPRODUCIBLE`/`INVALID` are valid outcomes — don't force a confirmation.
-

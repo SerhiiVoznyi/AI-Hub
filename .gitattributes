@@ -1,3 +1,0 @@
-# Force LF for scripts executed on Linux runners
-.github/scripts/*.sh text eol=lf
-.github/workflows/*.yml text eol=lf
