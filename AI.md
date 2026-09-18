@@ -8,13 +8,19 @@ AI-Hub stores reusable AI artifacts organized by competency. It is intentionally
 
 ## Navigate The Repository
 
-- `agents/`: reusable agent role definitions with clear responsibilities and boundaries
-- `skills/`: atomic capabilities that can be composed into larger tasks
-- `prompts/`: reusable prompt patterns for common tasks
-- `workflows/`: multi-step task sequences, including human checkpoints when needed
-- `knowledge/`: stable concepts, glossaries, mental models, and shared contracts (safety, handoffs, return shapes, output discipline); agents and prompts must link these instead of restating them
-- `templates/`: starter files for creating new artifacts consistently
-- `.cursor/rules/ai-hub.mdc` and `.coding-assistant/`: thin adapters for specific tools; they should not become alternate sources of truth
+Human-facing indexes (each links back to [README.md](README.md)):
+
+- [agents/](agents/README.md): reusable agent role definitions with clear responsibilities and boundaries
+- [skills/](skills/README.md): atomic capabilities that can be composed into larger tasks
+- [prompts/](prompts/README.md): reusable prompt patterns for common tasks
+- [workflows/](workflows/README.md): multi-step task sequences, including human checkpoints when needed
+- [knowledge/](knowledge/README.md): stable concepts, glossaries, mental models, and shared contracts (safety, handoffs, return shapes, output discipline); agents and prompts must link these instead of restating them
+- [templates/](templates/README.md): starter files for creating new artifacts consistently
+
+Thin tool adapters (point here; do not become alternate sources of truth):
+
+- [`.cursor/rules/ai-hub.mdc`](.cursor/rules/ai-hub.mdc)
+- [`.coding-assistant/instructions.md`](.coding-assistant/instructions.md) / [`.coding-assistant/context.md`](.coding-assistant/context.md)
 
 ## Repository Conventions
 

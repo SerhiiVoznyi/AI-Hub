@@ -1,29 +1,51 @@
+[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](./README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](../knowledge/README.md) · [Templates](../templates/README.md)
+
 # Skills
 
-Use this folder for atomic capabilities that can be reused across prompts, agents, and workflows.
+Atomic capabilities reusable across prompts, agents, and workflows.
 
-Prefer names that describe visible behavior (naming examples only: `structured-reasoning.md`, `evidence-synthesis.md`), rather than names that imply hidden model internals.
+Prefer names that describe visible behavior (e.g. `structured-reasoning.md`, `evidence-synthesis.md`) over names that imply hidden model internals.
 
-Use [../templates/skill-template.md](../templates/skill-template.md) to start new skill definitions.
+New skills: copy [../templates/skill-template.md](../templates/skill-template.md).
 
-## Available Skills
+## Available skills
 
-- [story-brief-normalization.md](./story-brief-normalization.md): turns a user story into a clarified brief with boundaries, assumptions, and observable completion criteria for orchestrator and planner use.
-- [aws-lambda-change-planning.md](./aws-lambda-change-planning.md): helps the planner sequence Lambda work across handlers, integrations, configuration, risks, and acceptance criteria.
-- [serverless-operability-checks.md](./serverless-operability-checks.md): adds production-minded checks for retries, idempotency, timeout safety, observability, and configuration risk.
-- [typescript-design.md](./typescript-design.md): language-level TypeScript rules with strict typing and an object-oriented default for feature surfaces and boundaries.
-- [nodejs-backend-implementation.md](./nodejs-backend-implementation.md): Node.js runtime concerns including composition root, dependency injection through classes, configuration, and lifecycle.
-- [aws-lambda-implementation.md](./aws-lambda-implementation.md): **Node.js / TypeScript** Lambda thin handler adapter + injected service class with typed event contracts.
-- [typescript-jest-test-design.md](./typescript-jest-test-design.md): Jest coverage for TypeScript code at stable seams, with typed fixtures and deliberate mocking at injected interfaces.
-- [acceptance-evidence-traceability.md](./acceptance-evidence-traceability.md): maps each approved criterion to concrete evidence so completion claims and review decisions stay aligned.
-- [validation-disposition.md](./validation-disposition.md): helps the validator distinguish `pass`, `rework`, and `replan` based on evidence quality, implementation defects, and planning gaps.
-- [dotnet-10-csharp-design.md](./dotnet-10-csharp-design.md): idiomatic C# for .NET 10 (`net10.0`), nullable reference types, async, and DI-friendly class boundaries.
-- [dotnet-backend-implementation.md](./dotnet-backend-implementation.md): ASP.NET Core and generic .NET hosting—composition root, options, logging, `HttpClient` factory, graceful shutdown.
-- [aws-lambda-dotnet-implementation.md](./aws-lambda-dotnet-implementation.md): C# Lambda entry as a thin adapter with injectable services, serialization, and timeout-aware calls (does not require the TypeScript Lambda skill).
-- [dotnet-10-csharp-test-design.md](./dotnet-10-csharp-test-design.md): xUnit strategies and evidence expectations at interface seams for .NET 10 C#.
+### Story & validation
+
+| Skill | Purpose |
+| --- | --- |
+| [story-brief-normalization.md](./story-brief-normalization.md) | Clarified brief with boundaries, assumptions, and observable completion criteria |
+| [acceptance-evidence-traceability.md](./acceptance-evidence-traceability.md) | Maps each approved criterion to concrete evidence |
+| [validation-disposition.md](./validation-disposition.md) | Distinguishes `pass`, `rework`, and `replan` from evidence quality |
+
+### TypeScript / Node.js / Lambda
+
+| Skill | Purpose |
+| --- | --- |
+| [typescript-design.md](./typescript-design.md) | Strict typing and OOP default for TypeScript surfaces |
+| [nodejs-backend-implementation.md](./nodejs-backend-implementation.md) | Composition root, DI through classes, configuration, lifecycle |
+| [aws-lambda-implementation.md](./aws-lambda-implementation.md) | Node.js/TS thin handler + injected service with typed events |
+| [aws-lambda-change-planning.md](./aws-lambda-change-planning.md) | Sequences Lambda work across handlers, integrations, and risks |
+| [serverless-operability-checks.md](./serverless-operability-checks.md) | Retries, idempotency, timeouts, observability, config risk |
+| [typescript-jest-test-design.md](./typescript-jest-test-design.md) | Jest at stable seams with typed fixtures and deliberate mocks |
+
+### .NET / C#
+
+| Skill | Purpose |
+| --- | --- |
+| [dotnet-10-csharp-design.md](./dotnet-10-csharp-design.md) | Idiomatic C# for .NET 10 (`net10.0`) |
+| [dotnet-backend-implementation.md](./dotnet-backend-implementation.md) | ASP.NET Core / generic hosting composition and lifecycle |
+| [aws-lambda-dotnet-implementation.md](./aws-lambda-dotnet-implementation.md) | C# Lambda thin adapter with injectable services |
+| [dotnet-10-csharp-test-design.md](./dotnet-10-csharp-test-design.md) | xUnit strategies at interface seams for .NET 10 |
 
 ## Composition
 
-Skill binding for the orchestrated planner, executor, and validator flow is **prompt-driven**. The user or triggering prompt supplies a per-role **task skills manifest** (repository-root paths such as `skills/foo.md`); the orchestrator forwards the full manifest on every handoff. Start from [../prompts/orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md), which includes example manifests for a TypeScript, Node.js, and Lambda stack and for a .NET 10 C# Lambda stack.
+Skill binding for the orchestrated planner / executor / validator flow is **prompt-driven**. Supply a per-role **task skills manifest** (paths like `skills/foo.md`); the orchestrator forwards it on every handoff.
 
-Shared contracts (handoffs, return shapes, output brevity, safety) live under [../knowledge/](../knowledge/)—skills should link them, not restate them.
+Start from [orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md) (includes TypeScript/Node/Lambda and .NET 10 C# Lambda example manifests).
+
+Shared contracts live under [../knowledge/](../knowledge/README.md) — skills should link them, not restate them.
+
+---
+
+[↑ Back to AI-Hub](../README.md)

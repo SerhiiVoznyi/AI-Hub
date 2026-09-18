@@ -26,7 +26,7 @@ outputs:
 
 # Summary
 
-Acts as a principal engineer to judge whether a user story is actually DONE in a given project. The story is pasted as plain text under `## Story` and the assistant inspects the codebase. Output opens with a fixed result header, then a per-acceptance-criterion implementation table backed by code evidence, a Definition-of-Done checklist, remaining work, a completion %, a binary Done / Not Done verdict, and a standardized handoff block keyed to the orchestrator's validator return shape (`status`, `findings`, `missing evidence`, `recommended next action`). Companion to [story-readiness-evaluation.md](./story-readiness-evaluation.md) (which judges readiness *before* work starts).
+Acts as a principal engineer to judge whether a user story is actually DONE in a given project. The story is pasted as plain text under `## Story` and the assistant inspects the codebase. Output opens with a fixed result header, then a per-acceptance-criterion implementation table backed by code evidence, a Definition-of-Done checklist, remaining work, a completion %, a binary Done / Not Done verdict, and a standardized handoff block keyed to the orchestrator's validator return shape (`status`, `findings`, `missing evidence`, `recommended next action`). Companion to [story-ready-for-dev-evaluation.md](./story-ready-for-dev-evaluation.md) (which judges readiness *before* work starts).
 
 ## Use When
 

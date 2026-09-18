@@ -2,6 +2,8 @@
 
 AI-Hub is a repository of reusable AI artifacts organized by competency rather than by vendor or model.
 
+Browse: [../README.md](../README.md) · Canonical rules: [../AI.md](../AI.md)
+
 Priorities:
 
 - keep artifacts small, composable, and easy to cross-link

@@ -1,13 +1,28 @@
+[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](../knowledge/README.md) · [Templates](./README.md)
+
 # Templates
 
-This folder contains starter files for creating new artifacts in a consistent format.
+Starter files for creating new artifacts in a consistent format.
 
-Each template includes the shared frontmatter schema from `AI.md` and a minimal content outline that can be copied into the appropriate directory.
+Each template includes the shared frontmatter schema from [AI.md](../AI.md) and a minimal content outline to copy into the target folder.
 
 ## Available templates
 
-- [agent-template.md](./agent-template.md): starter for new agent role definitions.
-- [skill-template.md](./skill-template.md): starter for atomic skills with a Safety section.
-- [prompt-template.md](./prompt-template.md): starter for reusable prompt patterns.
-- [workflow-template.md](./workflow-template.md): starter for multi-step workflow artifacts.
-- [knowledge-template.md](./knowledge-template.md): starter for compact knowledge / contract documents.
+| Template | Use for |
+| --- | --- |
+| [agent-template.md](./agent-template.md) | New agent role definitions → [../agents/](../agents/README.md) |
+| [skill-template.md](./skill-template.md) | Atomic skills (includes Safety section) → [../skills/](../skills/README.md) |
+| [prompt-template.md](./prompt-template.md) | Reusable prompt patterns → [../prompts/](../prompts/README.md) |
+| [workflow-template.md](./workflow-template.md) | Multi-step workflow artifacts → [../workflows/](../workflows/README.md) |
+| [knowledge-template.md](./knowledge-template.md) | Compact knowledge / contract documents → [../knowledge/](../knowledge/README.md) |
+
+## How to contribute
+
+1. Pick the smallest fitting folder in [AI.md](../AI.md).
+2. Copy the matching template above.
+3. Fill frontmatter and body; keep one concept per file.
+4. Link the new artifact from that folder’s [README](../README.md) index.
+
+---
+
+[↑ Back to AI-Hub](../README.md)

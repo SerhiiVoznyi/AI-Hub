@@ -1,11 +1,23 @@
+[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](./README.md) · [Knowledge](../knowledge/README.md) · [Templates](../templates/README.md)
+
 # Workflows
 
-Use this folder for multi-step execution patterns that coordinate prompts, skills, tools, or humans across a task.
+Multi-step execution patterns that coordinate prompts, skills, tools, or humans — order of operations, review checkpoints, and branching decisions.
 
-Add a workflow when the value comes from the order of operations, review checkpoints, or branching decisions rather than from a single prompt alone.
+New workflows: copy [../templates/workflow-template.md](../templates/workflow-template.md).
 
-Use [../templates/workflow-template.md](../templates/workflow-template.md) to start new workflow artifacts.
+## Available workflows
 
-## Available Workflows
+_None yet._ Add a workflow artifact here when the value is the sequence itself (not a single prompt), then link it from this index.
 
-_(None yet — add workflow artifacts here and link them from this index.)_
+## Related
+
+For multi-agent runs today, start from prompts rather than workflows:
+
+- [orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md)
+- [peer-review-panel.md](../prompts/peer-review-panel.md)
+- [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md)
+
+---
+
+[↑ Back to AI-Hub](../README.md)
