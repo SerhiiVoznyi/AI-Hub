@@ -42,4 +42,4 @@ Compact topology for the four-agent orchestrated pattern. Agents and prompts lin
 
 # Package shapes
 
-Emit packages per [agent-return-contracts.md](./agent-return-contracts.md). Keep runtime text short per [execution-output-discipline.md](./execution-output-discipline.md).
+Emit packages per [agent-return-contracts.md](./agent-return-contracts.md). Keep runtime text short per [execution-output-discipline.md](./execution-output-discipline.md). Limit repository reads/searches per [scoped-context-discipline.md](./scoped-context-discipline.md).

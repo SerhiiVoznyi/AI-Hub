@@ -44,7 +44,7 @@ The philosopher agent examines meaning, ethics, hidden assumptions, reasoning qu
 4. Withdraw an objection only by stating what satisfied it; otherwise carry it forward.
 5. As chair, emit the final chair → user package; otherwise stop after the panel package.
 
-Protocol: [peer-review-panel-protocol.md](../knowledge/peer-review-panel-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
+Protocol: [peer-review-panel-protocol.md](../knowledge/peer-review-panel-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md). Context thrift: [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 ## Constraints
 

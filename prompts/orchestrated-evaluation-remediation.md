@@ -62,6 +62,7 @@ Run the AI-Hub orchestrated multi-agent pattern to remediate project evaluation 
 - knowledge/orchestrated-handoff-protocol.md
 - knowledge/agent-return-contracts.md
 - knowledge/execution-output-discipline.md
+- knowledge/scoped-context-discipline.md
 
 ## Remediation objective
 
@@ -74,7 +75,7 @@ Fix only:
 Do NOT in this run:
 {{NON_GOALS}}
 
-Flag destructive/production/IAM/secret work for user confirmation per knowledge/safety-policy.md.
+Flag destructive/production/IAM/secret work for user confirmation per knowledge/safety-policy.md. Open only paths named in the scoped findings or required to prove the success criteria; do not scan the rest of the repo (knowledge/scoped-context-discipline.md).
 
 ### Success criteria
 {{SUCCESS_CRITERIA}}
@@ -102,5 +103,5 @@ Manifest changes need user approval.
 
 ## Start
 
-Begin as the orchestrator. Obey orchestrated-handoff-protocol.md. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md. One run = scoped findings only.
+Begin as the orchestrator. Obey orchestrated-handoff-protocol.md. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md; limit reads/searches per scoped-context-discipline.md. One run = scoped findings only.
 ```

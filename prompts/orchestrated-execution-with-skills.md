@@ -42,6 +42,7 @@ Knowledge (do not restate; obey):
 - knowledge/orchestrated-handoff-protocol.md
 - knowledge/agent-return-contracts.md
 - knowledge/execution-output-discipline.md
+- knowledge/scoped-context-discipline.md
 
 ## User objective
 
@@ -58,7 +59,7 @@ orchestrator_skills:
 planner_skills:
   - skills/aws-lambda-change-planning.md
 executor_skills:
-  - skills/typescript-design.md
+  - skills/typescript-oop-design.md
 validator_skills:
   - skills/validation-disposition.md
 
@@ -66,7 +67,7 @@ Replace lists for this task before execution. Manifest changes need user approva
 
 ## Start
 
-Begin as the orchestrator: normalize using orchestrator_skills, then follow the handoff protocol through planner → executor → validator. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md.
+Begin as the orchestrator: normalize using orchestrator_skills, then follow the handoff protocol through planner → executor → validator. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md; limit reads/searches per scoped-context-discipline.md.
 ```
 
 ## Notes
@@ -87,19 +88,24 @@ orchestrator_skills:
 planner_skills:
   - skills/aws-lambda-change-planning.md
   - skills/serverless-operability-checks.md
-  - skills/typescript-jest-test-design.md
+  - skills/typescript-jest-seam-testing.md
 executor_skills:
-  - skills/typescript-design.md
-  - skills/nodejs-backend-implementation.md
-  - skills/aws-lambda-implementation.md
-  - skills/typescript-jest-test-design.md
+  - skills/typescript-oop-design.md
+  - skills/typescript-boundary-typing.md
+  - skills/nodejs-composition-root.md
+  - skills/nodejs-configuration.md
+  - skills/nodejs-async-lifecycle.md
+  - skills/aws-lambda-handler-composition.md
+  - skills/aws-lambda-runtime-reuse.md
+  - skills/typescript-jest-seam-testing.md
+  - skills/typescript-jest-fixtures-and-mocks.md
   - skills/acceptance-evidence-traceability.md
   - skills/serverless-operability-checks.md
 validator_skills:
   - skills/validation-disposition.md
   - skills/acceptance-evidence-traceability.md
   - skills/serverless-operability-checks.md
-  - skills/typescript-jest-test-design.md
+  - skills/typescript-jest-seam-testing.md
 ```
 
 ### Example B — .NET 10 C#, AWS Lambda, xUnit
@@ -110,17 +116,21 @@ orchestrator_skills:
 planner_skills:
   - skills/aws-lambda-change-planning.md
   - skills/serverless-operability-checks.md
-  - skills/dotnet-10-csharp-test-design.md
+  - skills/dotnet-10-xunit-seam-testing.md
 executor_skills:
-  - skills/dotnet-10-csharp-design.md
-  - skills/dotnet-backend-implementation.md
-  - skills/aws-lambda-dotnet-implementation.md
-  - skills/dotnet-10-csharp-test-design.md
+  - skills/dotnet-10-csharp-oop-design.md
+  - skills/dotnet-10-csharp-nullability-and-async.md
+  - skills/dotnet-composition-and-di.md
+  - skills/dotnet-options-and-http.md
+  - skills/aws-lambda-dotnet-handler-composition.md
+  - skills/aws-lambda-dotnet-serialization-and-reuse.md
+  - skills/dotnet-10-xunit-seam-testing.md
+  - skills/dotnet-10-xunit-fixtures-and-fakes.md
   - skills/acceptance-evidence-traceability.md
   - skills/serverless-operability-checks.md
 validator_skills:
   - skills/validation-disposition.md
   - skills/acceptance-evidence-traceability.md
   - skills/serverless-operability-checks.md
-  - skills/dotnet-10-csharp-test-design.md
+  - skills/dotnet-10-xunit-seam-testing.md
 ```

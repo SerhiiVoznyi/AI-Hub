@@ -54,7 +54,7 @@ The orchestrator agent owns the end-to-end task flow. It receives the user reque
 7. Route on `status`: `pass` → final user package; `rework` → focused executor request if achievable; `replan` → planner; else ask the user.
 8. Stop after the final user response.
 
-Topology and loop details: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Output brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
+Topology and loop details: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Output brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md). Context thrift: [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 ## Constraints
 
@@ -69,6 +69,7 @@ Topology and loop details: [orchestrated-handoff-protocol.md](../knowledge/orche
 
 Follow [../knowledge/safety-policy.md](../knowledge/safety-policy.md), including **Enforcement** for the orchestrator.
 
+- Put concrete path boundaries in the brief; do not treat full-repo inspection as implied.
 - Reject scope expansions that were not a routed clarification or named risk.
 - Only the user can override a safety clause for the current task.
 

@@ -32,6 +32,7 @@ Topology, return shapes, and output brevity live in knowledge — do not restate
 - [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md)
 - [agent-return-contracts.md](../knowledge/agent-return-contracts.md)
 - [execution-output-discipline.md](../knowledge/execution-output-discipline.md)
+- [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md)
 - [safety-policy.md](../knowledge/safety-policy.md)
 
 Skill binding is prompt-driven via the **task skills manifest** — see [orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md).

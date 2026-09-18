@@ -43,6 +43,7 @@ Knowledge (do not restate; obey):
 - knowledge/peer-review-panel-protocol.md
 - knowledge/agent-return-contracts.md
 - knowledge/execution-output-discipline.md
+- knowledge/scoped-context-discipline.md
 
 ## Topic
 
@@ -64,7 +65,7 @@ software_engineer_skills:
 
 ## Start
 
-Each agent analyzes the topic independently first, prefixing every turn with its own keyword. Then run at most three review rounds per the panel protocol. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md. Only the chair emits the final response.
+Each agent analyzes the topic independently first, prefixing every turn with its own keyword. Then run at most three review rounds per the panel protocol. Emit packages per agent-return-contracts.md; keep outputs short per execution-output-discipline.md; read only paths the topic or user attached (scoped-context-discipline.md). Only the chair emits the final response.
 ```
 
 ## Notes

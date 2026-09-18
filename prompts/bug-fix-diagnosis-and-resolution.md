@@ -23,7 +23,7 @@ outputs:
 
 # Summary
 
-Assistant acts as a Principal Software Engineer: scans the codebase, decides if a reported bug is real, explains the root cause, tables the offending files/code, and proposes a fix. Fix is applied only if explicitly authorized.
+Assistant acts as a Principal Software Engineer: traces the bug from the report through the smallest relevant call chain, decides if it is real, explains the root cause, tables the offending files/code, and proposes a fix. Fix is applied only if explicitly authorized.
 
 ## Use When
 
@@ -44,7 +44,8 @@ Decide if the bug below is real and reproducible in this codebase.
 Cite evidence — files, functions, lines — for every claim.
 Say "Not found" rather than guess.
 
-Follow AI-Hub `knowledge/safety-policy.md`.
+Follow AI-Hub `knowledge/safety-policy.md` and `knowledge/scoped-context-discipline.md`.
+Start from symptoms in the bug report; open only files on the suspected call chain, related tests, and configs they require. Do not inventory the whole repo.
 Don't edit files until Step 6 authorizes it, and don't touch files beyond the root cause without flagging it.
 
 If the bug report is empty/placeholder, or you have no code access, output only the Result Header with `Verdict: BLOCKED` (state why) and stop.
@@ -56,8 +57,8 @@ If the bug report is empty/placeholder, or you have no code access, output only 
 
 ## Bug description
 
-## Step 1 — Scan & Locate
-List files/functions involved: entry point, call chain, config, related tests. One line each on why relevant. Note gaps.
+## Step 1 — Locate (targeted)
+From the report, list only the files/functions needed: entry point, call chain, config, related tests. One line each on why relevant. Do not broaden into unrelated modules. Note gaps.
 
 ## Step 2 — Validate
 Pick one, with evidence:

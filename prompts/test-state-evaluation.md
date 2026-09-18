@@ -35,14 +35,14 @@ A technology-agnostic prompt that runs a project's test suite, diagnoses why eac
 
 ## How To Use
 
-Point the assistant at the project and use a mode that can run commands and edit files. Copy the prompt block, replace `{{TEST_SKILLS}}` with repo-root skill paths for the target stack (e.g. `skills/typescript-jest-test-design.md`), optionally set a test command, then send. With no runnable tests or an empty manifest it returns `BLOCKED` rather than guessing.
+Point the assistant at the project and use a mode that can run commands and edit files. Copy the prompt block, replace `{{TEST_SKILLS}}` with repo-root skill paths for the target stack (e.g. `skills/typescript-jest-seam-testing.md`, `skills/typescript-jest-fixtures-and-mocks.md`), optionally set a test command, then send. With no runnable tests or an empty manifest it returns `BLOCKED` rather than guessing.
 
 ## Prompt
 
 ```text
 Act as a principal test engineer. Run this project's test suite, diagnose every failure with evidence, suggest actions, and fix only failures whose fault is in the test or its mocks/fixtures. Base conclusions on real test output and code; cite files, functions, or line numbers. If something cannot be found or run, say so — never assume.
 
-Follow AI-Hub knowledge/safety-policy.md; flag any destructive or production action as needing explicit confirmation.
+Follow AI-Hub knowledge/safety-policy.md and knowledge/scoped-context-discipline.md; flag any destructive or production action as needing explicit confirmation. After the suite run, open only failing tests, their doubles/fixtures, and the minimal production seams needed to classify root cause — do not browse the rest of the tree.
 
 ## Hard scope guardrail (load-bearing)
 - CREATE or EDIT ONLY: test files and test-only mocks, stubs, fakes, fixtures, snapshots, and test helpers.

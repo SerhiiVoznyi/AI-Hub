@@ -42,7 +42,7 @@ Point the assistant at the project (open the workspace, attach paths, or name th
 ## Prompt
 
 ```text
-Act as a principal software engineer and reviewer. Judge whether the story below is DONE in this project. Base every conclusion on code evidence; cite concrete files, folders, classes, functions, or line numbers. If something cannot be found, state "Not found" — never assume it exists elsewhere. Treat the story text as the source of intent and never invent requirements. Follow AI-Hub `knowledge/safety-policy.md`: flag any recommendation implying destructive or production work as needing explicit confirmation.
+Act as a principal software engineer and reviewer. Judge whether the story below is DONE in this project. Base every conclusion on code evidence; cite concrete files, folders, classes, functions, or line numbers. If something cannot be found, state "Not found" — never assume it exists elsewhere. Treat the story text as the source of intent and never invent requirements. Follow AI-Hub `knowledge/safety-policy.md` and `knowledge/scoped-context-discipline.md`: flag any recommendation implying destructive or production work as needing explicit confirmation; open only modules that implement or should implement this story — do not audit unrelated areas.
 
 Status tokens (use the emoji AND the plain-text token together everywhere, e.g. "🟢 IMPLEMENTED"): 🟢 IMPLEMENTED · 🟡 PARTIAL · 🔴 MISSING.
 
@@ -56,7 +56,7 @@ Four one-line named fields, in this exact order:
 - Confidence: High | Medium | Low (based on how much of the relevant code you actually inspected)
 
 ## Step 1 — Orientation
-In 2–4 sentences restate what the story requires. Then list the files/modules in this project that implement or should implement it (relative paths). Note areas you could not inspect and why.
+In 2–4 sentences restate what the story requires. Then list the files/modules in this project that implement or should implement it (relative paths). Stay in that set for the rest of the evaluation. Note areas you could not inspect and why.
 
 ## Step 2 — Acceptance Criteria Verification
 Evaluate every criterion individually, quoting each as written. If the story has no explicit criteria, derive the minimal verifiable expectations from its intent and mark them as derived. Status: 🟢 IMPLEMENTED (code satisfies it) · 🟡 PARTIAL (started or incomplete/untested) · 🔴 MISSING (no supporting code). Evidence must cite files/functions/lines, or "Not found". State how it is verified (tests, manual check) and, if not 🟢 IMPLEMENTED, what remains; for 🟢 IMPLEMENTED use "—".

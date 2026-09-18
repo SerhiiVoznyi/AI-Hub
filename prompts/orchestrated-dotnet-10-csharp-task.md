@@ -46,6 +46,7 @@ Run the AI-Hub orchestrated multi-agent pattern.
 - knowledge/orchestrated-handoff-protocol.md
 - knowledge/agent-return-contracts.md
 - knowledge/execution-output-discipline.md
+- knowledge/scoped-context-discipline.md
 
 ## Task
 <TEXT>
@@ -54,19 +55,22 @@ Run the AI-Hub orchestrated multi-agent pattern.
 orchestrator_skills:
   - skills/story-brief-normalization.md
 planner_skills:
-  - skills/dotnet-10-csharp-design.md
-  - skills/dotnet-10-csharp-test-design.md
+  - skills/dotnet-10-csharp-oop-design.md
+  - skills/dotnet-10-xunit-seam-testing.md
 executor_skills:
-  - skills/dotnet-10-csharp-design.md
-  - skills/dotnet-backend-implementation.md
-  - skills/dotnet-10-csharp-test-design.md
+  - skills/dotnet-10-csharp-oop-design.md
+  - skills/dotnet-10-csharp-nullability-and-async.md
+  - skills/dotnet-composition-and-di.md
+  - skills/dotnet-options-and-http.md
+  - skills/dotnet-10-xunit-seam-testing.md
+  - skills/dotnet-10-xunit-fixtures-and-fakes.md
   - skills/acceptance-evidence-traceability.md
 validator_skills:
   - skills/validation-disposition.md
   - skills/acceptance-evidence-traceability.md
-  - skills/dotnet-10-csharp-test-design.md
+  - skills/dotnet-10-xunit-seam-testing.md
 
-Stack: .NET 10 / C# 14 + xUnit. Begin as the orchestrator; emit packages per agent-return-contracts.md.
+Stack: .NET 10 / C# 14 + xUnit. Begin as the orchestrator; emit packages per agent-return-contracts.md; limit reads/searches per scoped-context-discipline.md.
 ```
 
 ## Notes

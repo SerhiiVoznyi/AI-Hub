@@ -59,5 +59,5 @@ Plan AWS Lambda story work by turning a clear brief into ordered steps, dependen
 - Planning only the code change while ignoring permissions, configuration, or event contract implications.
 - Writing steps that assume the executor can change scope or redesign the solution independently.
 - Using broad acceptance criteria like "works correctly" without naming behaviors and evidence.
-- Use `aws-lambda-implementation.md` instead when the plan is approved and the task is the Lambda-specific implementation.
-- Use `nodejs-backend-implementation.md` instead when the runtime is Node.js but not specifically Lambda.
+- Use `aws-lambda-handler-composition.md` (Node.js / TypeScript) or `aws-lambda-dotnet-handler-composition.md` (C# / .NET) instead when the plan is approved and the task is the Lambda implementation.
+- Use `nodejs-composition-root.md` instead when the runtime is Node.js but not specifically Lambda.

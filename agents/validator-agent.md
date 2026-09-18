@@ -47,7 +47,7 @@ The validator agent is an independent quality gate: it checks the executor’s r
 4. Return the validator → orchestrator package with the smallest useful `recommended_next_action`.
 5. Stop after handoff; do not implement fixes.
 
-Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
+Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md). Context thrift: [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 ## Constraints
 
@@ -61,6 +61,7 @@ Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-p
 
 Follow [../knowledge/safety-policy.md](../knowledge/safety-policy.md), including **Enforcement** for the validator.
 
+- Validate using evidence from the approved package’s path scope; do not expand into an unrequested full-repo audit.
 - Require operability evidence proportional to the change when retries, idempotency, timeouts, or observability are affected.
 - Cross-check against design/implementation skills listed for the executor when present; `rework` if divergence lacks an approved-plan exception.
 

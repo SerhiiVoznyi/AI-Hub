@@ -47,6 +47,7 @@ Run the AI-Hub orchestrated multi-agent pattern.
 - knowledge/orchestrated-handoff-protocol.md
 - knowledge/agent-return-contracts.md
 - knowledge/execution-output-discipline.md
+- knowledge/scoped-context-discipline.md
 
 ## Story
 (Paste the plain-text user story: actors, trigger, behavior, definition of done.)
@@ -57,21 +58,26 @@ orchestrator_skills:
 planner_skills:
   - skills/aws-lambda-change-planning.md
   - skills/serverless-operability-checks.md
-  - skills/typescript-jest-test-design.md
+  - skills/typescript-jest-seam-testing.md
 executor_skills:
-  - skills/typescript-design.md
-  - skills/nodejs-backend-implementation.md
-  - skills/aws-lambda-implementation.md
-  - skills/typescript-jest-test-design.md
+  - skills/typescript-oop-design.md
+  - skills/typescript-boundary-typing.md
+  - skills/nodejs-composition-root.md
+  - skills/nodejs-configuration.md
+  - skills/nodejs-async-lifecycle.md
+  - skills/aws-lambda-handler-composition.md
+  - skills/aws-lambda-runtime-reuse.md
+  - skills/typescript-jest-seam-testing.md
+  - skills/typescript-jest-fixtures-and-mocks.md
   - skills/acceptance-evidence-traceability.md
   - skills/serverless-operability-checks.md
 validator_skills:
   - skills/validation-disposition.md
   - skills/acceptance-evidence-traceability.md
   - skills/serverless-operability-checks.md
-  - skills/typescript-jest-test-design.md
+  - skills/typescript-jest-seam-testing.md
 
-Stack: AWS Lambda + Node.js/TypeScript + Jest. Begin as the orchestrator; emit packages per agent-return-contracts.md.
+Stack: AWS Lambda + Node.js/TypeScript + Jest. Begin as the orchestrator; emit packages per agent-return-contracts.md; limit reads/searches per scoped-context-discipline.md.
 ```
 
 ## Notes

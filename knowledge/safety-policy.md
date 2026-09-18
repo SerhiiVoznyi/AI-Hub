@@ -7,8 +7,8 @@ tags:
   - guardrails
   - operations
 status: reviewed
-version: 0.2.0
-last_reviewed: 2026-08-01
+version: 0.2.1
+last_reviewed: 2026-09-18
 tooling: agnostic
 inputs:
   - any agent or skill that performs work in this repository or downstream systems
@@ -44,6 +44,7 @@ Applies to every agent and skill that may change files, run shells, call network
 ## Scope and approvals
 
 - Stay inside the approved work package; no opportunistic refactors.
+- Do not scan the whole codebase or unrelated projects for context; load only named or task-necessary paths — see [scoped-context-discipline.md](./scoped-context-discipline.md).
 - Stop and ask before expanding scope, changing public contracts, altering IAM, touching production, or modifying shared infrastructure.
 - Never self-certify completion; validation (or explicit user acceptance) must use evidence, not plausibility.
 - User confirmation is required for any step flagged as destructive, secret-touching, IAM-widening, or production-affecting.
@@ -71,8 +72,8 @@ Applies to every agent and skill that may change files, run shells, call network
 
 ## Coding posture
 
-- TypeScript / Node.js: OOP default (constructor-injected classes). Details and exceptions: `skills/typescript-design.md`.
-- .NET / C#: follow the design skill in the task skills manifest when present (e.g. `skills/dotnet-10-csharp-design.md`).
+- TypeScript / Node.js: OOP default (constructor-injected classes). Details and exceptions: `skills/typescript-oop-design.md`.
+- .NET / C#: follow the design skill in the task skills manifest when present (e.g. `skills/dotnet-10-csharp-oop-design.md`).
 
 # Enforcement by role
 

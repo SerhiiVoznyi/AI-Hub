@@ -49,7 +49,7 @@ The executor agent performs the approved work package from the orchestrator, ret
 5. On routed rework, address only that request and return an updated package.
 6. Stop after handoff.
 
-Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
+Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md). Context thrift: [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 ## Constraints
 
@@ -63,6 +63,7 @@ Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-p
 
 Follow [../knowledge/safety-policy.md](../knowledge/safety-policy.md), including **Enforcement** for the executor.
 
+- Stay inside approved path boundaries; do not open unrelated projects or folders to “be thorough.”
 - Refuse planner-flagged destructive/production/IAM/secret steps without routed user confirmation; report a blocker.
 - When `executor_skills` defines an OOP/design default, follow it unless the approved plan documents a narrow exception.
 

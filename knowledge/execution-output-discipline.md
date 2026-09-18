@@ -18,7 +18,7 @@ outputs:
 
 # Summary
 
-Token discipline for **runtime AI outputs** during execution (not only for writing hub artifacts). Pair with [agent-return-contracts.md](./agent-return-contracts.md).
+Token discipline for **runtime AI outputs** during execution (not only for writing hub artifacts). Pair with [agent-return-contracts.md](./agent-return-contracts.md). For what may be **read or searched** into context, see [scoped-context-discipline.md](./scoped-context-discipline.md).
 
 # Rules
 

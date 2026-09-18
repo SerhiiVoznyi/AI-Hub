@@ -56,4 +56,4 @@ Map each approved acceptance criterion to concrete evidence so executor claims a
 - Providing global claims like "tests pass" without stating which criterion that proves.
 - Mixing evidence with new scope decisions that were not part of the approved work package.
 - Hiding assumptions or manual checks inside a generic completion summary.
-- Use the stack’s test-design skill (`typescript-jest-test-design.md` or `dotnet-10-csharp-test-design.md`) when the missing piece is which tests to design rather than how to map evidence to criteria.
+- Use the stack’s seam-testing skill (`typescript-jest-seam-testing.md` or `dotnet-10-xunit-seam-testing.md`) when the missing piece is which tests to design rather than how to map evidence to criteria.

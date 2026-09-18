@@ -47,7 +47,7 @@ The planner agent turns the orchestrator’s task brief into an execution plan w
 4. Check steps are actionable and criteria are observable.
 5. Hand off to the orchestrator and stop.
 
-Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
+Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md). Context thrift: [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 ## Constraints
 
@@ -61,6 +61,7 @@ Topology: [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-p
 
 Follow [../knowledge/safety-policy.md](../knowledge/safety-policy.md), including **Enforcement** for the planner.
 
+- Name path/folder boundaries in the plan when the brief names them; do not require a full-repo scan unless the user asked.
 - Mark each named safety risk with confirmation owner (user or orchestrator).
 - Put dry-run/preview before unavoidable destructive steps.
 - When `planner_skills` includes design/runtime skills, sequence so execution can follow them; flag deviations as assumptions.

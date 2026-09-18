@@ -10,19 +10,21 @@ New knowledge docs: copy [../templates/knowledge-template.md](../templates/knowl
 
 | Document | Purpose |
 | --- | --- |
-| [safety-policy.md](./safety-policy.md) | Operational guardrails (destructive ops, secrets, scope, supply chain, AWS, untrusted input, coding posture) |
+| [safety-policy.md](./safety-policy.md) | Operational guardrails (destructive ops, secrets, scope, supply chain, AWS, untrusted input, coding posture; points to scoped context for read thrift) |
 | [orchestrated-handoff-protocol.md](./orchestrated-handoff-protocol.md) | Four-agent topology, allowed loop, and task skills manifest forwarding |
 | [peer-review-panel-protocol.md](./peer-review-panel-protocol.md) | Three-agent peer topology, round budget, objections, chair, consensus |
 | [agent-return-contracts.md](./agent-return-contracts.md) | Canonical keyed packages for every orchestrated handoff and peer-panel turn |
 | [execution-output-discipline.md](./execution-output-discipline.md) | Brevity rules for runtime AI execution outputs |
+| [scoped-context-discipline.md](./scoped-context-discipline.md) | Limit reads/searches to named or task-necessary paths (input token thrift) |
 
 ## Who should link what
 
 | Consumer | Prefer these |
 | --- | --- |
 | Any agent or skill that changes systems | [safety-policy.md](./safety-policy.md) |
-| Orchestrated planner / executor / validator | [orchestrated-handoff-protocol.md](./orchestrated-handoff-protocol.md), [agent-return-contracts.md](./agent-return-contracts.md), [execution-output-discipline.md](./execution-output-discipline.md) |
-| Peer review panel | [peer-review-panel-protocol.md](./peer-review-panel-protocol.md), [agent-return-contracts.md](./agent-return-contracts.md) |
+| Any agent or prompt that reads a repository | [scoped-context-discipline.md](./scoped-context-discipline.md), [execution-output-discipline.md](./execution-output-discipline.md) |
+| Orchestrated planner / executor / validator | [orchestrated-handoff-protocol.md](./orchestrated-handoff-protocol.md), [agent-return-contracts.md](./agent-return-contracts.md), [execution-output-discipline.md](./execution-output-discipline.md), [scoped-context-discipline.md](./scoped-context-discipline.md) |
+| Peer review panel | [peer-review-panel-protocol.md](./peer-review-panel-protocol.md), [agent-return-contracts.md](./agent-return-contracts.md), [scoped-context-discipline.md](./scoped-context-discipline.md) |
 
 ---
 

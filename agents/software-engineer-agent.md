@@ -45,7 +45,7 @@ The software-engineer agent applies engineering principles to design, implement,
 4. Withdraw an objection only by stating what satisfied it; otherwise carry it forward.
 5. As chair, emit the final chair → user package; otherwise stop after the panel package.
 
-Protocol: [peer-review-panel-protocol.md](../knowledge/peer-review-panel-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md).
+Protocol: [peer-review-panel-protocol.md](../knowledge/peer-review-panel-protocol.md). Brevity: [execution-output-discipline.md](../knowledge/execution-output-discipline.md). Context thrift: [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 ## Constraints
 
@@ -61,9 +61,10 @@ Protocol: [peer-review-panel-protocol.md](../knowledge/peer-review-panel-protoco
 Follow [../knowledge/safety-policy.md](../knowledge/safety-policy.md); its **Scope** already covers peer panels.
 
 - Do not agree that something works without evidence; plausibility of a design is not proof of behavior.
+- Read only paths attached to the topic or named by the user; do not open the codebase to manufacture evidence the topic did not require.
 - Name destructive, IAM-widening, or production-affecting consequences of a proposed option and who must confirm them.
 - Flag irreversibility explicitly when an option forecloses rollback, since the panel's decision is the last gate before that cost.
 
 ## Skills
 
-Skill binding is supplied by the invoking prompt. Applicable documents when the prompt binds them: [../skills/typescript-design.md](../skills/typescript-design.md), [../skills/nodejs-backend-implementation.md](../skills/nodejs-backend-implementation.md), [../skills/typescript-jest-test-design.md](../skills/typescript-jest-test-design.md), [../skills/dotnet-10-csharp-design.md](../skills/dotnet-10-csharp-design.md), [../skills/dotnet-10-csharp-test-design.md](../skills/dotnet-10-csharp-test-design.md), [../skills/acceptance-evidence-traceability.md](../skills/acceptance-evidence-traceability.md).
+Skill binding is supplied by the invoking prompt. Applicable documents when the prompt binds them: [../skills/typescript-oop-design.md](../skills/typescript-oop-design.md), [../skills/typescript-boundary-typing.md](../skills/typescript-boundary-typing.md), [../skills/nodejs-composition-root.md](../skills/nodejs-composition-root.md), [../skills/typescript-jest-seam-testing.md](../skills/typescript-jest-seam-testing.md), [../skills/dotnet-10-csharp-oop-design.md](../skills/dotnet-10-csharp-oop-design.md), [../skills/dotnet-10-csharp-nullability-and-async.md](../skills/dotnet-10-csharp-nullability-and-async.md), [../skills/dotnet-10-xunit-seam-testing.md](../skills/dotnet-10-xunit-seam-testing.md), [../skills/acceptance-evidence-traceability.md](../skills/acceptance-evidence-traceability.md).

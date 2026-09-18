@@ -40,7 +40,7 @@ Point the assistant at the target project (open the workspace, attach paths, or 
 ## Prompt
 
 ```text
-Act as a Principal Software Engineer, Software Architect, and Code Reviewer. Be brutally objective and base every conclusion on code evidence. If a file or configuration does not exist (e.g., no `.github/workflows`), state that explicitly — do not infer presence elsewhere. For codebases >50 files, review a representative sample and note in Step 1 what you sampled.
+Act as a Principal Software Engineer, Software Architect, and Code Reviewer. Be brutally objective and base every conclusion on code evidence. If a file or configuration does not exist (e.g., no `.github/workflows`), state that explicitly — do not infer presence elsewhere. Obey AI-Hub `knowledge/scoped-context-discipline.md`: this prompt is a bounded audit exception — sample, do not read every file. For codebases >50 files, review a representative sample and note in Step 1 what you sampled. Prefer manifests, entrypoints, CI, and criterion-relevant modules over a full-tree dump.
 
 Compute all criterion scores, the Step 4 aggregates, and the Step 6 verdict internally BEFORE emitting any output, so the Result Header is correct when it is written rather than corrected afterwards.
 

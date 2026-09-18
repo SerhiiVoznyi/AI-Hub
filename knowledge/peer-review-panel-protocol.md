@@ -52,4 +52,4 @@ Compact collaboration rules for the three-agent peer review panel. Agents and pr
 
 # Package shapes
 
-Emit packages per [agent-return-contracts.md](./agent-return-contracts.md) (peer agent → panel, chair → user). Keep runtime text short per [execution-output-discipline.md](./execution-output-discipline.md).
+Emit packages per [agent-return-contracts.md](./agent-return-contracts.md) (peer agent → panel, chair → user). Keep runtime text short per [execution-output-discipline.md](./execution-output-discipline.md). Limit repository reads/searches per [scoped-context-discipline.md](./scoped-context-discipline.md).
