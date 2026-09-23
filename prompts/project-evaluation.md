@@ -9,8 +9,8 @@ tags:
   - quality
   - production-readiness
 status: draft
-version: 0.3.0
-last_reviewed: 2026-08-02
+version: 0.4.0
+last_reviewed: 2026-09-23
 tooling: agnostic
 inputs:
   - target project (codebase the assistant can read)
@@ -21,11 +21,12 @@ outputs:
   - key-findings lists and aggregate scores
   - consistency-check line and final verdict
   - standardized handoff (status, findings, missing evidence, recommended next action)
+  - persisted copy at `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`
 ---
 
 # Summary
 
-A single-pass review prompt that has the assistant act as a Principal Engineer / Architect / Code Reviewer and produce a strict, evidence-based assessment of a codebase across 14 criteria, ending in aggregate scores, a tokenized verdict, and a standardized orchestration handoff. Designed for any stack; the assistant must cite concrete files, folders, classes, functions, or line numbers.
+A single-pass review prompt that has the assistant act as a Principal Engineer / Architect / Code Reviewer and produce a strict, evidence-based assessment of a codebase across 14 criteria, ending in aggregate scores, a tokenized verdict, and a standardized orchestration handoff. Designed for any stack; the assistant must cite concrete files, folders, classes, functions, or line numbers. The full report is also written to the target project's root under `.evaluation/evaluation-result-{YYYY-MM-DD}.md`.
 
 ## Use When
 
@@ -36,6 +37,8 @@ A single-pass review prompt that has the assistant act as a Principal Engineer /
 ## How To Use
 
 Point the assistant at the target project (open the workspace, attach paths, or name the directory), then copy the prompt block below and send it. With no code access the prompt returns `BLOCKED (no code access)` and `status: BLOCKED` rather than guessing.
+
+After a successful (or BLOCKED) run, expect a Markdown file at `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`. `{date}` is the calendar date of the evaluation in ISO 8601 (`YYYY-MM-DD`). Do not treat that file as source code; it is an audit artifact.
 
 ## Prompt
 
@@ -135,13 +138,25 @@ Emit these four named fields verbatim so an orchestrator can route without parsi
 - findings: ordered list; each ties a Step 3 Key Finding to its file/module evidence.
 - missing evidence: criteria scored N/A or areas you could not inspect (or "none").
 - recommended next action: the smallest useful next step, ending with a suggested route — pass (quality is adequate as is), rework (scoped remediation of Key Findings closes the gaps), or replan (architecture or requirements must change before code work is worthwhile).
+
+## Step 8 — Persist the evaluation
+After the Result Header through Step 7 are complete, write that same Markdown (Result Header through Step 7 only — not this instruction block) to the **target project's root**, not to AI-Hub:
+
+- Path: `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`
+- `{YYYY-MM-DD}` is the evaluation date in ISO 8601 (local calendar date of the run).
+- Create `.evaluation/` if it does not exist.
+- If a file for that date already exists, overwrite it with this run (one dated snapshot per day; earlier same-day content is replaced).
+- Persist BLOCKED runs as well, using the same path, so a failed attach is recorded.
+- Do not commit, stage, or gitignore-change unless the user explicitly asks.
+- Secrets stay `REDACTED` in the file just as in the reply.
 ```
 
 ## Notes
 
 - Point the assistant at the target project before sending the prompt (open the workspace, attach paths, or specify the directory).
+- Persistence is mandatory: the full report (Result Header through Step 7) is written to `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`. Same-day reruns overwrite that date's file. This is an audit artifact, not product source.
 - The 14 criteria, scoring scale, calibration anchors, status mapping, score formulas, one-decimal rounding rule, verdict tokens, and verdict rules are load-bearing — change them only when the rubric itself needs to evolve.
 - Step 6 uses a single production-readiness gate (`Overall Production Readiness < 7`) so the ladder is monotonic: raising either score can never produce a worse verdict. Both scores are the Step 4 aggregates rounded to one decimal, which is what keeps the verdict stable across runs.
 - Output is bounded on purpose: the Step 1 tree is capped, each score is listed once (Step 2 table plus a short per-criterion block), and Step 3 allows at most 5 findings per category.
-- The Result Header and the Step 7 Handoff are stable anchors for automation. Field names (`status`, `findings`, `missing evidence`, `recommended next action`) and routes (`pass` / `rework` / `replan`) mirror the validator return shape in [../knowledge/agent-return-contracts.md](../knowledge/agent-return-contracts.md), and Step 3 Key Findings feed `{{KEY_FINDINGS_EXCERPT}}` in [orchestrated-evaluation-remediation.md](./orchestrated-evaluation-remediation.md).
+- The Result Header and the Step 7 Handoff are stable anchors for automation. Field names (`status`, `findings`, `missing evidence`, `recommended next action`) and routes (`pass` / `rework` / `replan`) mirror the validator return shape in [../knowledge/agent-return-contracts.md](../knowledge/agent-return-contracts.md), and Step 3 Key Findings feed `{{KEY_FINDINGS_EXCERPT}}` in [orchestrated-evaluation-remediation.md](./orchestrated-evaluation-remediation.md). The dated file under `.evaluation/` is the durable copy of the same report.
 - Pair with [../knowledge/safety-policy.md](../knowledge/safety-policy.md) when the review may touch destructive operations (e.g., proposing migrations or dependency upgrades); its untrusted-input and secrets clauses are invoked directly in the prompt.
