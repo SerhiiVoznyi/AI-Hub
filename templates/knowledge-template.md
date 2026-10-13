@@ -20,7 +20,7 @@ Describe the durable concept or shared contract in one short paragraph.
 
 ## Use When
 
-- Situations where agents or prompts should link here instead of restating content.
+- Situations where prompts or skills should link here instead of restating content.
 
 ## Content
 

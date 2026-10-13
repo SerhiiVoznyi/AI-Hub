@@ -4,17 +4,16 @@
 
 ## Purpose
 
-AI-Hub stores reusable AI artifacts organized by competency. It is intentionally model-agnostic and tool-aware rather than vendor-centered.
+AI-Hub stores reusable AI artifacts organized by competency: prompts, skills, and the shared contracts they depend on. It is intentionally model-agnostic and tool-aware rather than vendor-centered.
 
 ## Navigate The Repository
 
 Human-facing indexes (each links back to [README.md](README.md)):
 
-- [agents/](agents/README.md): reusable agent role definitions with clear responsibilities and boundaries
 - [skills/](skills/README.md): atomic capabilities that can be composed into larger tasks
 - [prompts/](prompts/README.md): reusable prompt patterns for common tasks
 - [workflows/](workflows/README.md): multi-step task sequences, including human checkpoints when needed
-- [knowledge/](knowledge/README.md): stable concepts, glossaries, mental models, and shared contracts (safety, handoffs, return shapes, output discipline); agents and prompts must link these instead of restating them
+- [knowledge/](knowledge/README.md): stable concepts, glossaries, mental models, and shared contracts (safety, context discipline); prompts and skills must link these instead of restating them
 - [templates/](templates/README.md): starter files for creating new artifacts consistently
 
 Thin tool adapters (point here; do not become alternate sources of truth):
@@ -29,11 +28,11 @@ Thin tool adapters (point here; do not become alternate sources of truth):
 3. Keep names descriptive and generic: prefer `structured-reasoning.md` over names that imply hidden model internals.
 4. Use lowercase kebab-case for artifact filenames.
 5. Version and review materials over time as capabilities evolve.
-6. Treat [knowledge/safety-policy.md](knowledge/safety-policy.md) as the single source of operational guardrails. Agents and skills must reference it instead of restating its clauses.
-7. Shared orchestration contracts live under `knowledge/` ([orchestrated-handoff-protocol.md](knowledge/orchestrated-handoff-protocol.md), [agent-return-contracts.md](knowledge/agent-return-contracts.md), [execution-output-discipline.md](knowledge/execution-output-discipline.md), [scoped-context-discipline.md](knowledge/scoped-context-discipline.md)). Agents, prompts, and runtime packages must reference them instead of duplicating shapes, handoff rules, or context-loading rules.
-8. Default coding style for TypeScript and Node.js work is object-oriented (classes with constructor-injected dependencies). See [skills/typescript-oop-design.md](skills/typescript-oop-design.md) for concrete rules and allowed exceptions.
-9. Orchestrated multi-agent runs use a **task skills manifest** (per-role skill paths) supplied by the triggering prompt; see [prompts/orchestrated-execution-with-skills.md](prompts/orchestrated-execution-with-skills.md).
-10. For a fixed AWS Lambda / Node.js story run with a hard-coded hub path, see [prompts/orchestrated-aws-lambda-nodejs-story.md](prompts/orchestrated-aws-lambda-nodejs-story.md). For a fixed general .NET 10 / C# 14 task run with a hard-coded hub path, see [prompts/orchestrated-dotnet-10-csharp-task.md](prompts/orchestrated-dotnet-10-csharp-task.md). For Principal-Engineer-style codebase evaluation, see [prompts/project-evaluation.md](prompts/project-evaluation.md). For criterion-by-criterion feasibility assessment of a story against the project that would implement it — stable `AC-1…n` IDs, evidence-gated feasibility verdicts with per-criterion and overall confidence, plus an overall verdict — see [prompts/story-acceptance-criteria-confirmation.md](prompts/story-acceptance-criteria-confirmation.md). For technology-agnostic test-suite diagnosis and test/mock-only repair (skills supplied as a parameter), see [prompts/test-state-evaluation.md](prompts/test-state-evaluation.md).
+6. Treat [knowledge/safety-policy.md](knowledge/safety-policy.md) as the single source of operational guardrails. Prompts and skills must reference it instead of restating its clauses.
+7. Treat [knowledge/scoped-context-discipline.md](knowledge/scoped-context-discipline.md) as the single source of rules for what may be read or searched into context. Prompts must reference it instead of restating read limits.
+8. Default coding style for TypeScript and Node.js work is object-oriented (classes with constructor-injected dependencies). See [skills/typescript-oop-design.md](skills/typescript-oop-design.md) for concrete rules and allowed exceptions. The .NET equivalent is [skills/dotnet-10-csharp-oop-design.md](skills/dotnet-10-csharp-oop-design.md).
+9. Prompts run as a single assistant acting as a Principal Software Engineer: evidence-cited, scoped to the task, and gated before any change. There is no agent catalog and no multi-agent orchestration.
+10. The four prompts are: [prompts/project-evaluation.md](prompts/project-evaluation.md) for a Principal-Engineer codebase audit; [prompts/story-acceptance-criteria-confirmation.md](prompts/story-acceptance-criteria-confirmation.md) for criterion-by-criterion feasibility of a story against the project that would implement it; [prompts/story-development-completion-evaluation.md](prompts/story-development-completion-evaluation.md) for whether a story is implemented and every acceptance criterion met, with cited evidence; [prompts/bug-fix-diagnosis-and-resolution.md](prompts/bug-fix-diagnosis-and-resolution.md) for bug triage, root cause, and a gated fix.
 
 ## Artifact Metadata
 
@@ -59,7 +58,7 @@ outputs:
 
 Field guidance:
 
-- `type`: `agent`, `skill`, `prompt`, `workflow`, `knowledge`, or `template`
+- `type`: `skill`, `prompt`, `workflow`, `knowledge`, or `template`
 - `status`: `draft`, `reviewed`, or `deprecated`
 - `tooling`: `agnostic`, `tool-assisted`, or a specific tool name when required
 - Navigation links belong in folder `README.md` indexes and intentional body links, not in frontmatter

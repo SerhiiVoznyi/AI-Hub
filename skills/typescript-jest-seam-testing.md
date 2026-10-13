@@ -53,7 +53,6 @@ Decide which Jest tests to write for TypeScript code so each acceptance criterio
 - Hidden coupling to private methods or module internals, forcing churn on every refactor.
 - Broad suites that never trace back to a specific acceptance criterion.
 - Use `typescript-jest-fixtures-and-mocks.md` for how to build fixtures and where to mock.
-- Use `acceptance-evidence-traceability.md` when the immediate task is packaging evidence rather than designing tests.
 
 ## Safety
 

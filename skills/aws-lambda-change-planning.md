@@ -8,11 +8,11 @@ tags:
   - planning
   - serverless
 status: draft
-version: 0.1.0
-last_reviewed: 2026-05-12
+version: 0.2.0
+last_reviewed: 2026-10-12
 tooling: agnostic
 inputs:
-  - clarified task brief
+  - task description
   - lambda context
   - integration boundaries
 outputs:
@@ -28,13 +28,13 @@ Plan AWS Lambda story work by turning a clear brief into ordered steps, dependen
 ## Use When
 
 - The story changes a Lambda handler, event trigger, deployment configuration, or an AWS integration used by Lambda.
-- The planner needs to expose hidden prerequisites such as IAM, environment variables, payload contracts, or infrastructure changes.
+- Hidden prerequisites such as IAM, environment variables, payload contracts, or infrastructure changes must surface before work starts.
 - Acceptance criteria must reflect serverless runtime behavior rather than only code structure.
 
 ## Inputs
 
 - Required:
-  - approved or clarified task brief
+  - the task or story to be implemented
   - current Lambda entry points, triggers, and downstream dependencies
 - Optional:
   - infrastructure ownership boundaries
@@ -47,8 +47,8 @@ Plan AWS Lambda story work by turning a clear brief into ordered steps, dependen
 2. Break the work into ordered steps that respect dependencies across application code, infrastructure assumptions, and test updates.
 3. Surface assumptions explicitly, especially around event sources, IAM access, environment variables, retries, and existing contracts with other services.
 4. Add Lambda-specific risks such as duplicate delivery, timeout pressure, partial failure handling, schema drift, and cold-start-sensitive initialization.
-5. Define acceptance criteria in terms the validator can observe: behavior on valid and invalid events, expected side effects, error handling, and evidence from tests or artifacts.
-6. Return only the plan package. Do not slip into implementation details that belong to the executor.
+5. Define acceptance criteria in observable terms: behavior on valid and invalid events, expected side effects, error handling, and evidence from tests or artifacts.
+6. Return the plan and stop. Settle the sequence and the risks before writing implementation detail.
 
 ## Safety
 
@@ -57,7 +57,7 @@ Plan AWS Lambda story work by turning a clear brief into ordered steps, dependen
 ## Failure Modes
 
 - Planning only the code change while ignoring permissions, configuration, or event contract implications.
-- Writing steps that assume the executor can change scope or redesign the solution independently.
+- Writing steps that quietly widen scope or redesign the solution instead of planning the change that was asked for.
 - Using broad acceptance criteria like "works correctly" without naming behaviors and evidence.
-- Use `aws-lambda-handler-composition.md` (Node.js / TypeScript) or `aws-lambda-dotnet-handler-composition.md` (C# / .NET) instead when the plan is approved and the task is the Lambda implementation.
+- Use `aws-lambda-handler-composition.md` (Node.js / TypeScript) or `aws-lambda-dotnet-handler-composition.md` (C# / .NET) instead when the plan is settled and the task is the Lambda implementation.
 - Use `nodejs-composition-root.md` instead when the runtime is Node.js but not specifically Lambda.

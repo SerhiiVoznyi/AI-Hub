@@ -53,7 +53,6 @@ Decide which xUnit tests to write for **.NET 10** C# code so each acceptance cri
 - Test suites that grow without tracing back to a specific acceptance criterion.
 - Integration tests used for logic that a fast unit test at the service seam would cover.
 - Use `dotnet-10-xunit-fixtures-and-fakes.md` for fixtures, substitutes, and `WebApplicationFactory` setup.
-- Use `acceptance-evidence-traceability.md` when the immediate task is packaging evidence rather than designing tests.
 
 ## Safety
 

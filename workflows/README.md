@@ -1,4 +1,4 @@
-[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](./README.md) · [Knowledge](../knowledge/README.md) · [Templates](../templates/README.md)
+[Home](../README.md) · [AI.md](../AI.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](./README.md) · [Knowledge](../knowledge/README.md) · [Templates](../templates/README.md)
 
 # Workflows
 
@@ -12,11 +12,7 @@ _None yet._ Add a workflow artifact here when the value is the sequence itself (
 
 ## Related
 
-For multi-agent runs today, start from prompts rather than workflows:
-
-- [orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md)
-- [peer-review-panel.md](../prompts/peer-review-panel.md)
-- [orchestrated-handoff-protocol.md](../knowledge/orchestrated-handoff-protocol.md)
+Until then, start from [../prompts/README.md](../prompts/README.md): evaluation, feasibility, completion, and bug-fix runs are each a single prompt.
 
 ---
 

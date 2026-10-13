@@ -10,7 +10,6 @@ AI-Hub is a curated collection of AI artifacts, patterns, and frameworks focused
 
 | Folder | What lives here |
 | --- | --- |
-| [agents/](agents/README.md) | Reusable agent role definitions |
 | [skills/](skills/README.md) | Atomic capabilities and techniques |
 | [prompts/](prompts/README.md) | Prompt patterns and reusable task setups |
 | [workflows/](workflows/README.md) | Multi-step execution patterns |
@@ -19,10 +18,10 @@ AI-Hub is a curated collection of AI artifacts, patterns, and frameworks focused
 
 ## Quick links
 
-- [Safety policy](knowledge/safety-policy.md) — operational guardrails for every agent and skill
-- [Orchestrated handoff protocol](knowledge/orchestrated-handoff-protocol.md) — four-agent topology and skill-manifest forwarding
-- [Orchestrated execution with skills](prompts/orchestrated-execution-with-skills.md) — start a planner → executor → validator run
-- [Peer review panel](prompts/peer-review-panel.md) — philosopher / AI expert / software engineer panel
+- [Safety policy](knowledge/safety-policy.md) — operational guardrails for every prompt and skill
+- [Project evaluation](prompts/project-evaluation.md) — Principal-Engineer codebase audit across 14 criteria
+- [Story completion evaluation](prompts/story-development-completion-evaluation.md) — is the story implemented, and is every criterion met
+- [Bug fix diagnosis and resolution](prompts/bug-fix-diagnosis-and-resolution.md) — triage, root cause, gated fix
 
 ## Tool adapters
 

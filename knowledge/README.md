@@ -1,8 +1,8 @@
-[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](./README.md) · [Templates](../templates/README.md)
+[Home](../README.md) · [AI.md](../AI.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](./README.md) · [Templates](../templates/README.md)
 
 # Knowledge
 
-Stable concepts, glossaries, mental models, and shared contracts. Agents and prompts should **link** these documents instead of restating them.
+Stable concepts, glossaries, mental models, and shared contracts. Prompts and skills should **link** these documents instead of restating them.
 
 New knowledge docs: copy [../templates/knowledge-template.md](../templates/knowledge-template.md).
 
@@ -11,20 +11,14 @@ New knowledge docs: copy [../templates/knowledge-template.md](../templates/knowl
 | Document | Purpose |
 | --- | --- |
 | [safety-policy.md](./safety-policy.md) | Operational guardrails (destructive ops, secrets, scope, supply chain, AWS, untrusted input, coding posture; points to scoped context for read thrift) |
-| [orchestrated-handoff-protocol.md](./orchestrated-handoff-protocol.md) | Four-agent topology, allowed loop, and task skills manifest forwarding |
-| [peer-review-panel-protocol.md](./peer-review-panel-protocol.md) | Three-agent peer topology, round budget, objections, chair, consensus |
-| [agent-return-contracts.md](./agent-return-contracts.md) | Canonical keyed packages for every orchestrated handoff and peer-panel turn |
-| [execution-output-discipline.md](./execution-output-discipline.md) | Brevity rules for runtime AI execution outputs |
 | [scoped-context-discipline.md](./scoped-context-discipline.md) | Limit reads/searches to named or task-necessary paths (input token thrift) |
 
 ## Who should link what
 
 | Consumer | Prefer these |
 | --- | --- |
-| Any agent or skill that changes systems | [safety-policy.md](./safety-policy.md) |
-| Any agent or prompt that reads a repository | [scoped-context-discipline.md](./scoped-context-discipline.md), [execution-output-discipline.md](./execution-output-discipline.md) |
-| Orchestrated planner / executor / validator | [orchestrated-handoff-protocol.md](./orchestrated-handoff-protocol.md), [agent-return-contracts.md](./agent-return-contracts.md), [execution-output-discipline.md](./execution-output-discipline.md), [scoped-context-discipline.md](./scoped-context-discipline.md) |
-| Peer review panel | [peer-review-panel-protocol.md](./peer-review-panel-protocol.md), [agent-return-contracts.md](./agent-return-contracts.md), [scoped-context-discipline.md](./scoped-context-discipline.md) |
+| Any prompt or skill that changes systems | [safety-policy.md](./safety-policy.md) |
+| Any prompt or skill that reads a repository | [scoped-context-discipline.md](./scoped-context-discipline.md) |
 
 ---
 

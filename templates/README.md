@@ -1,4 +1,4 @@
-[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](../knowledge/README.md) · [Templates](./README.md)
+[Home](../README.md) · [AI.md](../AI.md) · [Skills](../skills/README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](../knowledge/README.md) · [Templates](./README.md)
 
 # Templates
 
@@ -10,7 +10,6 @@ Each template includes the shared frontmatter schema from [AI.md](../AI.md) and 
 
 | Template | Use for |
 | --- | --- |
-| [agent-template.md](./agent-template.md) | New agent role definitions → [../agents/](../agents/README.md) |
 | [skill-template.md](./skill-template.md) | Atomic skills (includes Safety section) → [../skills/](../skills/README.md) |
 | [prompt-template.md](./prompt-template.md) | Reusable prompt patterns → [../prompts/](../prompts/README.md) |
 | [workflow-template.md](./workflow-template.md) | Multi-step workflow artifacts → [../workflows/](../workflows/README.md) |

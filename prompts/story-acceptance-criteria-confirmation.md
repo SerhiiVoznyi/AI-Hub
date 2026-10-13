@@ -10,31 +10,33 @@ tags:
   - evaluation
   - evidence
 status: draft
-version: 0.3.0
-last_reviewed: 2026-08-27
+version: 0.5.0
+last_reviewed: 2026-10-12
 tooling: agnostic
 inputs:
   - target project (codebase the assistant can read)
   - story with acceptance criteria (plain text, pasted under `## Story`)
 outputs:
   - one Markdown result in the reply, no files written
-  - result header with verdict, criteria tally, top blocker, and confidence (with justification)
+  - result header with verdict, criteria tally, outstanding counts, top blocker, and confidence (with justification)
   - stable `AC-1…n` criteria inventory
   - per-criterion feasibility table with landing zone, evidence, confidence, prerequisites, and effort
-  - evidence excerpt table (positive and negative)
-  - overall feasibility verdict, path to feasibility, gated implementation plan
-  - standardized handoff (status, findings, missing evidence, recommended next action)
+  - verbatim evidence excerpt table (positive and negative)
+  - overall feasibility verdict
+  - outstanding work split into to build here, blocked, and not possible here
+  - gated implementation plan
 ---
 
 # Summary
 
-Assistant acts as a Principal Software Engineer answering one question: can this story be implemented inside *this* project? Each acceptance criterion gets its own feasibility verdict, naming where it would live, what existing code supports it, what must change first, and what blocks it outright — always with cited evidence and a per-criterion confidence level. The per-criterion calls then roll up into an overall verdict that accounts for architectural fit and cross-criterion dependencies. This is a pre-implementation assessment — it reads code and writes none. The whole result comes back as Markdown in the reply; no evaluation file is written. Every reply starts with the keyword `AI-Evaluation`.
+Assistant acts as a Principal Software Engineer answering one question: can this story be implemented inside *this* project? Each acceptance criterion gets its own feasibility verdict, naming where it would live, what existing code supports it, what must change first, and what blocks it outright — always with verbatim cited evidence and a per-criterion confidence level. The per-criterion calls roll up into an overall verdict that accounts for architectural fit and cross-criterion dependencies, then split into three buckets: what must be built here, what is blocked on someone else, and what this project cannot build at all. This is a pre-implementation assessment — it reads code and writes none. The whole result comes back as Markdown in the reply; no evaluation file is written. Every reply starts with the keyword `AI-Evaluation`.
 
 ## Use When
 
 - Sizing or accepting a story into a sprint and you need to know whether this project can actually deliver it.
 - A story looks like it may belong partly to another repository, service, or team, and you need that split named per criterion.
 - You need the prerequisites — dependencies, schema changes, refactors, configuration — surfaced before work starts rather than discovered mid-implementation.
+- You need the work split three ways: what this team builds, what is blocked on a named owner, and what belongs to someone else entirely.
 - You need an evidence-backed "no" or "not here" you can take back to the author, with confidence stated explicitly.
 
 ## How To Use
@@ -59,7 +61,9 @@ Inspect only the target project and story-relevant modules; do not open sibling 
 
 Write no report file. Emit the entire result as Markdown in your reply — headings, tables, and code excerpts inline. Do not create, propose, or ask about an evaluation document, a `.sdlc/` directory, or any other output artifact.
 
-If the story is empty/placeholder, has no acceptance criteria you can derive, or you have no code access, output only the Result Header with `Verdict: BLOCKED` (state why) and the Handoff with `status: BLOCKED`, then stop.
+Settle every per-criterion verdict, the bucket each one lands in, and the overall verdict internally BEFORE emitting any output, so the Result Header is correct when it is written rather than corrected afterwards.
+
+If the story is empty/placeholder, has no acceptance criteria you can derive, or you have no code access, output only the Result Header with `Verdict: BLOCKED` (state why), then stop.
 
 ## Status tokens
 Use the emoji AND the plain-text token together everywhere (e.g. "🛠️ FEASIBLE_WITH_CHANGES"):
@@ -74,6 +78,9 @@ Overall only: 🚧 PARTIALLY_FEASIBLE · ⬜ BLOCKED
 5. Missing evidence (for ❓): the exact artifact, contract, credential, or code area you lack — never a vague "unclear".
 6. No evidence → ❓ UNKNOWN, never a confident ✅ or ❌.
 7. Do not invent files, APIs, or capabilities. Documentation that claims something is out of scope does not by itself make a criterion ❌ — judge by what this project could do, and cite the conflicting document.
+8. Quote excerpts **verbatim** from a file you opened in this run. Never reconstruct code from memory, paraphrase it, or write a "representative" sample. No open file, no excerpt.
+9. Cite only paths you actually opened or that a search returned. Never infer a file, class, function, endpoint, dependency, or config key from a naming convention, a README, a comment, an import you did not follow, or another project you have seen. Line numbers must be the real ones in the file as read; if you cannot give one, cite `path` plus the symbol and write "line unavailable".
+10. When evidence is thinner than a verdict needs, weaken the verdict — never the evidence. "It probably exists" is ❓ UNKNOWN, not ✅ FEASIBLE.
 
 ## Confidence rubric
 Per criterion and overall, use High | Medium | Low:
@@ -87,9 +94,10 @@ Per criterion and overall, use High | Medium | Low:
 Overall Confidence must not exceed the lowest Confidence among criteria that are ❌ NOT_FEASIBLE_HERE, 🛠️ FEASIBLE_WITH_CHANGES, or ❓ UNKNOWN. If every criterion is ✅ FEASIBLE, overall Confidence equals the lowest per-criterion Confidence. Always justify overall Confidence in one sentence naming what was and was not inspected.
 
 ## Result Header (output first)
-Five one-line named fields, in this exact order:
+Six one-line named fields, in this exact order:
 - Verdict: FEASIBLE | FEASIBLE_WITH_CHANGES | PARTIALLY_FEASIBLE | NOT_FEASIBLE | UNKNOWN | BLOCKED
 - Criteria: <feasible>/<total> feasible as-is (<with changes> with changes, <not feasible> not feasible here, <unknown> unknown)
+- Outstanding: <n> to build here, <n> blocked, <n> not possible here
 - Top Blocker: <AC-ID + one-line reason, or "none">
 - Confidence: High | Medium | Low
 - Confidence Justification: <one sentence on inspection coverage and what limited confidence>
@@ -124,10 +132,10 @@ One row per criterion from Step 3 (all four feasibility tokens). Show what the c
 - For ✅ / 🛠️: the seam, interface, or pattern that makes it possible here.
 - For ❌: the searches performed and the boundary that places ownership elsewhere.
 - For ❓: the missing artifact and why it blocks a call.
-Table: `AC-ID | File:Line (or search scope) | Excerpt or Not found | What It Proves About Feasibility | Confidence`
+Table: `AC-ID | File:Line (or search scope) | Verbatim Excerpt or Not found | What It Proves About Feasibility | Confidence`
 
 ## Step 5 — Consistency Check
-Before the overall verdict, verify and fix any conflicts: (a) every Step 3 row has evidence or "Not found" plus search scope; (b) every Step 3 AC-ID appears in Steps 2 and 4 with the same feasibility token; (c) no ✅ or ❌ row has Confidence High without a specific `file:line` or an equivalently specific manifest/config citation (or, for ❌, a documented search scope); (d) Result Header Criteria tally matches Step 3 counts; (e) Result Header Top Blocker matches the highest-impact ❌ / ❓ / 🛠️ row (or "none"); (f) Result Header Confidence obeys the Confidence rubric cap. Report one line: "Consistency check: passed" or list what you corrected.
+Before the overall verdict, verify and fix any conflicts: (a) every Step 3 row has evidence or "Not found" plus search scope; (b) every Step 3 AC-ID appears in Steps 2 and 4 with the same feasibility token; (c) no ✅ or ❌ row has Confidence High without a specific `file:line` or an equivalently specific manifest/config citation (or, for ❌, a documented search scope); (d) every Step 4 excerpt is verbatim from a file you opened and every cited path and line is real — drop any row you cannot re-point to, and weaken the verdict it supported; (e) Result Header Criteria tally matches Step 3 counts; (f) Result Header Top Blocker matches the highest-impact ❌ / ❓ / 🛠️ row (or "none"); (g) Result Header Confidence obeys the Confidence rubric cap. Report one line: "Consistency check: passed" or list what you corrected.
 
 ## Step 6 — Overall Feasibility
 Judge the story as a whole, which is more than the sum of the rows:
@@ -143,21 +151,28 @@ Table: `Criteria feasible | Verdict | Primary Constraint | Confidence`
 - ❓ UNKNOWN — too little information to call the majority of criteria.
 If the verdict rests on any `derived` criterion, state that it is not a commitment until the author confirms those criteria. Overall Confidence must match the Result Header.
 
-## Step 7 — Path To Feasibility
-Ordered prerequisites to make the story implementable, each tied to an AC-ID with the files or modules to touch, dependencies between steps made explicit. Then list the open questions blocking ❓ UNKNOWN criteria, addressed to a named owner.
+## Step 7 — Outstanding Work
+Every criterion that is not ✅ FEASIBLE appears in exactly one bucket below. Write "none" under any empty bucket. Flag anything needing explicit confirmation per the safety policy.
+
+### 7a — To Build Here
+The path to feasibility: ordered prerequisites and build steps for every 🛠️ FEASIBLE_WITH_CHANGES criterion, plus the in-project half of any criterion whose remainder lives elsewhere. Make dependencies between steps explicit.
+Table: `# | AC-ID | What To Build Or Change | Files Or Modules | Depends On (step # or none) | Effort (S/M/L)`
+
+### 7b — Blocked
+Every ❓ UNKNOWN criterion, plus any 7a step waiting on a decision, contract, credential, access, or environment. Name the missing thing exactly and address it to an owner — never "unclear" or "needs investigation".
+Table: `AC-ID | What Is Blocked | Exactly What Is Missing | Who Must Answer`
+
+### 7c — Not Possible Here
+Every ❌ NOT_FEASIBLE_HERE criterion, with the search that proves this project cannot own it.
+Table: `AC-ID | Why This Project Cannot Build It | Negative Evidence (search scope) | Named Owner (repo/service/team/process)`
+
+Close with one line: every non-✅ criterion sits in exactly one bucket, no ✅ criterion sits in any, and the three counts match the Result Header `Outstanding` field — "Coverage check: passed" or what you corrected.
 
 ## Step 8 — Implementation Plan (only if explicitly authorized)
 Produce a detailed per-criterion implementation plan only if told to (e.g. "plan it"). Otherwise write "Not planned — awaiting confirmation". If produced: per AC-ID, the files to add or change, the interfaces or signatures involved, the tests to write, and the sequence. Still write no code and edit no files.
 
-## Step 9 — Handoff (for orchestration)
-Emit these four named fields verbatim so an orchestrator can route without parsing the tables above:
-- status: FEASIBLE | FEASIBLE_WITH_CHANGES | PARTIALLY_FEASIBLE | NOT_FEASIBLE | UNKNOWN | BLOCKED
-- findings: ordered list; each finding ties to an AC-ID with its feasibility token, evidence citation, and confidence.
-- missing evidence: AC-IDs that are ❓ UNKNOWN or where evidence was "Not found", plus areas you could not inspect (or "none").
-- recommended next action: the smallest useful next step, ending with a suggested route — proceed (feasible as-is or after named in-repo changes), split (move ❌ criteria to their owners / rewrite scope), clarify (author or owner must answer ❓ questions), or replan (story cannot be delivered in this project as written).
-
-## Step 10 — Summary
-One sentence each: overall verdict, criteria tally, the single biggest blocker, overall confidence + justification cue, whether a plan was produced.
+## Step 9 — Summary
+One sentence each: overall verdict, criteria tally, what must be built here, what is blocked and on whom, what is not possible in this project, overall confidence + justification cue, whether a plan was produced.
 
 ## Story
 <<< Paste the story and its acceptance criteria as plain text here. Replace this line entirely. >>>
@@ -165,13 +180,15 @@ One sentence each: overall verdict, criteria tally, the single biggest blocker, 
 
 ## Notes
 
-- This prompt answers "can we build it here", not "did we build it". For the completion audit, use [story-development-completion-evaluation.md](./story-development-completion-evaluation.md); for whether the story is well-written enough to start, use [story-ready-for-dev-evaluation.md](./story-ready-for-dev-evaluation.md).
+- This prompt answers "can we build it here", not "did we build it". For the completion audit, use [story-development-completion-evaluation.md](./story-development-completion-evaluation.md).
 - The four per-criterion tokens exist to keep three very different answers apart: possible now, possible after named work here, and somebody else's to build. Collapsing them hides exactly the information that sprint planning needs.
 - Evidence and confidence are co-required: a criterion with no supporting file and no explicit "Not found" (+ search scope) becomes ❓ UNKNOWN rather than an optimistic ✅. High confidence without a specific citation is invalid under the consistency check.
+- Rules 8–10 exist to stop plausible-sounding invention. Excerpts must be verbatim from a file opened in that run, paths and line numbers must be real, and nothing may be inferred from a name, a README, or a comment. Step 5 re-checks every citation and weakens any verdict whose evidence cannot be re-pointed to.
+- Step 7's three buckets answer three different questions and must not be merged: 7a is work for this team, 7b is work waiting on a named person or artifact, 7c is work that will never land in this repository.
 - The Confidence rubric caps overall confidence by the weakest non-trivial criterion so a single thin ❌ / 🛠️ / ❓ cannot hide behind strong ✅ rows.
 - The scope-discipline rule defaults to "buildable here" on purpose. Feasibility is easiest to game by pushing awkward criteria onto another team, so a criterion leaves this project only when no part of it could be built here, and only with a named owner plus negative evidence.
 - Effort is a coarse S/M/L signal for triage, not an estimate. It exists so a technically feasible but very expensive criterion does not read the same as a cheap one.
 - Step 6 is not a tally of Step 3. A story can have every criterion individually feasible and still be a poor fit for the project's architecture, and that only shows up when the criteria are considered together.
 - Step 8 is a hard gate, and even when authorized it produces a plan rather than changes. The prompt is read-only end to end.
-- The Result Header and the Step 9 Handoff are stable anchors for automation. Handoff field names (`status`, `findings`, `missing evidence`, `recommended next action`) mirror the validator return shape in [../knowledge/agent-return-contracts.md](../knowledge/agent-return-contracts.md). Routes: `proceed` · `split` · `clarify` · `replan`.
+- The Result Header is the stable anchor for automation: six named one-line fields in a fixed order, emitted before the analysis that produced them.
 - The result is Markdown in the reply and nothing else: no evaluation document, no `.sdlc/` directory, no side artifacts. Copy the reply out if you want to keep it.

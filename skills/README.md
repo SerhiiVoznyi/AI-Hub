@@ -1,22 +1,14 @@
-[Home](../README.md) · [AI.md](../AI.md) · [Agents](../agents/README.md) · [Skills](./README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](../knowledge/README.md) · [Templates](../templates/README.md)
+[Home](../README.md) · [AI.md](../AI.md) · [Skills](./README.md) · [Prompts](../prompts/README.md) · [Workflows](../workflows/README.md) · [Knowledge](../knowledge/README.md) · [Templates](../templates/README.md)
 
 # Skills
 
-Atomic capabilities reusable across prompts, agents, and workflows.
+Atomic capabilities reusable across prompts and workflows.
 
 Prefer names that describe visible behavior (e.g. `structured-reasoning.md`, `evidence-synthesis.md`) over names that imply hidden model internals.
 
 New skills: copy [../templates/skill-template.md](../templates/skill-template.md).
 
 ## Available skills
-
-### Story & validation
-
-| Skill | Purpose |
-| --- | --- |
-| [story-brief-normalization.md](./story-brief-normalization.md) | Clarified brief with boundaries, assumptions, and observable completion criteria |
-| [acceptance-evidence-traceability.md](./acceptance-evidence-traceability.md) | Maps each approved criterion to concrete evidence |
-| [validation-disposition.md](./validation-disposition.md) | Distinguishes `pass`, `rework`, and `replan` from evidence quality |
 
 ### TypeScript language
 
@@ -84,9 +76,7 @@ New skills: copy [../templates/skill-template.md](../templates/skill-template.md
 
 ## Composition
 
-Skill binding for the orchestrated planner / executor / validator flow is **prompt-driven**. Supply a per-role **task skills manifest** (paths like `skills/foo.md`); the orchestrator forwards it on every handoff.
-
-Start from [orchestrated-execution-with-skills.md](../prompts/orchestrated-execution-with-skills.md) (includes TypeScript/Node/Lambda and .NET 10 C# Lambda example manifests).
+Skills are loaded on demand: name the ones a task needs (paths like `skills/foo.md`) and the assistant follows them for that task. Load only what the task requires — see [scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 
 Shared contracts live under [../knowledge/](../knowledge/README.md) — skills should link them, not restate them.
 

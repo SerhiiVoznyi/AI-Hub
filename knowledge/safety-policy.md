@@ -7,11 +7,11 @@ tags:
   - guardrails
   - operations
 status: reviewed
-version: 0.2.1
-last_reviewed: 2026-09-18
+version: 0.3.0
+last_reviewed: 2026-10-12
 tooling: agnostic
 inputs:
-  - any agent or skill that performs work in this repository or downstream systems
+  - any prompt or skill that performs work in this repository or downstream systems
 outputs:
   - operational guardrails
   - confirmation thresholds
@@ -20,11 +20,11 @@ outputs:
 
 # Summary
 
-Single source of operational safety for AI-Hub. Agents and skills **reference** this document; they must not restate its clauses. If anything more permissive conflicts with this file, this file wins unless the user explicitly overrides it for the current task.
+Single source of operational safety for AI-Hub. Prompts and skills **reference** this document; they must not restate its clauses. If anything more permissive conflicts with this file, this file wins unless the user explicitly overrides it for the current task.
 
 # Scope
 
-Applies to every agent and skill that may change files, run shells, call networks, install dependencies, deploy, or touch cloud providers—including orchestrated roles, standalone prompts, and peer panels.
+Applies to every prompt and skill that may change files, run shells, call networks, install dependencies, deploy, or touch cloud providers.
 
 # Rules
 
@@ -43,10 +43,10 @@ Applies to every agent and skill that may change files, run shells, call network
 
 ## Scope and approvals
 
-- Stay inside the approved work package; no opportunistic refactors.
+- Stay inside the task the user approved; no opportunistic refactors.
 - Do not scan the whole codebase or unrelated projects for context; load only named or task-necessary paths — see [scoped-context-discipline.md](./scoped-context-discipline.md).
 - Stop and ask before expanding scope, changing public contracts, altering IAM, touching production, or modifying shared infrastructure.
-- Never self-certify completion; validation (or explicit user acceptance) must use evidence, not plausibility.
+- Never self-certify completion; a completion claim must rest on cited evidence, not plausibility.
 - User confirmation is required for any step flagged as destructive, secret-touching, IAM-widening, or production-affecting.
 
 ## Supply chain
@@ -73,15 +73,4 @@ Applies to every agent and skill that may change files, run shells, call network
 ## Coding posture
 
 - TypeScript / Node.js: OOP default (constructor-injected classes). Details and exceptions: `skills/typescript-oop-design.md`.
-- .NET / C#: follow the design skill in the task skills manifest when present (e.g. `skills/dotnet-10-csharp-oop-design.md`).
-
-# Enforcement by role
-
-Standalone or peer agents obey **Rules** above; they must not invent a softer path.
-
-- **Planner:** name destructive, secret, IAM, or production impact as risks with a confirmation owner; put dry-run/preview before unavoidable destructive steps.
-- **Executor:** refuse policy-violating steps without routed confirmation; redact secrets in evidence; stay inside the approved package.
-- **Validator:** never `pass` when evidence has secrets, unapproved scope expansion, or undocumented destructive ops — use `rework` or `replan`.
-- **Orchestrator:** require user confirmation for planner-flagged safety risks; never auto-approve plans that depend on them.
-
-Handoff topology (who may talk to whom) lives in [orchestrated-handoff-protocol.md](./orchestrated-handoff-protocol.md), not here.
+- .NET / C#: OOP default on `net10.0`. Details and exceptions: `skills/dotnet-10-csharp-oop-design.md`.
