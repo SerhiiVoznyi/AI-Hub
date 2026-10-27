@@ -22,6 +22,7 @@ AI-Hub is a curated collection of AI artifacts, patterns, and frameworks focused
 - [Project evaluation](prompts/project-evaluation.md) — Principal-Engineer codebase audit across 14 criteria
 - [Story completion evaluation](prompts/story-development-completion-evaluation.md) — is the story implemented, and is every criterion met
 - [Bug fix diagnosis and resolution](prompts/bug-fix-diagnosis-and-resolution.md) — triage, root cause, gated fix
+- [Repository knowledge graph creation](prompts/repository-knowledge-graph-creation.md) — build a `kb/` knowledge graph so agents can navigate any repository
 
 ## Tool adapters
 

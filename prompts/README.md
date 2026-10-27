@@ -16,6 +16,7 @@ New prompts: copy [../templates/prompt-template.md](../templates/prompt-template
 | [story-acceptance-criteria-confirmation.md](./story-acceptance-criteria-confirmation.md) | Can this project build the story? Per-criterion feasibility (`AC-1…n`), then what to build here, what is blocked, what is not possible here |
 | [story-development-completion-evaluation.md](./story-development-completion-evaluation.md) | Did it get built? Per-criterion status with verbatim code evidence, then what is left, what is blocked, what is not possible here |
 | [bug-fix-diagnosis-and-resolution.md](./bug-fix-diagnosis-and-resolution.md) | Bug-report triage with root cause, offending code table, and gated fix application |
+| [repository-knowledge-graph-creation.md](./repository-knowledge-graph-creation.md) | Builds (or refreshes) a file-based knowledge graph for any repository: `KB.md` cards per project, shared nodes, typed evidence-cited edges, and generated indexes for AI navigation |
 
 ## Related
 
