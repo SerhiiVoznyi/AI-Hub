@@ -8,7 +8,7 @@ tags:
   - delivery
   - multi-agent
 status: draft
-version: 0.2.0
+version: 0.2.1
 last_reviewed: 2026-11-04
 capabilities:
   - read-files
@@ -53,7 +53,7 @@ The sequence the team in [../agents/README.md](../agents/README.md) follows from
 ## Inputs
 
 - Required: a client request, and a target project the specialists can read.
-- Optional: existing acceptance criteria; architectural constraints and priorities; a `kb/` knowledge graph from [../prompts/repository-knowledge-graph-creation.md](../prompts/repository-knowledge-graph-creation.md).
+- Optional: existing acceptance criteria; architectural constraints and priorities; repository knowledge files — `AGENTS.md` and `AI.md` per project, and a `kb/` graph — from [../prompts/repository-knowledge-graph-creation.md](../prompts/repository-knowledge-graph-creation.md).
 
 ## Routing
 

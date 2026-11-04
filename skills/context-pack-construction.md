@@ -8,7 +8,7 @@ tags:
   - tokens
   - orchestration
 status: draft
-version: 0.1.0
+version: 0.1.1
 last_reviewed: 2026-11-04
 capabilities:
   - read-files
@@ -44,7 +44,7 @@ Assemble the smallest set of pointers — path, line range, symbol, and why it m
   - the task or work package, with its criteria
   - read access to the target repository
 - Optional:
-  - a `kb/` knowledge graph or existing architecture notes
+  - repository knowledge files (`AGENTS.md`, `AI.md` cards, a `kb/` graph) or existing architecture notes
   - gaps reported by a previous pack
 
 ## Method
@@ -52,7 +52,7 @@ Assemble the smallest set of pointers — path, line range, symbol, and why it m
 1. Work from the task's criteria. A pointer earns its place by serving a criterion, not by being interesting.
 2. Locate before reading: glob and bounded search first, then open only the ranges a match names, per [../knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md).
 3. Write each entry as `path:line-range (symbol) — why it matters in one line`. Never paste the code; the specialist opens what it needs.
-4. Order entries so a reader can start at the top: entry point, then the modules it calls, then contracts, then tests, then configuration.
+4. Order entries so a reader can start at the top: the `AGENTS.md` and `AI.md` of each project in scope when present, then the entry point, the modules it calls, contracts, tests, and configuration.
 5. Include the negative space: name what you searched for and did not find, with the search scope. An absence saves a specialist a fruitless hunt.
 6. Mark anything uncertain as inferred, with the clue that suggested it. A confident pointer that is wrong costs more than an honest one that is vague.
 7. Keep the pack shorter than the reading it replaces. If it approaches the size of the files it points at, the task did not need a pack.
@@ -76,7 +76,7 @@ Assemble the smallest set of pointers — path, line range, symbol, and why it m
 
 - [../knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md) — the read limits this skill operationalizes.
 - [token-budget-planning.md](./token-budget-planning.md) — how much each step may spend.
-- [../prompts/repository-knowledge-graph-creation.md](../prompts/repository-knowledge-graph-creation.md) — a durable graph when packs are needed repeatedly.
+- [../prompts/repository-knowledge-graph-creation.md](../prompts/repository-knowledge-graph-creation.md) — durable per-project knowledge files and a graph, when packs are needed repeatedly.
 
 ## Safety
 

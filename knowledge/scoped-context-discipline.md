@@ -9,7 +9,7 @@ tags:
   - exploration
   - discipline
 status: draft
-version: 0.4.0
+version: 0.5.0
 last_reviewed: 2026-11-04
 capabilities: []
 inputs:
@@ -31,7 +31,7 @@ Governs what may be loaded while doing the work. Scope boundaries for the work i
 ## Rules
 
 1. **Named scope first.** Start from the paths the user or the task named; do not precede them with a repository tour.
-2. **Cheapest tool first.** Locate with glob or list, confirm with a bounded search, read only the matched ranges, and read a file whole only when it is small or decisive.
+2. **Cheapest tool first.** Where the target has knowledge files — `AGENTS.md` and `AI.md` in the folders in scope, a `kb/` index — read them first and locate through their pointers. Then locate with glob or list, confirm with a bounded search, read only the matched ranges, and read a file whole only when it is small or decisive. Knowledge files are leads: cite code, not cards, as evidence.
 3. **Stop at sufficiency.** Stop reading once the current step can be cited; a file that is merely related is not a reason to open it.
 4. **Never re-read.** Do not reopen what is already in context, and do not re-read a file to confirm your own successful edit.
 5. **Skip low-signal bulk.** Lockfiles, dependency and build directories, generated output, snapshots, minified bundles, and binaries: search them, never read them whole.
@@ -55,6 +55,7 @@ An artifact or the user may require repository-wide or multi-root review (for ex
 - [safety-policy.md](./safety-policy.md) — scope of the work itself, and approval thresholds.
 - [orchestrated-delivery-protocol.md](./orchestrated-delivery-protocol.md) — context packs and output economy between roles.
 - [../skills/context-pack-construction.md](../skills/context-pack-construction.md) — building a pointer set another role can work from.
+- [../prompts/repository-knowledge-graph-creation.md](../prompts/repository-knowledge-graph-creation.md) — writes the knowledge files rule 2 starts from.
 
 ## Notes
 
