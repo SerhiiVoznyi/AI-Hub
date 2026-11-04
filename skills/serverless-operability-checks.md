@@ -1,6 +1,7 @@
 ---
 title: "Serverless Operability Checks"
 type: skill
+summary: "Check retries, idempotency, timeouts, configuration, and observability so functional success does not hide production gaps."
 tags:
   - skills
   - aws
@@ -8,9 +9,10 @@ tags:
   - operability
   - serverless
 status: draft
-version: 0.2.0
-last_reviewed: 2026-10-12
-tooling: agnostic
+version: 0.3.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
 inputs:
   - planned or completed lambda change
   - runtime expectations
@@ -21,7 +23,9 @@ outputs:
   - missing evidence list
 ---
 
-# Summary
+# Serverless Operability Checks
+
+## Summary
 
 Apply production-minded checks to Lambda work so functional success does not hide reliability, observability, or configuration gaps.
 
@@ -30,6 +34,12 @@ Apply production-minded checks to Lambda work so functional success does not hid
 - A story changes Lambda behavior in ways that could affect retries, idempotency, timeout safety, or runtime diagnostics.
 - Operational risks need capturing before implementation starts.
 - A compact operability checklist is needed alongside implementation or review evidence.
+
+## Do Not Use When
+
+- The main need is sequencing the change — use [aws-lambda-change-planning.md](./aws-lambda-change-planning.md).
+- The concern is cost at scale rather than failure behavior — use [performance-review.md](./performance-review.md).
+- The concern is exploitability — use [secure-code-review.md](./secure-code-review.md).
 
 ## Inputs
 
@@ -49,13 +59,25 @@ Apply production-minded checks to Lambda work so functional success does not hid
 4. Check observability: structured logs, enough context to debug failures, and evidence that critical behavior is visible in tests or review artifacts.
 5. Record only the highest-value operability risks and missing evidence, so they can change what gets built or what gets accepted.
 
-## Safety
+## Quality Bar
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
+- Every risk recorded is tied to this change, not to the platform in general.
+- Duplicate delivery and partial failure each have a stated handling, even if that handling is "not applicable, because".
+- Missing evidence is named specifically enough to be produced.
+- The list is short enough to act on, ranked by material impact.
 
 ## Failure Modes
 
 - Treating a passing happy-path test as proof that the change is production-ready.
 - Turning the checklist into a generic platform review unrelated to the actual story.
 - Requiring ideal observability for every small change instead of focusing on material risks.
-- Use `aws-lambda-change-planning.md` instead when the main need is sequencing the change rather than judging its operability.
+
+## Related
+
+- [aws-lambda-change-planning.md](./aws-lambda-change-planning.md) — sequencing the change these risks apply to.
+- [aws-lambda-runtime-reuse.md](./aws-lambda-runtime-reuse.md) — timeout budgeting specifics.
+- [change-set-review.md](./change-set-review.md) — the review this feeds for serverless diffs.
+
+## Safety
+
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) and [knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md). Do not restate their clauses.

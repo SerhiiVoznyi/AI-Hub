@@ -1,15 +1,18 @@
 ---
 title: "Node.js Configuration"
 type: skill
+summary: "Load configuration once into a typed object at the composition root and fail fast, so misconfiguration surfaces at startup."
 tags:
   - skills
   - nodejs
   - configuration
   - runtime
 status: draft
-version: 0.1.0
-last_reviewed: 2026-09-18
-tooling: agnostic
+version: 0.2.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
+  - edit-files
 inputs:
   - runtime environment definition
   - required settings and secrets
@@ -18,7 +21,9 @@ outputs:
   - fail-fast validation
 ---
 
-# Summary
+# Node.js Configuration
+
+## Summary
 
 Load Node.js configuration once into a typed object at the composition root and fail fast on missing or malformed values, so misconfiguration surfaces at startup rather than mid-request.
 
@@ -27,6 +32,11 @@ Load Node.js configuration once into a typed object at the composition root and 
 - Introducing new environment variables, settings files, or parameter store lookups.
 - Replacing scattered `process.env` reads with a single typed surface.
 - Deciding how a service should behave when required settings are absent.
+
+## Do Not Use When
+
+- The task is wiring dependencies rather than loading settings — use [nodejs-composition-root.md](./nodejs-composition-root.md).
+- The runtime is .NET — use [dotnet-options-and-http.md](./dotnet-options-and-http.md).
 
 ## Inputs
 
@@ -46,14 +56,25 @@ Load Node.js configuration once into a typed object at the composition root and 
 5. Keep secrets out of logs and error messages. Reference the setting name, never the value.
 6. Treat configuration as immutable after load; if a value must change at runtime, model that explicitly as a refreshable source.
 
+## Quality Bar
+
+- Every setting the process uses appears in one typed shape.
+- A missing required setting stops startup with an error naming it.
+- No `process.env` read exists outside the loader.
+- No log or error message can emit a configuration value that may be secret.
+
 ## Failure Modes
 
 - Reading `process.env` deep inside domain classes, which hides requirements and breaks tests.
 - Defaulting a required secret or endpoint to a placeholder so startup succeeds and production fails later.
 - Logging the full configuration object during startup diagnostics.
-- Use `nodejs-composition-root.md` instead when the task is wiring dependencies rather than loading settings.
+
+## Related
+
+- [nodejs-composition-root.md](./nodejs-composition-root.md) — where configuration is loaded and injected.
+- [nodejs-async-lifecycle.md](./nodejs-async-lifecycle.md) — timeouts that configuration usually supplies.
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) and [knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md). Do not restate their clauses.
 - Configuration frequently carries credentials; apply the secrets handling clauses of the safety policy.

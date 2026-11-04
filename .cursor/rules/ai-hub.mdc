@@ -5,14 +5,17 @@ alwaysApply: true
 
 # AI-Hub Entry Point
 
-- Read `AI.md` first for repository purpose, structure, metadata, and growth rules.
+- Read `AI.md` first for repository purpose, structure, the artifact schema, body rules, and growth rules.
 - Treat `AI.md` as the single source of truth; keep this rule minimal.
-- Use `README.md` (and each folder `README.md`) for human navigation indexes; they must stay aligned with on-disk artifacts.
+- Use `README.md` and each folder `README.md` for human navigation indexes; they must stay aligned with on-disk artifacts.
 - Follow `knowledge/safety-policy.md` for destructive operations, secrets, scope and approvals, supply chain, AWS safety, untrusted-input handling, and the OOP-default coding posture.
-- Prefer placing new material in `skills/`, `prompts/`, `workflows/`, `knowledge/`, or `templates/` before creating new top-level folders.
-- Mark tool-specific artifacts explicitly instead of presenting them as universally applicable.
+- Follow `knowledge/scoped-context-discipline.md` for what may be read or searched into context, and `knowledge/orchestrated-delivery-protocol.md` when roles hand work to each other.
+- Prefer placing new material in `agents/`, `skills/`, `prompts/`, `workflows/`, `knowledge/`, or `templates/` before creating new top-level folders.
+- Delivery roles live in `agents/` as executor-agnostic `<role>-agent.md` files. `.cursor/agents/` holds thin adapters that point at them, never a second role definition.
+- Mark executor requirements with the `capabilities` field instead of naming a product.
 
 Examples:
 
 - Put reusable repository guidance in `AI.md`, not in this rule file.
 - Add a new prompt pattern under `prompts/` before introducing another top-level category.
+- Change a role's behavior in `agents/<role>-agent.md`, not in its adapter.

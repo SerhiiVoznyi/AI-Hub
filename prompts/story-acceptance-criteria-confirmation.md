@@ -1,6 +1,7 @@
 ---
-title: "Story acceptance criteria feasibility confirmation"
+title: "Story Acceptance Criteria Feasibility Confirmation"
 type: prompt
+summary: "Answers whether this project can build a story, criterion by criterion, with cited evidence, prerequisites, and a gated plan."
 tags:
   - prompts
   - agile
@@ -10,26 +11,29 @@ tags:
   - evaluation
   - evidence
 status: draft
-version: 0.5.0
-last_reviewed: 2026-10-12
-tooling: agnostic
+version: 0.6.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
 inputs:
-  - target project (codebase the assistant can read)
-  - story with acceptance criteria (plain text, pasted under `## Story`)
+  - target project the executor can read
+  - story with acceptance criteria, pasted under `## Story`
 outputs:
   - one Markdown result in the reply, no files written
-  - result header with verdict, criteria tally, outstanding counts, top blocker, and confidence (with justification)
+  - result header with verdict, criteria tally, outstanding counts, top blocker, and confidence
   - stable `AC-1…n` criteria inventory
   - per-criterion feasibility table with landing zone, evidence, confidence, prerequisites, and effort
-  - verbatim evidence excerpt table (positive and negative)
+  - verbatim evidence excerpt table, positive and negative
   - overall feasibility verdict
   - outstanding work split into to build here, blocked, and not possible here
   - gated implementation plan
 ---
 
-# Summary
+# Story Acceptance Criteria Feasibility Confirmation
 
-Assistant acts as a Principal Software Engineer answering one question: can this story be implemented inside *this* project? Each acceptance criterion gets its own feasibility verdict, naming where it would live, what existing code supports it, what must change first, and what blocks it outright — always with verbatim cited evidence and a per-criterion confidence level. The per-criterion calls roll up into an overall verdict that accounts for architectural fit and cross-criterion dependencies, then split into three buckets: what must be built here, what is blocked on someone else, and what this project cannot build at all. This is a pre-implementation assessment — it reads code and writes none. The whole result comes back as Markdown in the reply; no evaluation file is written. Every reply starts with the keyword `AI-Evaluation`.
+## Summary
+
+The executor acts as a Principal Software Engineer answering one question: can this story be implemented inside *this* project? Each acceptance criterion gets its own feasibility verdict, naming where it would live, what existing code supports it, what must change first, and what blocks it outright — always with verbatim cited evidence and a per-criterion confidence level. The per-criterion calls roll up into an overall verdict that accounts for architectural fit and cross-criterion dependencies, then split into three buckets: what must be built here, what is blocked on someone else, and what this project cannot build at all. Read-only, and the whole result comes back as Markdown in the reply.
 
 ## Use When
 
@@ -39,9 +43,37 @@ Assistant acts as a Principal Software Engineer answering one question: can this
 - You need the work split three ways: what this team builds, what is blocked on a named owner, and what belongs to someone else entirely.
 - You need an evidence-backed "no" or "not here" you can take back to the author, with confidence stated explicitly.
 
+## Do Not Use When
+
+- The question is whether the story was already built — use [story-development-completion-evaluation.md](./story-development-completion-evaluation.md).
+- Something is broken and needs diagnosis — use [bug-fix-diagnosis-and-resolution.md](./bug-fix-diagnosis-and-resolution.md).
+- The whole codebase needs a quality baseline — use [project-evaluation.md](./project-evaluation.md).
+
+## Inputs
+
+- Required: a target project the executor can read, and a story pasted under `## Story`.
+- Required capabilities: read files. The prompt writes nothing.
+- Optional: say "plan it" to unlock the Step 8 implementation plan.
+
+## Outputs
+
+Result header, six one-line fields in this order:
+
+- `Verdict` — `FEASIBLE`, `FEASIBLE_WITH_CHANGES`, `PARTIALLY_FEASIBLE`, `NOT_FEASIBLE`, `UNKNOWN`, or `BLOCKED`
+- `Criteria` — feasible as-is, with changes, not feasible here, unknown
+- `Outstanding` — to build here, blocked, not possible here
+- `Top Blocker` — AC-ID and a one-line reason, or "none"
+- `Confidence` — High, Medium, or Low
+- `Confidence Justification` — one sentence on inspection coverage
+
+Then: the capability scan, criteria inventory, per-criterion feasibility, evidence detail, consistency check, overall verdict, the three outstanding buckets, the gated plan, and a summary. Every reply begins with the keyword `AI-Evaluation`.
+
 ## How To Use
 
-Open the target project, copy the prompt, replace the placeholder under `## Story`, and send. No story or no code access → `BLOCKED`. Say "plan it" to have Step 8 produce the detailed implementation plan.
+1. Give the executor read access to the target project.
+2. Copy the prompt block below and replace the placeholder under `## Story`.
+3. Send it. With no story or no code access it returns `BLOCKED`.
+4. To get the detailed implementation plan, reply "plan it". Step 8 stays unwritten otherwise.
 
 ## Prompt
 
@@ -191,4 +223,10 @@ One sentence each: overall verdict, criteria tally, what must be built here, wha
 - Step 6 is not a tally of Step 3. A story can have every criterion individually feasible and still be a poor fit for the project's architecture, and that only shows up when the criteria are considered together.
 - Step 8 is a hard gate, and even when authorized it produces a plan rather than changes. The prompt is read-only end to end.
 - The Result Header is the stable anchor for automation: six named one-line fields in a fixed order, emitted before the analysis that produced them.
-- The result is Markdown in the reply and nothing else: no evaluation document, no `.sdlc/` directory, no side artifacts. Copy the reply out if you want to keep it.
+- The result is Markdown in the reply and nothing else: no evaluation document, no side artifacts. Copy the reply out if you want to keep it.
+
+## Related
+
+- [story-development-completion-evaluation.md](./story-development-completion-evaluation.md) — the completion audit for the same story.
+- [../agents/business-analyst-agent.md](../agents/business-analyst-agent.md) — runs Steps 1–7 of this prompt as its feasibility method.
+- [../skills/acceptance-criteria-authoring.md](../skills/acceptance-criteria-authoring.md) — when the story has no usable criteria yet.

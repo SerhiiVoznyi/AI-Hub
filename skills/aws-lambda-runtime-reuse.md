@@ -1,6 +1,7 @@
 ---
 title: "AWS Lambda Runtime Reuse and Time Budget (Node.js / TypeScript)"
 type: skill
+summary: "Decide what a Lambda keeps across invocations and how it spends its timeout, so warm starts stay cheap and calls cannot exhaust the budget."
 tags:
   - skills
   - aws
@@ -8,9 +9,11 @@ tags:
   - serverless
   - performance
 status: draft
-version: 0.1.0
-last_reviewed: 2026-09-18
-tooling: tool-assisted
+version: 0.2.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
+  - edit-files
 inputs:
   - lambda configuration limits
   - downstream call profile
@@ -19,7 +22,9 @@ outputs:
   - timeout budget
 ---
 
-# Summary
+# AWS Lambda Runtime Reuse and Time Budget (Node.js / TypeScript)
+
+## Summary
 
 Manage what a **Node.js / TypeScript** Lambda keeps across invocations and how it spends its configured timeout, so warm starts stay cheap and outbound calls cannot exhaust the function's time budget.
 
@@ -28,6 +33,12 @@ Manage what a **Node.js / TypeScript** Lambda keeps across invocations and how i
 - Deciding which clients, connections, or parsed configuration live outside the handler.
 - Tuning a Lambda that suffers cold-start latency or timeout-related failures.
 - Setting outbound call timeouts against the configured function timeout.
+
+## Do Not Use When
+
+- The concern is handler and service layout — use [aws-lambda-handler-composition.md](./aws-lambda-handler-composition.md).
+- The task is auditing retries, idempotency, and observability — use [serverless-operability-checks.md](./serverless-operability-checks.md).
+- The runtime is C# / .NET — use [aws-lambda-dotnet-serialization-and-reuse.md](./aws-lambda-dotnet-serialization-and-reuse.md).
 
 ## Inputs
 
@@ -47,15 +58,26 @@ Manage what a **Node.js / TypeScript** Lambda keeps across invocations and how i
 5. Set each outbound client timeout shorter than the function timeout so the function can fail cleanly and emit diagnostics instead of being killed.
 6. Move heavy one-time work (schema compilation, credential resolution) into initialization rather than the invocation path.
 
+## Quality Bar
+
+- No SDK client or pool is constructed inside the handler body.
+- Nothing request-scoped or caller-specific is held in module scope.
+- Every outbound timeout is strictly shorter than the function timeout, with headroom stated.
+- Initialization is idempotent and does not depend on module import order.
+
 ## Failure Modes
 
 - Constructing SDK clients inside the handler body on every invocation.
 - Caching per-request data in module scope, leaking it into the next invocation.
 - Leaving default SDK timeouts that exceed the Lambda timeout, producing opaque timeouts with no logs.
-- Use `aws-lambda-handler-composition.md` for the handler and service layout.
-- Use `serverless-operability-checks.md` when the task is auditing retries, idempotency, and observability.
+
+## Related
+
+- [aws-lambda-handler-composition.md](./aws-lambda-handler-composition.md) — handler and service layout.
+- [serverless-operability-checks.md](./serverless-operability-checks.md) — retries, idempotency, and observability.
+- [performance-review.md](./performance-review.md) — judging the resulting cost at scale.
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) and [knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md). Do not restate their clauses.
 - Reused state must never carry caller-specific data across invocations.

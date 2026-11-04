@@ -1,6 +1,7 @@
 ---
 title: ".NET Options, HTTP, and Host Lifecycle"
 type: skill
+summary: "Bind configuration through validated options, call APIs through factory-managed clients, and shut the host down gracefully."
 tags:
   - skills
   - dotnet
@@ -8,9 +9,11 @@ tags:
   - http
   - lifecycle
 status: draft
-version: 0.1.0
-last_reviewed: 2026-09-18
-tooling: agnostic
+version: 0.2.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
+  - edit-files
 inputs:
   - required settings and endpoints
   - hosting model
@@ -19,7 +22,9 @@ outputs:
   - managed HTTP clients and shutdown
 ---
 
-# Summary
+# .NET Options, HTTP, and Host Lifecycle
+
+## Summary
 
 Bind .NET configuration through validated options, call external APIs through factory-managed HTTP clients, and shut the host down gracefully, so misconfiguration and socket or cancellation problems surface early.
 
@@ -28,6 +33,11 @@ Bind .NET configuration through validated options, call external APIs through fa
 - Adding settings, secrets, or external API calls to a .NET application.
 - Implementing background services or reviewing shutdown behavior.
 - Replacing `IConfiguration` lookups scattered through domain classes.
+
+## Do Not Use When
+
+- The task is service registration and lifetime decisions — use [dotnet-composition-and-di.md](./dotnet-composition-and-di.md).
+- The runtime is Node.js — use [nodejs-configuration.md](./nodejs-configuration.md).
 
 ## Inputs
 
@@ -47,14 +57,25 @@ Bind .NET configuration through validated options, call external APIs through fa
 5. Propagate `CancellationToken` from ASP.NET Core requests or host shutdown into service and repository calls.
 6. Use `IHostedService` / `BackgroundService` for long-running work and coordinate shutdown so in-flight work completes or fails fast within the host stop timeout.
 
+## Quality Bar
+
+- No domain class takes `IConfiguration`; every setting arrives as a validated options object.
+- Critical settings are validated at startup and fail loudly when absent or malformed.
+- Every `HttpClient` comes from the factory and carries an explicit timeout.
+- Cancellation flows from the request or host shutdown to the outermost outbound call.
+
 ## Failure Modes
 
 - Pulling `IConfiguration` deep into domain classes instead of options objects.
 - Creating `new HttpClient()` per call or per service instance without factory management.
 - Swallowing startup validation errors so misconfiguration is discovered only in production.
-- Use `dotnet-composition-and-di.md` for service registration and lifetime decisions.
+
+## Related
+
+- [dotnet-composition-and-di.md](./dotnet-composition-and-di.md) — registration and lifetimes.
+- [dotnet-10-csharp-nullability-and-async.md](./dotnet-10-csharp-nullability-and-async.md) — cancellation in method contracts.
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) and [knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md). Do not restate their clauses.
 - Never log secrets, connection strings, or bearer tokens. Use placeholder redaction in examples and diagnostics.

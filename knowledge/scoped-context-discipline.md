@@ -1,6 +1,7 @@
 ---
 title: "Scoped Context Discipline"
 type: knowledge
+summary: "Rules limiting what enters context: reads, searches, trees, diffs, and command output stay bounded to the task."
 tags:
   - knowledge
   - tokens
@@ -8,20 +9,26 @@ tags:
   - exploration
   - discipline
 status: draft
-version: 0.3.0
-last_reviewed: 2026-10-12
-tooling: agnostic
+version: 0.4.0
+last_reviewed: 2026-11-04
+capabilities: []
 inputs:
-  - any prompt, skill, or tool-using run that reads a repository
+  - any agent, prompt, or skill that reads a repository
 outputs:
   - rules that limit which paths are opened or searched
 ---
 
-# Summary
+# Scoped Context Discipline
 
-Token discipline for **what enters context**: reads, searches, trees, diffs, and command output. Open only what the user named, the task requires, or the current step must cite — never scan a whole codebase, workspace, or sibling project uninvited. Scope boundaries for the work itself stay in [safety-policy.md](./safety-policy.md).
+## Summary
 
-# Rules
+Token discipline for **what enters context**: reads, searches, trees, diffs, and command output. Open only what the user named, the task requires, or the current step must cite — never scan a whole codebase, workspace, or sibling project uninvited.
+
+## Scope
+
+Governs what may be loaded while doing the work. Scope boundaries for the work itself stay in [safety-policy.md](./safety-policy.md). How context is packaged and passed between roles stays in [orchestrated-delivery-protocol.md](./orchestrated-delivery-protocol.md).
+
+## Rules
 
 1. **Named scope first.** Start from the paths the user or the task named; do not precede them with a repository tour.
 2. **Cheapest tool first.** Locate with glob or list, confirm with a bounded search, read only the matched ranges, and read a file whole only when it is small or decisive.
@@ -34,6 +41,23 @@ Token discipline for **what enters context**: reads, searches, trees, diffs, and
 9. **Hub scope.** Load only the skills the task names; when the hub and a target project are both open, read code under the target project rather than the hub.
 10. **Report scope in one line** only when it changes a conclusion or a confidence level; absence claims name the scope searched.
 
-# Exceptions
+## Rationale
 
-A prompt or the user may require repository-wide or multi-root review (for example, a project evaluation). Rules 2, 5, 6, and 8 still hold: bound and sample the review, and never dump trees or file bodies wholesale.
+- Rules 2 and 3 matter more than they look: most context waste is not one huge file but a dozen plausible ones opened past the point where the answer was already provable.
+- Rule 7 keeps a failed search honest. Silently widening and then reporting a confident absence is how a wrong "not found" reaches the user.
+
+## Exceptions
+
+An artifact or the user may require repository-wide or multi-root review (for example, a project evaluation). Rules 2, 5, 6, and 8 still hold: bound and sample the review, and never dump trees or file bodies wholesale.
+
+## Related
+
+- [safety-policy.md](./safety-policy.md) — scope of the work itself, and approval thresholds.
+- [orchestrated-delivery-protocol.md](./orchestrated-delivery-protocol.md) — context packs and output economy between roles.
+- [../skills/context-pack-construction.md](../skills/context-pack-construction.md) — building a pointer set another role can work from.
+
+## Notes
+
+- Load this document by path at runtime; do not paste its body into another artifact.
+- Cite rules by number rather than quoting them.
+- Navigation belongs in [README.md](./README.md), not in frontmatter.

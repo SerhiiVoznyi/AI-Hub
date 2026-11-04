@@ -1,6 +1,7 @@
 ---
-title: "Story development completion evaluation"
+title: "Story Development Completion Evaluation"
 type: prompt
+summary: "Decides whether a story is actually implemented, judging each criterion against verbatim code evidence and naming what is left."
 tags:
   - prompts
   - agile
@@ -10,24 +11,27 @@ tags:
   - evidence
   - code-review
 status: draft
-version: 0.4.0
-last_reviewed: 2026-10-12
-tooling: agnostic
+version: 0.5.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
 inputs:
-  - target project (codebase the assistant can read)
-  - story with acceptance criteria (plain text, pasted under `## Story`)
+  - target project the executor can read
+  - story with acceptance criteria, pasted under `## Story`
 outputs:
   - result header with verdict, criteria tally, outstanding counts, top gap, and confidence
   - stable `AC-1…n` criteria inventory
   - per-criterion implementation status with code evidence
   - evidence table of verbatim excerpts proving each criterion
   - outstanding work split into left to implement, blocked, and not possible here
-  - implemented / not implemented verdict
+  - implemented or not implemented verdict
 ---
 
-# Summary
+# Story Development Completion Evaluation
 
-Assistant acts as a Principal Software Engineer: decides whether the pasted story is actually implemented in this project, judges every acceptance criterion individually, and backs each call with cited files and verbatim code excerpts. Whatever is not done is sorted into three buckets — still to implement, blocked on someone else, or not possible in this project at all. Read-only: it reports what the code proves, it does not write or fix anything.
+## Summary
+
+The executor acts as a Principal Software Engineer: decides whether the pasted story is actually implemented in this project, judges every acceptance criterion individually, and backs each call with cited files and verbatim code excerpts. Whatever is not done is sorted into three buckets — still to implement, blocked on someone else, or not possible in this project at all. Read-only: it reports what the code proves, and fixes nothing.
 
 ## Use When
 
@@ -36,9 +40,35 @@ Assistant acts as a Principal Software Engineer: decides whether the pasted stor
 - You need the leftovers named precisely: what remains to build, what is waiting on a decision or access, and what this repository can never satisfy.
 - A "done" claim needs checking against the code rather than the commit message.
 
+## Do Not Use When
+
+- The question is whether the story *can* be built here — use [story-acceptance-criteria-confirmation.md](./story-acceptance-criteria-confirmation.md).
+- A defect found this way needs fixing — use [bug-fix-diagnosis-and-resolution.md](./bug-fix-diagnosis-and-resolution.md).
+- The concern is whether the tests are strong enough — use [../skills/test-suite-quality-review.md](../skills/test-suite-quality-review.md).
+
+## Inputs
+
+- Required: a target project the executor can read, and a story pasted under `## Story`.
+- Required capabilities: read files. The prompt writes nothing and runs nothing.
+- Optional: the plan or work packages the story was built from.
+
+## Outputs
+
+Result header, five one-line fields in this order:
+
+- `Verdict` — `IMPLEMENTED`, `PARTIALLY_IMPLEMENTED`, `NOT_IMPLEMENTED`, or `BLOCKED`
+- `Criteria` — met, partial, not met, not possible here, unverifiable
+- `Outstanding` — to implement, blocked, not possible here
+- `Top Gap` — AC-ID and a one-line reason, or "none"
+- `Confidence` — High, Medium, or Low, with its limiting clause
+
+Then: story understanding, the located modules, criteria inventory, per-criterion status, the evidence table, the three outstanding buckets, a consistency check, the verdict, and a summary.
+
 ## How To Use
 
-Open the target project, copy the prompt, replace the placeholder under `## Story`, and send. No story or no code access → `BLOCKED`. Companion to [story-acceptance-criteria-confirmation.md](./story-acceptance-criteria-confirmation.md), which asks whether the story *can* be built here rather than whether it *was*.
+1. Give the executor read access to the target project.
+2. Copy the prompt block below and replace the placeholder under `## Story`.
+3. Send it. With no story or no code access it returns `BLOCKED`.
 
 ## Prompt
 
@@ -139,9 +169,15 @@ One sentence each: verdict, criteria tally, what is left to implement, what is b
 
 ## Notes
 
-- No code access or no story → `BLOCKED`.
-- Read-only end to end: it reports status and outstanding work, it never applies a fix. To fix a defect found this way, use [bug-fix-diagnosis-and-resolution.md](./bug-fix-diagnosis-and-resolution.md).
+- No code access or no story produces `BLOCKED`.
+- Read-only end to end: it reports status and outstanding work, and never applies a fix.
 - Evidence and status are co-required: a criterion with no cited code and no explicit "Not found" (plus search scope) becomes ❓ UNVERIFIABLE rather than 🟢 MET.
 - The evidence rules exist to stop plausible-sounding invention. Excerpts must be verbatim from a file opened in that run, paths and line numbers must be real, and nothing may be inferred from a name, a README, or a comment. Step 6 re-checks every citation and downgrades any status whose evidence cannot be re-pointed to.
 - Step 5's three buckets answer three different questions and must not be merged: 5a is work for this team, 5b is work waiting on a named person or artifact, 5c is work that will never land in this repository. ⛔ NOT_POSSIBLE_HERE is deliberately hard to earn — if any part of a criterion could be built here, it is 🔴 NOT_MET.
 - `IMPLEMENTED` is strict — one partial, unmet, impossible, or unverifiable criterion is enough to deny it.
+
+## Related
+
+- [story-acceptance-criteria-confirmation.md](./story-acceptance-criteria-confirmation.md) — the feasibility question, before the work.
+- [bug-fix-diagnosis-and-resolution.md](./bug-fix-diagnosis-and-resolution.md) — fixing a defect this audit finds.
+- [../agents/qa-engineer-agent.md](../agents/qa-engineer-agent.md) — runs this prompt as its verification method.

@@ -1,6 +1,7 @@
 ---
 title: "TypeScript Jest Seam Testing"
 type: skill
+summary: "Decide which Jest tests to write so each acceptance criterion maps to a named scenario exercised through a stable public seam."
 tags:
   - skills
   - typescript
@@ -8,9 +9,12 @@ tags:
   - testing
   - validation
 status: draft
-version: 0.1.0
-last_reviewed: 2026-09-18
-tooling: tool-assisted
+version: 0.2.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
+  - edit-files
+  - run-commands
 inputs:
   - acceptance criteria
   - changed classes and interfaces
@@ -19,7 +23,9 @@ outputs:
   - criterion-to-scenario mapping
 ---
 
-# Summary
+# TypeScript Jest Seam Testing
+
+## Summary
 
 Decide which Jest tests to write for TypeScript code so each acceptance criterion maps to a named scenario exercised through a stable public seam.
 
@@ -28,6 +34,12 @@ Decide which Jest tests to write for TypeScript code so each acceptance criterio
 - Planning testable acceptance criteria for a TypeScript change.
 - Choosing which behaviors of a class-based feature deserve tests.
 - Judging whether existing test evidence supports a completion claim.
+
+## Do Not Use When
+
+- The question is how to build fixtures and where to mock — use [typescript-jest-fixtures-and-mocks.md](./typescript-jest-fixtures-and-mocks.md).
+- The code under test is a UI component — use [frontend-component-testing.md](./frontend-component-testing.md).
+- The task is judging an existing suite's strength — use [test-suite-quality-review.md](./test-suite-quality-review.md).
 
 ## Inputs
 
@@ -47,13 +59,25 @@ Decide which Jest tests to write for TypeScript code so each acceptance criterio
 5. For Lambda work, target the service class rather than the handler export; keep handler coverage limited to parsing and response mapping.
 6. State what the tests prove and what still relies on other evidence such as configuration review, deployment assumptions, or manual verification.
 
+## Quality Bar
+
+- Every important criterion maps to a named scenario, visible in the test name or a table.
+- No test asserts on a private method or internal call order.
+- Failure paths and boundaries are covered, not only the happy path.
+- What the tests do not prove is stated explicitly.
+
 ## Failure Modes
 
 - Tests that mirror implementation steps, asserting internal call order rather than observable behavior.
 - Hidden coupling to private methods or module internals, forcing churn on every refactor.
 - Broad suites that never trace back to a specific acceptance criterion.
-- Use `typescript-jest-fixtures-and-mocks.md` for how to build fixtures and where to mock.
+
+## Related
+
+- [typescript-jest-fixtures-and-mocks.md](./typescript-jest-fixtures-and-mocks.md) — building the doubles these scenarios need.
+- [acceptance-test-authoring.md](./acceptance-test-authoring.md) — deriving scenarios from criteria before implementation.
+- [dotnet-10-xunit-seam-testing.md](./dotnet-10-xunit-seam-testing.md) — the .NET equivalent.
 
 ## Safety
 
-- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md). Do not restate its clauses.
+- Follow [knowledge/safety-policy.md](../knowledge/safety-policy.md) and [knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md). Do not restate their clauses.

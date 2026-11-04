@@ -1,6 +1,7 @@
 ---
-title: "Project evaluation by a Principal Engineer"
+title: "Project Evaluation By A Principal Engineer"
 type: prompt
+summary: "Audits a codebase across 14 criteria with cited evidence, aggregate scores, a tokenized verdict, and a dated report file."
 tags:
   - prompts
   - code-review
@@ -9,11 +10,13 @@ tags:
   - quality
   - production-readiness
 status: draft
-version: 0.5.0
-last_reviewed: 2026-10-12
-tooling: agnostic
+version: 0.6.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
+  - edit-files
 inputs:
-  - target project (codebase the assistant can read)
+  - target project the executor can read and write
 outputs:
   - result header with verdict token, composite score, top risk, and confidence
   - orientation summary
@@ -23,21 +26,46 @@ outputs:
   - persisted copy at `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`
 ---
 
-# Summary
+# Project Evaluation By A Principal Engineer
 
-A single-pass review prompt that has the assistant act as a Principal Engineer / Architect / Code Reviewer and produce a strict, evidence-based assessment of a codebase across 14 criteria, ending in aggregate scores and a tokenized verdict. Designed for any stack; the assistant must cite concrete files, folders, classes, functions, or line numbers. The full report is also written to the target project's root under `.evaluation/evaluation-result-{YYYY-MM-DD}.md`.
+## Summary
+
+A single-pass review prompt that has the executor act as a Principal Engineer, Architect, and Code Reviewer and produce a strict, evidence-based assessment of a codebase across 14 criteria, ending in aggregate scores and a tokenized verdict. Designed for any stack; every claim must cite concrete files, folders, classes, functions, or line numbers. The full report is also written to the target project's root under `.evaluation/evaluation-result-{YYYY-MM-DD}.md`.
 
 ## Use When
 
 - Auditing an unfamiliar repository, an inherited project, or a candidate solution.
-- Producing a baseline quality / production-readiness report before a refactor or release.
+- Producing a baseline quality or production-readiness report before a refactor or release.
 - You want a repeatable, comparable scoring template rather than free-form feedback.
+
+## Do Not Use When
+
+- The question is whether one story can be built here — use [story-acceptance-criteria-confirmation.md](./story-acceptance-criteria-confirmation.md).
+- A specific defect needs diagnosis — use [bug-fix-diagnosis-and-resolution.md](./bug-fix-diagnosis-and-resolution.md).
+- Agents need a reusable map of the repository — use [repository-knowledge-graph-creation.md](./repository-knowledge-graph-creation.md).
+
+## Inputs
+
+- Required: a target project the executor can read.
+- Required capabilities: read files; write files, for the persisted report.
+- Optional: areas you want sampled first, in a codebase too large to read whole.
+
+## Outputs
+
+Result header, four one-line fields in this order:
+
+- `Verdict` — the verdict token and label
+- `Score` — composite, one decimal
+- `Top Risk` — the first item of the Top Risks list, or "none"
+- `Confidence` — High, Medium, or Low
+
+Then: orientation, the 14-criterion evaluation, key findings, aggregate scores, a consistency-check line, the final verdict, and the persisted file.
 
 ## How To Use
 
-Point the assistant at the target project (open the workspace, attach paths, or name the directory), then copy the prompt block below and send it. With no code access the prompt returns `BLOCKED (no code access)` rather than guessing.
-
-After a successful (or BLOCKED) run, expect a Markdown file at `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`. `{date}` is the calendar date of the evaluation in ISO 8601 (`YYYY-MM-DD`). Do not treat that file as source code; it is an audit artifact.
+1. Give the executor read and write access to the target project.
+2. Copy the prompt block below and send it. With no code access it returns `BLOCKED (no code access)` rather than guessing.
+3. Collect the report at `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`, where the date is the ISO 8601 calendar date of the run. Treat it as an audit artifact, not as source.
 
 ## Prompt
 
@@ -145,10 +173,15 @@ After the Result Header through Step 6 are complete, write that same Markdown (R
 
 ## Notes
 
-- Point the assistant at the target project before sending the prompt (open the workspace, attach paths, or specify the directory).
+- Give the executor access to the target project before sending the prompt.
 - Persistence is mandatory: the full report (Result Header through Step 6) is written to `<project-root>/.evaluation/evaluation-result-{YYYY-MM-DD}.md`. Same-day reruns overwrite that date's file. This is an audit artifact, not product source.
 - The 14 criteria, scoring scale, calibration anchors, status mapping, score formulas, one-decimal rounding rule, verdict tokens, and verdict rules are load-bearing — change them only when the rubric itself needs to evolve.
 - Step 6 uses a single production-readiness gate (`Overall Production Readiness < 7`) so the ladder is monotonic: raising either score can never produce a worse verdict. Both scores are the Step 4 aggregates rounded to one decimal, which is what keeps the verdict stable across runs.
 - Output is bounded on purpose: the Step 1 tree is capped, each score is listed once (Step 2 table plus a short per-criterion block), and Step 3 allows at most 5 findings per category.
 - The Result Header is the stable anchor for automation: four named one-line fields in a fixed order, correct on first emission because Step 6 is computed before anything is written. The dated file under `.evaluation/` is the durable copy of the same report.
-- Pair with [../knowledge/safety-policy.md](../knowledge/safety-policy.md) when the review may touch destructive operations (e.g., proposing migrations or dependency upgrades); its untrusted-input and secrets clauses are invoked directly in the prompt.
+
+## Related
+
+- [../knowledge/safety-policy.md](../knowledge/safety-policy.md) — invoked directly by the prompt for destructive operations, untrusted input, and secrets.
+- [repository-knowledge-graph-creation.md](./repository-knowledge-graph-creation.md) — build a reusable map when the audit will be repeated.
+- [../agents/solution-architect-agent.md](../agents/solution-architect-agent.md) — turns audit findings into a remediation plan.

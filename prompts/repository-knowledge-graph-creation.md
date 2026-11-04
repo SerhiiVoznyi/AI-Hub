@@ -1,32 +1,38 @@
 ---
-
-## title: "Repository knowledge graph creation"  
-type: prompt  
-tags:  
-  - prompts  
-  - knowledge-base  
-  - knowledge-graph  
-  - monorepo  
-  - documentation  
-  - ai-agents  
-status: draft  
-version: 0.1.0  
-last_reviewed: 2026-10-27  
-tooling: agnostic  
-inputs:  
-  - target repository (codebase the assistant can read and write)  
-outputs:  
-  - result header with status, source commit, node and edge counts, coverage, and confidence  
+title: "Repository Knowledge Graph Creation"
+type: prompt
+summary: "Builds a file-based knowledge graph of a repository so later agents navigate from cards and indexes instead of reading everything."
+tags:
+  - prompts
+  - knowledge-base
+  - knowledge-graph
+  - monorepo
+  - documentation
+  - ai-agents
+status: draft
+version: 0.2.0
+last_reviewed: 2026-11-04
+capabilities:
+  - read-files
+  - edit-files
+  - run-commands
+inputs:
+  - target repository the executor can read and write
+outputs:
+  - result header with status, source commit, node and edge counts, coverage, and confidence
   - `kb/map/projects.md` project map and id registry, which is also the resume list
   - `kb/` schema, shared nodes, domains, flows, concepts, glossary, and generated indexes
   - one `KB.md` card next to each project, plus module cards for large single-project repos
   - `kb/index/graph.json` with evidence-cited edges and a source commit
   - `kb/index/by-path.md` and `kb/index/incoming.md` for path lookup and reverse traversal
-  - `kb/tools/` index generator script, rewritten every run (standard library only)
+  - `kb/tools/` index generator script, rewritten every run, standard library only
   - validation report and human review queue
   - root `AGENTS.md` only when the repository has no agent entry file; otherwise a pointer block to paste
+---
 
-# Summary
+# Repository Knowledge Graph Creation
+
+## Summary
 
 A self-contained prompt. Copied into a repository, it builds a file-based knowledge graph: a project map, one card per project (and per module in large single-project repos), shared nodes, flows, and generated indexes. Later agents find a card by id, alias, or file path, read a few cards instead of the whole codebase, and traverse edges in both directions. Every edge cites file, line, and symbol, every node records the commit it was checked against, and reruns refresh only what changed.
 
@@ -36,15 +42,29 @@ A self-contained prompt. Copied into a repository, it builds a file-based knowle
 - You want a first draft humans can review.
 - A `kb/` already exists and should be refreshed after code changes.
 
+## Do Not Use When
+
+- One task needs orientation now — use [../skills/context-pack-construction.md](../skills/context-pack-construction.md), which costs far less.
+- You want a quality judgement rather than a map — use [project-evaluation.md](./project-evaluation.md).
+
+## Inputs
+
+- Required: a target repository the executor can read and write.
+- Required capabilities: read files, write files, and run commands (`git` and the index generator).
+- Optional: an existing `kb/` to refresh, and an existing agent entry file to point at it.
+
+## Outputs
+
+Reported in this order: `Status` (`CREATED`, `UPDATED`, `PARTIAL`, or `BLOCKED`), `Commit`, node and edge counts, coverage, confidence, files written, index build method, validation result, and the review queue. The durable outputs are the `kb/` tree and the cards next to the code.
+
 ## How To Use
 
-1. Open the target repository as the workspace.
-2. Use agent mode so the assistant can write files and run `git`.
-3. Copy the prompt below and send it.
-4. If the status is `PARTIAL`, send the same prompt again. It continues from `kb/map/projects.md`. Run one agent at a time; a leftover `kb/.lock` from a crashed run can be deleted.
-5. If the report prints a "Knowledge base" block, paste it into your existing agent entry file so agents find `kb/`.
-6. Review the queued cards. When a card is right, set `review_status: reviewed` and `last_reviewed` to the date. The prompt never changes either field.
-7. After significant code changes, send the same prompt again. Unchanged projects are skipped.
+1. Give the executor read and write access to the target repository, and the ability to run `git`.
+2. Copy the prompt block below and send it.
+3. If the status is `PARTIAL`, send the same prompt again; it continues from `kb/map/projects.md`. Run one at a time, and delete a leftover `kb/.lock` only when no run is active.
+4. If the report prints a "Knowledge base" block, paste it into your existing agent entry file so agents find `kb/`.
+5. Review the queued cards. When a card is right, set `review_status: reviewed` and `last_reviewed` to the date; the prompt never changes either field.
+6. After significant code changes, send the same prompt again. Unchanged projects are skipped.
 
 ## Prompt
 
@@ -290,3 +310,9 @@ Then report, in this order:
 - A later run keeps reviewed prose and reviewed relations, and skips projects whose code has not changed since their `source_commit`.
 - `PARTIAL` means send the same prompt again; it resumes new cards and refreshes, and picks up projects added in between.
 - The graph covers projects, and modules in large single-project repos. It orients agents; it does not replace reading code at the cited entry points.
+
+## Related
+
+- [../skills/context-pack-construction.md](../skills/context-pack-construction.md) — per-task orientation when a full graph is too much.
+- [../agents/solution-architect-agent.md](../agents/solution-architect-agent.md) — reads `kb/` first when one exists.
+- [../knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md) — the read limits the graph exists to serve.
