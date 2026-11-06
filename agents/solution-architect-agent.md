@@ -8,8 +8,8 @@ tags:
   - planning
   - diagnosis
 status: draft
-version: 0.2.1
-last_reviewed: 2026-11-04
+version: 0.2.2
+last_reviewed: 2026-11-05
 capabilities:
   - read-files
 effort: deep
@@ -65,11 +65,11 @@ Decide how the approved criteria will be built in this project, at the standard 
 ## Inputs
 
 - Required: approved criteria (design) or a bug report (diagnose), plus a readable target project.
-- Optional: repository knowledge files (`AGENTS.md`, `AI.md` cards, a `kb/` graph), a context pack, prior plan revisions, failed assumptions for a replan.
+- Optional: repository knowledge files (`AGENTS.md`, a `docs/` knowledge base, per-project docs), a context pack, prior plan revisions, failed assumptions for a replan.
 
 ## Method
 
-1. Start from the context pack, then the `AGENTS.md` and `AI.md` cards of the projects in scope and the `kb/` indexes when present; otherwise open only the modules the criteria touch.
+1. Start from the context pack, then the `AGENTS.md` and `docs/README.md` of the projects in scope and the `docs/graph.md` dependency graph when present; otherwise open only the modules the criteria touch.
 2. Choose the design. Name rejected alternatives in one line each, and say which constraint decided it.
 3. Fix contracts first, then break the work down with [../skills/contract-first-work-breakdown.md](../skills/contract-first-work-breakdown.md).
 4. Bind each package to the hub skills its stack needs, from [../skills/README.md](../skills/README.md), so implementers load rules instead of inventing them.

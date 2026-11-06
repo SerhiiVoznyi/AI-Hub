@@ -10,8 +10,8 @@ tags:
   - user-story
   - delivery
 status: draft
-version: 0.2.0
-last_reviewed: 2026-11-04
+version: 0.2.2
+last_reviewed: 2026-11-05
 capabilities:
   - read-files
   - edit-files
@@ -54,7 +54,7 @@ The executor becomes the [Orchestrator](../agents/orchestrator-agent.md) for one
 
 - Required: a target project the team can read, and write after approval; AI-Hub readable by the executor; the story, pasted as plain text under `## Story`.
 - Required capabilities: read files, ask the client, and spawn sub-agents. Spawned developers and QA also need to edit files and run commands.
-- Optional: acceptance criteria inside the story; constraints and priorities; repository knowledge files — `AGENTS.md` and `AI.md` per project, and a `kb/` graph — from [repository-knowledge-graph-creation.md](./repository-knowledge-graph-creation.md); role adapters registered in the executor, per [../agents/README.md](../agents/README.md#adapters).
+- Optional: acceptance criteria inside the story; constraints and priorities; repository knowledge files — a `docs/` knowledge base, and a `README.md` and `docs/` per project — from [repository-knowledge-graph-creation.md](./repository-knowledge-graph-creation.md); role adapters registered in the executor, per [../agents/README.md](../agents/README.md#adapters).
 
 ## Outputs
 
@@ -170,7 +170,7 @@ Keep it current; it is your working memory. Hold packets, verdicts, paths, and r
 
 ## Method
 Step numbers match the workflow, so its routing table applies as written.
-1. Triage. Where the target has knowledge files, read its root `AI.md` for the layout and `kb/map/projects.md` to name the projects the story touches. Restate goal, scope, non-goals, constraints, and definition of done. Ask the client only what would change the work — one batch, a suggested default per question; otherwise take the reversible option and log the assumption. Spawn the `task-analyst`, or classify yourself as the table allows, then pick the path from the routing table — bug, small change, or feature or story — adding Economize for a large or unfamiliar repository. If the story is really a question, switch to your role's `answer` mode, answer with citations directly or via one read-only investigation, and stop.
+1. Triage. Where the target has knowledge files, read its root `README.md` for the structure and the projects table in `docs/README.md` to name the projects the story touches. Restate goal, scope, non-goals, constraints, and definition of done. Ask the client only what would change the work — one batch, a suggested default per question; otherwise take the reversible option and log the assumption. Spawn the `task-analyst`, or classify yourself as the table allows, then pick the path from the routing table — bug, small change, or feature or story — adding Economize for a large or unfamiliar repository. If the story is really a question, switch to your role's `answer` mode, answer with citations directly or via one read-only investigation, and stop.
 2. Analyze. Spawn the `business-analyst`. Require stable `AC-1…n` marked explicit or derived, per-criterion feasibility with evidence, out-of-scope items, and questions. Settle blocking questions before Design. A criterion not feasible here goes to the client at once: descope it, or end the run as `BLOCKED`.
 3. Design. Spawn the `solution-architect` in `design`, or in `diagnose` for a defect. Accept the plan only when:
    - every criterion sits in exactly one package and maps to a test level and an owner;
@@ -248,7 +248,7 @@ open_items:
 - Delegation depth is capped at two levels — orchestrator to specialist, or orchestrator to review lead to panel — because deeper chains break the single-dispatcher rule and lose traceability.
 - The business analyst and the solution architect run as single instances by design: one owner for criterion IDs, one for contracts and owned paths. Fan-out happens at build, test authoring, and review.
 - Roles are instantiated by path and their methods are never inlined, so changes to the role files, the workflow, or the protocol apply without editing this prompt. The one exception is the packet key list in the spawn brief, which mirrors the protocol; change both together.
-- This is the one prompt whose executor delegates: an entry point into the team rather than a single-executor procedure, which is why it carries `delegate` and `ask-user`.
+- This is the one prompt whose executor leads the delivery team: an entry point into the team rather than a single-executor procedure, which is why it carries `delegate` and `ask-user`.
 - The protocol's outcome set has no separate value for a client stop, so a stop at the gate closes as `BLOCKED`, with the reason under open items.
 
 ## Related

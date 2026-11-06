@@ -8,8 +8,8 @@ tags:
   - architecture
   - planning
 status: draft
-version: 0.2.1
-last_reviewed: 2026-11-04
+version: 0.2.2
+last_reviewed: 2026-11-05
 capabilities:
   - read-files
 inputs:
@@ -46,7 +46,7 @@ Fix the contracts first, then split the work into packages that can be dispatche
   - the modules, layers, and extension points the criteria touch
 - Optional:
   - existing contracts and schemas
-  - repository knowledge files (`AGENTS.md`, `AI.md` cards, a `kb/` graph)
+  - repository knowledge files (`AGENTS.md`, a `docs/` knowledge base, per-project docs)
   - operational or performance constraints
 
 ## Method
