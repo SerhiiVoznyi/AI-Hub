@@ -25,7 +25,6 @@ AI-Hub is a curated collection of AI artifacts, patterns, and frameworks focused
 - [Delivery protocol](knowledge/orchestrated-delivery-protocol.md) — packets, returns, budgets, and loop limits
 - [Project evaluation](prompts/project-evaluation.md) — Principal-Engineer codebase audit across 14 criteria
 - [Documentation evaluation](prompts/documentation-evaluation.md) — documentation-only audit of human onboarding and AI friendliness across 8 criteria
-- [Documentation and AI setup benchmark](prompts/documentation-and-ai-setup-benchmark.md) — 10 questions and 1 coding task, each run in a fresh sub-agent, timed, graded, and reported as tables
 - [Story completion evaluation](prompts/story-development-completion-evaluation.md) — is the story implemented, and is every criterion met
 - [Bug fix diagnosis and resolution](prompts/bug-fix-diagnosis-and-resolution.md) — triage, root cause, gated fix
 - [Repository knowledge graph creation](prompts/repository-knowledge-graph-creation.md) — a `docs/` knowledge base, a `README.md` and `docs/` per project, and a docs-first `AGENTS.md`, so agents navigate any repository without searching it all

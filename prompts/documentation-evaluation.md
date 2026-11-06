@@ -200,4 +200,3 @@ After the Result Header through Step 6 are complete, write that same Markdown (R
 - [../knowledge/scoped-context-discipline.md](../knowledge/scoped-context-discipline.md) — the read limits that good agent-facing documentation exists to serve.
 - [project-evaluation.md](./project-evaluation.md) — the full 14-criterion codebase audit this prompt narrows.
 - [repository-knowledge-graph-creation.md](./repository-knowledge-graph-creation.md) — writes the documentation layer this prompt judges; run it on the findings, then evaluate again.
-- [documentation-and-ai-setup-benchmark.md](./documentation-and-ai-setup-benchmark.md) — the live-run counterpart: fresh sub-agents answer questions and make a change from the same documentation, timed and graded.
